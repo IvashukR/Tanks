@@ -14,6 +14,7 @@ public partial class Trenirovka : Node
 	private ShaderMaterial sh;
 	private BoxContainer info;
 	private bool flag = false;
+	private bool w = false;
 	private TextureButton restart;
 	private PackedScene s = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
 	
@@ -62,7 +63,10 @@ public partial class Trenirovka : Node
 		
 	}
 	protected void losse() => restart.Visible = true;
+	protected void win()
+	{
 
+	}
 	
 	public override async void _Process(double delta)
 	{
@@ -82,6 +86,11 @@ public partial class Trenirovka : Node
 			losse();
 			flag = false;
 
+		}
+		if (GetNodeOrNull("%town_enemy") == null && !w)
+		{
+			win();
+			w = true;
 		}
 
 
