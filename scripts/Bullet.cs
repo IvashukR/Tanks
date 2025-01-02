@@ -81,6 +81,10 @@ public partial class Bullet : CharacterBody2D
 			GlobalManager.Instance.EmitSignal("del_tank");
 			QueueFree();
 		}
+		else if (body.IsInGroup("bullet"))
+		{
+			QueueFree();
+		}
 
 
 		else if (body.IsInGroup("well"))
