@@ -16,8 +16,8 @@ public partial class Trenirovka : Node
 	private bool flag = false;
 	private bool w = false;
 	private TextureButton restart;
-	private PackedScene s = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
-	
+	protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
+	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
 	private Texture2D[] go = {
 		(Texture2D)ResourceLoader.Load("res://textures/two.png"),
 		(Texture2D)ResourceLoader.Load("res://textures/three.png"),
@@ -56,7 +56,6 @@ public partial class Trenirovka : Node
 		d = GetNode<MarginContainer>("%Dialog");
 		Dialog dialog = (Dialog) d;
 		GlobalManager.Instance.skip_d += skip;
-		string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 		dialog.display_text(inp);
 		
 
