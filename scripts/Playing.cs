@@ -5,17 +5,16 @@ public partial class Playing : State
 {
 	[Export] public float speed = 100.0f;
 	private Vector2 dir;
-	[Export] private CharacterBody2D Voin = new CharacterBody2D();
+	[Export] private CharacterBody2D voin = new CharacterBody2D();
 	private Sprite2D gun;
-	private Voin voin;
 	private Marker2D marker;
 	private bool can_shoot = true;
 	private Timer timer;
 	public override void _Ready()
 	{
-		voin = (Voin)Voin;
+		
 		timer = new Timer();
-		timer.WaitTime = voin.perezaryad;
+		timer.WaitTime = Voin.perezaryad;
 		timer.OneShot = true;
 		AddChild(timer);
 		gun = GetNode<Sprite2D>("gun");
@@ -31,8 +30,8 @@ public partial class Playing : State
 	public override void PhysicsProcess(double delta)
 	{
 		dir = Input.GetVector("l", "r", "d", "u").Normalized();
-		Voin.Velocity = dir  * voin.speed;
-		Voin.MoveAndSlide();
+		voin.Velocity = dir  * Voin.speed;
+		voin.MoveAndSlide();
 	}
 	public override void _Input(InputEvent @event)
     {
@@ -43,6 +42,7 @@ public partial class Playing : State
             {
                 GlobalManager.Instance.shoot(gun.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f, new Vector2(0.1f, 0.1f));
 				can_shoot = false;
+				Voin.patron_count--;
 				timer.Start();
             }
         }
