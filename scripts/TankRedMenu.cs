@@ -143,7 +143,7 @@ public partial class TankRedMenu : Godot.StaticBody2D
             
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && isMouse && can_shoot)
             {
-                GlobalManager.Instance.shoot(tankBlue.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f);
+                GlobalManager.Instance.shoot(tankBlue.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f, new Vector2(0.165f, 0.171f));
 				can_shoot = false;
             }
         }

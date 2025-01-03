@@ -20,7 +20,6 @@ public partial class GlobalManager : Node
 	[Signal]
 	public  delegate void failEventHandler();
 	Timer t;
-	public int patron;
 	
 	
 	public override void _Ready()
@@ -28,11 +27,12 @@ public partial class GlobalManager : Node
 		Instance = this;
 		
 	}
-	public void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka)
+	public void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka, Vector2 sc)
 	{
 		var _bullet = (PackedScene)ResourceLoader.Load("res://scene/bullet.tscn");
 		var bullet = _bullet.Instantiate<CharacterBody2D>();
 		bullet.GlobalPosition = marker_pos;
+		bullet.Scale = sc;
 		var b = bullet as Bullet;
 		b.player_pos = tank_pos;
 		b.fallow_m = fallow_m;
