@@ -17,7 +17,7 @@ public partial class Playing : State
 		timer.WaitTime = Voin.perezaryad;
 		timer.OneShot = true;
 		AddChild(timer);
-		gun = GetNode<Sprite2D>("gun");
+		gun = GetNode<Sprite2D>("%gun");
 		marker = GetNode<Marker2D>("%marker");
 		timer.Timeout += () => can_shoot = true;
 	}
@@ -25,7 +25,7 @@ public partial class Playing : State
 	public override void Process(double delta)
 	{
 		float ang = (GetViewport().GetMousePosition() - gun.GlobalPosition).Angle();
-		gun.Rotation += ang;
+		gun.Rotation == ang;
 	}
 	public override void PhysicsProcess(double delta)
 	{

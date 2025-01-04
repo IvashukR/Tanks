@@ -17,9 +17,14 @@ public partial class FSM : Node
 				States.Add(state.Name , st);
 			}
 		}
+		foreach (var pair in States)
+        {
+            GD.Print($"Ключ: {pair.Key}, Значение: {pair.Value}");
+        }
 		if (initial_state != null)
 		{
 			current_state = initial_state;
+			current_state.Enter();
 		}
 	}
 

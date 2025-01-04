@@ -61,7 +61,7 @@ public partial class Town : CharacterBody2D
                     can_shoot = false;
                     return;
                 }
-				GlobalManager.Instance.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f));
+				GlobalManager.Instance.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 7);
                 can_shoot = false;
                 t.Start();
                 patron--;
