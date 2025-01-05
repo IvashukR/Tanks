@@ -28,17 +28,17 @@ public partial class FSM : Node
 		}
 	}
 
-	public void change_state(string state, string new_state)
+	public void change_state(string new_state)
 	{
-		if (States[state] != current_state || state == new_state)
+		if (current_state == States[new_state])
 		{
 			return;
 		}
 		State  _new = States[new_state];
 		if (_new != null)
 		{
+			current_state.Exit();
 			current_state = _new;
-			States[state].Exit();
 			_new.Enter();
 		}
 

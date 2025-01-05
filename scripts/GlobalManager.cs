@@ -19,7 +19,19 @@ public partial class GlobalManager : Node
 	public  delegate void del_tEventHandler();
 	[Signal]
 	public  delegate void failEventHandler();
+	[Signal]
+	public  delegate void change_moneyEventHandler();
 	Timer t;
+	private int money = 200;
+	public int Money
+	{
+		set
+		{
+			money = value;
+			
+		}
+		get{return money;}
+	}
 	
 	
 	public override void _Ready()
@@ -27,13 +39,14 @@ public partial class GlobalManager : Node
 		Instance = this;
 		
 	}
-	public void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka, Vector2 sc)
+	public void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka, Vector2 sc, int damage)
 	{
 		var _bullet = (PackedScene)ResourceLoader.Load("res://scene/bullet.tscn");
 		var bullet = _bullet.Instantiate<CharacterBody2D>();
 		bullet.GlobalPosition = marker_pos;
 		bullet.Scale = sc;
 		var b = bullet as Bullet;
+		b.damage = damage;
 		b.player_pos = tank_pos;
 		b.fallow_m = fallow_m;
 		b.angle_pushka = angle_pushka;
