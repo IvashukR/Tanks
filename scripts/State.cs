@@ -18,4 +18,7 @@ public partial class State : Node
 	public  virtual void Process(double delta)
 	{
 	}
+	public virtual void Inp(InputEvent @event)
+	{
+	}
 }

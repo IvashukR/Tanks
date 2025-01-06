@@ -4,12 +4,14 @@ using System;
 public partial class Level1 : Trenirovka
 {
 	
-	
+	private Control card;
 	public override void _Ready()
 	{
+		card = GetNode<Control>("%card");
 		s =  (PackedScene)ResourceLoader.Load("res://scene/level.tscn");
-		inp = "Покупай юнитов за деньги , за каждого убитого вражеского юнита будут прибавлятся деньги а за своего уменьшатся зависимости от стоимости юнита.Уничтожь вражескую башню ,удачи!.";
 		base._Ready();
+		Card card_obj = (Card) card;
+		card_obj.SetInfo(new Voin());
 	}
 
 	

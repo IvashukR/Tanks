@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public partial class FSM : Node
 {
 	[Export] private State initial_state;
-	private State current_state;
+	public State current_state;
 	private Dictionary<string, State> States = new Dictionary<string, State>();
 
 	public override void _Ready()
@@ -52,5 +52,8 @@ public partial class FSM : Node
     {
         current_state.PhysicsProcess(delta);
     }
-	
+	public override void _Input(InputEvent @event)
+	{
+		current_state.Inp(@event);
+	}
 }
