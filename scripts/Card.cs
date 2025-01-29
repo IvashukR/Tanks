@@ -24,11 +24,12 @@ public partial class Card : Control
 			patron_l.Text = $"патрони: {target.patron_count}";
 			speed_l.Text = $"скорость: {target.speed}";
 			per_l.Text = $"перезарядка: {target.perezaryad}";
-			d_cost_l.Text = $"цена смерти: {target.perezaryad}";
+			d_cost_l.Text = $"цена смерти: {target.cost_death}";
 			damage_l.Text = $"урон: {target.damage}";
 			cost = target.cost;
 		}
 	}
+	
 	public void Buy(string _path)
 	{
 		PackedScene s  = ResourceLoader.Load<PackedScene>(this._path);

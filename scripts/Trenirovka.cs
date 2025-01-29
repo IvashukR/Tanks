@@ -2,7 +2,6 @@ using Godot;
 using System;
 public partial class Trenirovka : Node
 {
-	
 	public MarginContainer d;
 	private Sprite2D go_s;
 	private int id = 0;
@@ -31,6 +30,9 @@ public partial class Trenirovka : Node
 	}
 	public override  void _Ready()
 	{
+		Node p = GetNode("%Phone");
+		Phone phone = (Phone)p;
+		TankRedMenu.Changhe_Level(phone, "open", this);
 		GlobalManager.Instance.fail += losse;
 		restart = GetNode<TextureButton>("%restart");
 		restart.Pressed += () => {
@@ -97,5 +99,6 @@ public partial class Trenirovka : Node
 	public override void _ExitTree()
 	{
 		GlobalManager.Instance.skip_d -= skip;
+		GlobalManager.Instance.fail -= losse;
 	}
 }

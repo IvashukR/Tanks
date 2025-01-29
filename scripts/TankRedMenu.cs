@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 
-public partial class TankRedMenu : Godot.StaticBody2D
+public partial class TankRedMenu : StaticBody2D
 {
 	public float angle = 0;
 	
@@ -20,7 +20,6 @@ public partial class TankRedMenu : Godot.StaticBody2D
 	private Sprite2D _break;
 	private Marker2D marker;
 	private Sprite2D red_t;
-	private ColorRect p;
 	private CollisionShape2D col;
 	private Timer t;
 	private bool can_shoot = true;
@@ -29,27 +28,11 @@ public partial class TankRedMenu : Godot.StaticBody2D
 	public override void _Ready()
 	{
 		Node p = GetNode("%Phone");
-		
-		Phone Phone = (Phone)p;
-		
-		
-		
-		start = GetNode<TextureButton>("%btn");
-		start.Pressed += () => {
-			Phone.elaps_time = 0.0f;
-			Phone.Visible = true;
-			Phone.set_a(out Phone.a, 1);
-			var t = new Timer();
-			AddChild(t);
-			t.WaitTime = Phone.duration_sh;
-			t.Timeout += () => {
-				var s = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
-				GetTree().ChangeSceneToPacked(s);
-			};
-			t.Start();
-			
 
-		};
+		Phone phone = (Phone)p;
+		start = GetNode<TextureButton>("%btn");
+		start.Pressed += () => Changhe_Level(phone, "close", this);
+		GetTree().ChangeSceneToFile("res://scene/trenirovka.tscn");
 		marker = GetNode<Marker2D>("%marker");
 		red_t = GetNode<Sprite2D>("%red_t");
 		col = GetNode<CollisionShape2D>("%col");
@@ -74,12 +57,6 @@ public partial class TankRedMenu : Godot.StaticBody2D
 		move_r = false;
 		t.Start();
 		};
-		Phone.set_a(out Phone.a , 0);
-		
-		
-		
-		
-		
 	}
 	private void OnTimeout()
 	{
@@ -89,6 +66,12 @@ public partial class TankRedMenu : Godot.StaticBody2D
 			timer.Start(rng.RandfRange(0.1f, 0.5f));
 		}
 		
+	}
+	public static async void Changhe_Level(Phone p, string anim, Node obj)
+	{
+		p.anim_phone.Play(anim);
+		p.Visible = true;
+		await obj.ToSignal(p.anim_phone, "animation_finished");
 	}
 
 	public override void _Process(double delta)

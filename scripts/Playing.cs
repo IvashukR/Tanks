@@ -12,8 +12,10 @@ public partial class Playing : State
 	private Marker2D marker;
 	private bool can_shoot = true;
 	private Timer timer;
+	private AnimatedSprite2D anim;
 	public override void _Ready()
 	{
+		anim = GetNode<AnimatedSprite2D>("%anim");
 		fsm = GetNode<Node>("%FSM");
 		var parent = fsm.GetParent();
     	if (parent is Voin)
@@ -31,8 +33,10 @@ public partial class Playing : State
 	
 	public override void Process(double delta)
 	{
-		float ang = (GetViewport().GetMousePosition() - gun.GlobalPosition).Angle();
-		gun.Rotation = ang;
+		if (v.Velocity.Length() > 0)
+		{
+			anim.Play();
+		}
 	}
 	public override void PhysicsProcess(double delta)
 	{
