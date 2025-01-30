@@ -6,16 +6,15 @@ public partial class Playing : State
 	[Export] public float speed = 100.0f;
 	private Vector2 dir;
 	[Export] private CharacterBody2D voin = new CharacterBody2D();
-	private Sprite2D gun;
 	private Node fsm;
 	public Voin v;
 	private Marker2D marker;
 	private bool can_shoot = true;
 	private Timer timer;
-	private AnimatedSprite2D anim;
+	private AnimationPlayer anim;
 	public override void _Ready()
 	{
-		anim = GetNode<AnimatedSprite2D>("%anim");
+		anim = GetNode<AnimationPlayer>("%anim");
 		fsm = GetNode<Node>("%FSM");
 		var parent = fsm.GetParent();
     	if (parent is Voin)
@@ -26,16 +25,18 @@ public partial class Playing : State
 		timer.WaitTime = v.perezaryad;
 		timer.OneShot = true;
 		AddChild(timer);
-		gun = GetNode<Sprite2D>("%gun");
 		marker = GetNode<Marker2D>("%marker");
 		timer.Timeout += () => can_shoot = true;
 	}
 	
 	public override void Process(double delta)
 	{
+		
+		Vector2 mouse_pos = GetViewport().GetMousePosition();
+		v.LookAt(mouse_pos);
 		if (v.Velocity.Length() > 0)
 		{
-			anim.Play();
+			anim.Play("go");
 		}
 	}
 	public override void PhysicsProcess(double delta)
@@ -51,7 +52,7 @@ public partial class Playing : State
             
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count >= 0)
             {
-                GlobalManager.Instance.shoot(gun.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f, new Vector2(0.1f, 0.1f), v.damage);
+                GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f, new Vector2(0.1f, 0.1f), v.damage);
 				can_shoot = false;
 				v.patron_count--;
 				timer.Start();

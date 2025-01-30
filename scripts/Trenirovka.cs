@@ -33,6 +33,7 @@ public partial class Trenirovka : Node
 		Node p = GetNode("%Phone");
 		Phone phone = (Phone)p;
 		TankRedMenu.Changhe_Level(phone, "open", this);
+		phone.Hide();
 		GlobalManager.Instance.fail += losse;
 		restart = GetNode<TextureButton>("%restart");
 		restart.Pressed += () => {
