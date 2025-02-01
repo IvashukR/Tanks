@@ -61,8 +61,7 @@ public partial class Town : CharacterBody2D
                 {
                     foreach(TextureButton btn in level.all_btn_ui)
                     {
-                        GD.Print(parent.Name);
-                        if(btn.GetGlobalRect().HasPoint(mouseEvent.Position))return;
+                        if((btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true) || GlobalManager.Instance.block_shoot)return;
                     }
                 }
                 if (patron <= 0)

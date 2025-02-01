@@ -15,6 +15,8 @@ public partial class Trenirovka : Node
 	private bool flag = false;
 	private Control control;
 	private bool w = false;
+	[Signal]
+	public delegate void StartEventHandler();
 	private TextureButton restart;
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
@@ -75,7 +77,7 @@ public partial class Trenirovka : Node
 			GetTree().Paused = false;
 			go_s.Visible = false;
 			info.Visible = true;
-
+			EmitSignal("Start");
 			a = false;
 			
 		}

@@ -75,7 +75,10 @@ public partial class Bullet : CharacterBody2D
 	private  async void entered(Node2D body, Vector2 normal)
 	{
 		
-	
+		if (body == null || IsQueuedForDeletion())
+    	{
+        	return; 
+    	}
 		if (body.Name == "TankRed")
 		{
 			GlobalManager.Instance.EmitSignal("del_tank");

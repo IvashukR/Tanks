@@ -22,7 +22,7 @@ public partial class GlobalManager : Node
 	[Signal]
 	public  delegate void change_moneyEventHandler();
 	Timer t;
-	public bool some_btn_pressed;
+	public bool block_shoot;
 	private int money = 200;
 	public int Money
 	{

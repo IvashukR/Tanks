@@ -6,7 +6,7 @@ public partial class Level1 : Trenirovka
 {
 	private TextureButton card_ivisible;
 	private TextureButton card_visible;
-	private Control card;
+	private CanvasLayer card;
 	private Control control;
 	public List<TextureButton> all_btn_ui = new List<TextureButton>();
 	public override void _Ready()
@@ -14,13 +14,14 @@ public partial class Level1 : Trenirovka
 		control = GetNode<Control>("%Control");
 		card_ivisible = GetNode<TextureButton>("%card_invisible");
 		card_visible = GetNode<TextureButton>("%card_visible");
-		card = GetNode<Control>("%card");
+		card = GetNode<CanvasLayer>("%card");
 		s =  (PackedScene)ResourceLoader.Load("res://scene/level.tscn");
+		Start += () => card_ivisible.Show();
 		card_ivisible.Pressed += () =>
 		{
 			card_ivisible.Visible = false;
 			card_visible.Visible = true;
-			foreach(Control i in GetTree().GetNodesInGroup("cards"))
+			foreach(CanvasLayer i in GetTree().GetNodesInGroup("cards"))
 			{
 				i.Visible = true;
 			}
@@ -33,11 +34,17 @@ public partial class Level1 : Trenirovka
 		{
 			card_ivisible.Visible = true;
 			card_visible.Visible = false;
-			foreach(Control i in GetTree().GetNodesInGroup("cards"))
+			foreach(CanvasLayer i in GetTree().GetNodesInGroup("cards"))
 			{
 				i.Visible = false;
 			}
 		};
+		foreach(Card i in GetTree().GetNodesInGroup("cards"))
+		{
+			all_btn_ui.Add(i.show_i);
+			all_btn_ui.Add(i.hide_i);
+			all_btn_ui.Add(i.main_btn);
+		}
 		base._Ready();
 		Card card_obj = (Card) card;
 		card_obj.SetInfo(new Voin());
