@@ -1,13 +1,17 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Level1 : Trenirovka
 {
 	private TextureButton card_ivisible;
 	private TextureButton card_visible;
 	private Control card;
+	private Control control;
+	public List<TextureButton> all_btn_ui = new List<TextureButton>();
 	public override void _Ready()
 	{
+		control = GetNode<Control>("%Control");
 		card_ivisible = GetNode<TextureButton>("%card_invisible");
 		card_visible = GetNode<TextureButton>("%card_visible");
 		card = GetNode<Control>("%card");
@@ -21,6 +25,10 @@ public partial class Level1 : Trenirovka
 				i.Visible = true;
 			}
 		};
+		foreach(var node in control.GetChildren())
+		{
+			if(node is TextureButton)all_btn_ui.Add((TextureButton)node);
+		}
 		card_visible.Pressed += () =>
 		{
 			card_ivisible.Visible = true;

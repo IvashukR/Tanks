@@ -31,8 +31,13 @@ public partial class TankRedMenu : StaticBody2D
 
 		Phone phone = (Phone)p;
 		start = GetNode<TextureButton>("%btn");
-		start.Pressed += () => Changhe_Level(phone, "close", this);
-		GetTree().ChangeSceneToFile("res://scene/trenirovka.tscn");
+		start.Pressed += async () => 
+		{
+			phone.Show();
+			phone.anim_phone.Play("close");
+			await ToSignal(phone.anim_phone, "animation_finished");
+			GetTree().ChangeSceneToFile("res://scene/trenirovka.tscn");
+		};
 		marker = GetNode<Marker2D>("%marker");
 		red_t = GetNode<Sprite2D>("%red_t");
 		col = GetNode<CollisionShape2D>("%col");
@@ -66,12 +71,6 @@ public partial class TankRedMenu : StaticBody2D
 			timer.Start(rng.RandfRange(0.1f, 0.5f));
 		}
 		
-	}
-	public static async void Changhe_Level(Phone p, string anim, Node obj)
-	{
-		p.anim_phone.Play(anim);
-		p.Visible = true;
-		await obj.ToSignal(p.anim_phone, "animation_finished");
 	}
 
 	public override void _Process(double delta)
@@ -126,7 +125,7 @@ public partial class TankRedMenu : StaticBody2D
             
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && isMouse && can_shoot)
             {
-                GlobalManager.Instance.shoot(tankBlue.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f, new Vector2(0.165f, 0.171f), 75);
+                GlobalManager.Instance.shoot(tankBlue.GlobalPosition, marker.GlobalPosition, this, false, false, 0.0f, new Vector2(0.165f, 0.171f), 75);
 				can_shoot = false;
             }
         }

@@ -8,7 +8,7 @@ public partial class AudioServer : Node
 	
 	public override void _Ready()
 	{
-		drive_tank = GetNode<AudioStreamPlayer>("DriveTank");
+		drive_tank = GetNode<AudioStreamPlayer>("%d");
 		drive_tank.Play();
 		GlobalManager.Instance.drive_tank += () => drive_tank.Stop();
 		

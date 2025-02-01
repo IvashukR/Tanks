@@ -67,16 +67,16 @@ public partial class Card : Control
 
 	}
 	public override void _ExitTree()
-{
+	{
     
-    foreach (Node child in GetChildren())
-    {
-        if (child is CanvasItem)
-        {
-            child.QueueFree();
-        }
-    }
-}
+    	foreach (Node child in GetChildren())
+    	{
+        	if (child is CanvasItem)
+        	{
+            	child.QueueFree();
+        	}
+    	}
+	}
 
 
 	

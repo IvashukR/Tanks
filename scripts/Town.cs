@@ -7,6 +7,7 @@ public partial class Town : CharacterBody2D
     public bool can_shoot = true;
     public Marker2D marker;
     private Timer t;
+    public Node parent;
     private Label patron_l;
     protected int patron = 3;
     public int proch = 75;
@@ -24,6 +25,7 @@ public partial class Town : CharacterBody2D
     }
 	public override void _Ready()
     {
+        parent = GetParent();
         patron_l = GetNode<Label>("%patron_l");
         patron_l.Text = $"Town patron: {patron}";
         hp_l = GetNode<Label>("%hp_l");
@@ -51,11 +53,18 @@ public partial class Town : CharacterBody2D
     }
     public override void _Input(InputEvent @event)
     {
-		if (@event is InputEventMouseButton mouseEvent)
+		if (@event is InputEventMouseButton mouseEvent )
         {
-            
-            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot)
+            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot )
             {
+                if(parent is Level1 level)
+                {
+                    foreach(TextureButton btn in level.all_btn_ui)
+                    {
+                        GD.Print(parent.Name);
+                        if(btn.GetGlobalRect().HasPoint(mouseEvent.Position))return;
+                    }
+                }
                 if (patron <= 0)
                 {
                     can_shoot = false;

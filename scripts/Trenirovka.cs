@@ -13,6 +13,7 @@ public partial class Trenirovka : Node
 	private ShaderMaterial sh;
 	private BoxContainer info;
 	private bool flag = false;
+	private Control control;
 	private bool w = false;
 	private TextureButton restart;
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
@@ -32,8 +33,8 @@ public partial class Trenirovka : Node
 	{
 		Node p = GetNode("%Phone");
 		Phone phone = (Phone)p;
-		TankRedMenu.Changhe_Level(phone, "open", this);
-		phone.Hide();
+		phone.anim_phone.Play("open");
+		phone.anim_phone.AnimationFinished += (animationName) => phone.Hide();
 		GlobalManager.Instance.fail += losse;
 		restart = GetNode<TextureButton>("%restart");
 		restart.Pressed += () => {
@@ -47,22 +48,17 @@ public partial class Trenirovka : Node
 		go_s = GetNode<Sprite2D>("%go");
 		timer = new Timer();
 		timer.WaitTime = 1;
-		
 		AddChild(timer);
 		timer.Timeout += () => {
-			
 			go_s.Texture = go[id];
 			id++;
 			
 		};
-
 		d = GetNode<MarginContainer>("%Dialog");
 		Dialog dialog = (Dialog) d;
 		GlobalManager.Instance.skip_d += skip;
 		dialog.display_text(inp);
-		
 
-		
 	}
 	protected void losse() => restart.Visible = true;
 	protected void win()
