@@ -33,6 +33,7 @@ public partial class Trenirovka : Node
 	}
 	public override  void _Ready()
 	{
+		GetTree().Paused = true;
 		Node p = GetNode("%Phone");
 		Phone phone = (Phone)p;
 		phone.anim_phone.Play("open");
@@ -46,7 +47,6 @@ public partial class Trenirovka : Node
 		enemy = GetNode<StaticBody2D>("%town_enemy");
 		blast = GetNode<CpuParticles2D>("%blast");
 		sh = blast.Material as ShaderMaterial;
-		GetTree().Paused = true;
 		go_s = GetNode<Sprite2D>("%go");
 		timer = new Timer();
 		timer.WaitTime = 1;
@@ -72,25 +72,26 @@ public partial class Trenirovka : Node
 	{
 		if (go_s.Texture == go[2] && a)
 		{
+			a = false;
 			timer.Stop();
 			await ToSignal(GetTree().CreateTimer(1.3f), "timeout");
 			GetTree().Paused = false;
 			go_s.Visible = false;
 			info.Visible = true;
 			EmitSignal("Start");
-			a = false;
+			GD.Print(a);
 			
 		}
 		if (GetNodeOrNull("%town") == null && GetTree().GetNodesInGroup("bullet").Count == 0 && flag )
 		{
-			losse();
 			flag = false;
+			losse();
 
 		}
 		if (GetNodeOrNull("%town_enemy") == null && !w)
 		{
-			win();
 			w = true;
+			win();
 		}
 
 

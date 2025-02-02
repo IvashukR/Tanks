@@ -8,15 +8,22 @@ public partial class Level1 : Trenirovka
 	private TextureButton card_visible;
 	private CanvasLayer card;
 	private Control control;
+	private Town1 town;
 	public List<TextureButton> all_btn_ui = new List<TextureButton>();
 	public override void _Ready()
 	{
+		town = GetNode<Town1>("%town");
 		control = GetNode<Control>("%Control");
 		card_ivisible = GetNode<TextureButton>("%card_invisible");
 		card_visible = GetNode<TextureButton>("%card_visible");
 		card = GetNode<CanvasLayer>("%card");
 		s =  (PackedScene)ResourceLoader.Load("res://scene/level.tscn");
-		Start += () => card_ivisible.Show();
+		Start += () => 
+		{
+			card_ivisible.Show();
+			town.on_ai.MouseEntered += () => town.set_outline(true);
+        	town.on_ai.MouseExited += () => town.set_outline(false);
+		};
 		card_ivisible.Pressed += () =>
 		{
 			card_ivisible.Visible = false;

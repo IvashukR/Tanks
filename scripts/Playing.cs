@@ -11,6 +11,7 @@ public partial class Playing : State
 	private Marker2D marker;
 	private bool can_shoot = true;
 	private Timer timer;
+	private Node _parent;
 	private AnimationPlayer anim;
 	public override void _Ready()
 	{
@@ -21,6 +22,7 @@ public partial class Playing : State
     	{
         	v = (Voin)parent;
     	}
+		_parent = v.GetParent();
 		timer = new Timer();
 		timer.WaitTime = v.perezaryad;
 		timer.OneShot = true;
@@ -38,6 +40,7 @@ public partial class Playing : State
 		{
 			anim.Play("go");
 		}
+		else anim.Stop();
 	}
 	public override void PhysicsProcess(double delta)
 	{
@@ -49,10 +52,16 @@ public partial class Playing : State
     {
 		if (@event is InputEventMouseButton mouseEvent)
         {
-            
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count >= 0)
             {
-                GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, true, 0.0f, new Vector2(0.1f, 0.1f), v.damage);
+				if(_parent is Level1 level)
+                {
+                    foreach(TextureButton btn in level.all_btn_ui)
+                    {
+                        if(btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true)return;
+                    }
+                }
+                GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, true, marker.Rotation, new Vector2(0.1f, 0.1f), v.damage);
 				can_shoot = false;
 				v.patron_count--;
 				timer.Start();
@@ -62,10 +71,10 @@ public partial class Playing : State
     }
 	public override void _ExitTree()
 	{
-    if (v != null)
-    {
-        v.QueueFree();
-    }
+    	if (v != null)
+    	{
+        	v.QueueFree();
+    	}
 	}
 
 

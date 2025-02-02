@@ -12,16 +12,17 @@ public partial class Town : CharacterBody2D
     protected int patron = 3;
     public int proch = 75;
     private Label hp_l;
+    
     private void upd_h()
     {
         if (proch >= 0)
-                {
-                    hp_l.Text = $"Town health: {proch}";
-                }
-                else
-                {
-                    hp_l.Text = "Town health: 0";
-                }
+        {
+            hp_l.Text = $"Town health: {proch}";
+        }
+        else
+        {
+            hp_l.Text = "Town health: 0";
+        }
     }
 	public override void _Ready()
     {
@@ -61,7 +62,7 @@ public partial class Town : CharacterBody2D
                 {
                     foreach(TextureButton btn in level.all_btn_ui)
                     {
-                        if((btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true) || GlobalManager.Instance.block_shoot)return;
+                        if(btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true)return;
                     }
                 }
                 if (patron <= 0)

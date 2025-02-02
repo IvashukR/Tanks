@@ -16,7 +16,6 @@ public partial class Card : CanvasLayer
 	public TextureButton hide_i;
 	public TextureButton main_btn;
 	[Export] public string _path;
-	private Timer block_shoot_t;
 
 	public void SetInfo(object obj)
 	{
@@ -39,13 +38,12 @@ public partial class Card : CanvasLayer
 		Node fsm_node = sc.GetNode("%FSM");
 		FSM fsm = fsm_node as FSM;
 		sc.GlobalPosition = main_btn.GlobalPosition;
-		AddChild(sc);
+		GetParent().AddChild(sc);
 		fsm.change_state("Void");
 	}
 	public override void _Ready()
 	{
 		cr_info = GetNode<ColorRect>("%cr_info");
-		block_shoot_t = GetNode<Timer>("%block_shoot");
 		main_btn = GetNode<TextureButton>("%main_btn");
 		info = GetNode<VBoxContainer>("%info");
 		show_i = GetNode<TextureButton>("%show_i");
@@ -56,13 +54,7 @@ public partial class Card : CanvasLayer
 		d_cost_l = GetNode<Label>("%death_l");
 		patron_l = GetNode<Label>("%patron_l");
 		damage_l = GetNode<Label>("%damage_l");
-		block_shoot_t.Timeout += () => GlobalManager.Instance.block_shoot = false;
-		main_btn.Pressed += () => 
-		{
-			Buy(_path);
-			GlobalManager.Instance.block_shoot = true;
-			block_shoot_t.Start();
-		};
+		main_btn.Pressed += () => Buy(_path);
 		show_i.Pressed += () => {
 			info.Visible = true;
 			cr_info.Visible = true;
