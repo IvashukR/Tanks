@@ -75,7 +75,7 @@ public partial class Bullet : CharacterBody2D
 	private  async void entered(Node2D body, Vector2 normal)
 	{
 		
-		if (body == null || IsQueuedForDeletion())
+		if (body == null || body.IsQueuedForDeletion())
     	{
         	return; 
     	}
@@ -86,6 +86,7 @@ public partial class Bullet : CharacterBody2D
 		}
 		else if (body.IsInGroup("bullet"))
 		{
+			if(!body.IsQueuedForDeletion())body.QueueFree();
 			QueueFree();
 		}
 
@@ -108,7 +109,7 @@ public partial class Bullet : CharacterBody2D
 				QueueFree();
 			}
 		}
-		else if (body.IsInGroup("transport"))
+		else if (body.IsInGroup("transport") && !IsQueuedForDeletion())
 		{
 			int proch = 0;
 			int new_proch = 0;

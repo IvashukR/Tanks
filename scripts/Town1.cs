@@ -3,19 +3,42 @@ using System;
 
 public partial class Town1 : Town
 {
-    private bool is_ai = false;
+    private bool is_ai;
     public TextureButton on_ai;
-    private RayCast2D ray_cast;
+    private Area2D bullet_area;
+    private bool flag_area;
     public override void _Ready()
     {
-        ray_cast = GetNode<RayCast2D>("%raycast");
+        bullet_area = GetNode<Area2D>("%bullet_area");
         on_ai = GetNode<TextureButton>("%on_ai");
+        bullet_area.BodyEntered += (body) => Entered(body);
         on_ai.Pressed += () => 
         {
             is_ai = !is_ai;
+            flag_area = true;
         };
         base._Ready();
         
+    }
+    public async void  Entered(Node2D body)
+    {
+        if(body is Bullet bullet)
+        {
+            Vector2 future_pos = bullet.GlobalPosition + bullet.dir * bullet.speed * 0.2f;
+            var tween = CreateTween();
+            tween.SetEase(Tween.EaseType.InOut);
+            tween.SetTrans(Tween.TransitionType.Sine);
+            tween.TweenProperty(pushka, "rotation", (GlobalPosition - future_pos).Normalized().Angle(), 0.2f);
+            await ToSignal(tween, "finished");
+            if(patron > 0 && can_shoot)
+            {
+                GlobalManager.Instance.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50);
+                can_shoot = false;
+                t.Start();
+                patron--;
+                patron_l.Text = $"Town patron: {patron}";
+            }
+        }
     }
     public void set_outline(bool _render)
     {
@@ -42,32 +65,17 @@ public partial class Town1 : Town
     {
         if(!is_ai)base._Input(@event);
     }
-    public override async void  _Process(double delta)
+    public override  void  _Process(double delta)
     {
         if(!is_ai)
         {
             base._Process(delta);
         }
-        else
+        else if(flag_area)
         {
-            ray_cast.Rotation += 1.3f;
-            if(ray_cast.IsColliding())
-            {
-                var collider = ray_cast.GetCollider();
-                if(collider is Node coll)
-                {
-                    if(coll.IsInGroup("bullet"))
-                    {
-                        var tween = CreateTween();
-                        tween.SetEase(Tween.EaseType.InOut);
-                        tween.SetTrans(Tween.TransitionType.Sine);
-                        tween.TweenProperty(pushka, "rotation", (ray_cast.Rotation - Mathf.DegToRad(90)) * -1, 1.5f);
-                        await ToSignal(tween, "finished");
-                        GlobalManager.Instance.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50);
-                    }
-                }
-
-            }
+            flag_area = false;
+            bullet_area.Monitoring = true;
+            
         }
     }
 }

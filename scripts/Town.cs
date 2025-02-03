@@ -6,9 +6,9 @@ public partial class Town : CharacterBody2D
 	public Sprite2D pushka;
     public bool can_shoot = true;
     public Marker2D marker;
-    private Timer t;
+    protected Timer t;
     public Node parent;
-    private Label patron_l;
+    protected Label patron_l;
     protected int patron = 3;
     public int proch = 75;
     private Label hp_l;
