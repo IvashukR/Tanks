@@ -133,7 +133,7 @@ public partial class Bullet : CharacterBody2D
 					break;
 				}
 			}
-			if (boom != null &&  new_proch <= 0)
+			if (boom != null &&  new_proch <= 0 )
 			{
 				ShaderMaterial sm = boom.Material as ShaderMaterial;
 				boom.Emitting = true;
@@ -146,7 +146,6 @@ public partial class Bullet : CharacterBody2D
                 		sm.SetShaderParameter("glow_strength", i);
             		}
         		}
-				body.Visible = false;
 				boom.Emitting = false;
 				body.QueueFree();
         		QueueFree();

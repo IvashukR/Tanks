@@ -8,6 +8,7 @@ public partial class Town : CharacterBody2D
     public Marker2D marker;
     protected Timer t;
     public Node parent;
+    public bool is_death;
     protected Label patron_l;
     protected int patron = 3;
     public int proch = 75;

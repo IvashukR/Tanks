@@ -24,14 +24,14 @@ public partial class Town1 : Town
     {
         if(body is Bullet bullet)
         {
-            Vector2 future_pos = bullet.GlobalPosition + bullet.dir * bullet.speed * 0.2f;
-            var tween = CreateTween();
-            tween.SetEase(Tween.EaseType.InOut);
-            tween.SetTrans(Tween.TransitionType.Sine);
-            tween.TweenProperty(pushka, "rotation", (GlobalPosition - future_pos).Normalized().Angle(), 0.2f);
-            await ToSignal(tween, "finished");
             if(patron > 0 && can_shoot)
             {
+                Vector2 future_pos = bullet.GlobalPosition + bullet.dir * bullet.speed * 0.03f;
+                var tween = CreateTween();
+                tween.SetEase(Tween.EaseType.InOut);
+                tween.SetTrans(Tween.TransitionType.Sine);
+                tween.TweenProperty(pushka, "rotation", (GlobalPosition - future_pos).Normalized().Angle(), 0.2f);
+                await ToSignal(tween, "finished");
                 GlobalManager.Instance.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50);
                 can_shoot = false;
                 t.Start();
