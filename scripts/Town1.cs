@@ -7,18 +7,35 @@ public partial class Town1 : Town
     public TextureButton on_ai;
     private Area2D bullet_area;
     private bool flag_area;
+    private BoxContainer info;
+    private bool this_is_pick_unit;
     public override void _Ready()
     {
+        info = GetNode<BoxContainer>("%info");
         bullet_area = GetNode<Area2D>("%bullet_area");
-        on_ai = GetNode<TextureButton>("%on_ai");
+        on_ai = GetNode<TextureButton>("%on_ai_town");
+        GlobalManager.Instance.pick_unit += pick_unit;
         bullet_area.BodyEntered += (body) => Entered(body);
         on_ai.Pressed += () => 
         {
             is_ai = !is_ai;
+            if(is_ai)info.Hide();
+            else
+            {
+                info.Show();
+                this_is_pick_unit = true;
+                GlobalManager.Instance.EmitSignal("pick_unit");
+            }
             flag_area = true;
         };
         base._Ready();
         
+    }
+    private void pick_unit()
+    {
+        is_ai = !this_is_pick_unit;
+        if(is_ai && !info.IsQueuedForDeletion())info.Hide();
+        this_is_pick_unit = false;
     }
     public async void  Entered(Node2D body)
     {
@@ -40,9 +57,9 @@ public partial class Town1 : Town
             }
         }
     }
-    public void set_outline(bool _render)
+    static public void set_outline(Node parent, bool _render)
     {
-        foreach(var child in GetChildren())
+        foreach(var child in parent.GetChildren())
         {
             if(child is Sprite2D sprite)
             {
@@ -77,5 +94,10 @@ public partial class Town1 : Town
             bullet_area.Monitoring = true;
             
         }
+    }
+    public override void _ExitTree()
+    {
+        base._ExitTree();
+        GlobalManager.Instance.pick_unit -= pick_unit;
     }
 }

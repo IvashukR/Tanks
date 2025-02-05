@@ -41,7 +41,8 @@ public partial class Trenirovka : Node
 		GlobalManager.Instance.fail += losse;
 		restart = GetNode<TextureButton>("%restart");
 		restart.Pressed += () => {
-			GetTree().ChangeSceneToPacked(s);
+			//GetTree().ChangeSceneToPacked(s);
+			GetTree().ReloadCurrentScene();
 		};
 		info = GetNode<BoxContainer>("%info");
 		enemy = GetNode<StaticBody2D>("%town_enemy");

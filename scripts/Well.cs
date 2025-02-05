@@ -7,6 +7,7 @@ public partial class Well : StaticBody2D
     public float low;
 	private int _proch = 75;
     private AnimatedSprite2D well_t;
+    private bool crash;
 	public int Proch
     
     
@@ -19,8 +20,9 @@ public partial class Well : StaticBody2D
             {
                 _ = kill();
             }
-            else if (_proch <= low)
+            else if (_proch <= low && !crash)
             {
+                crash = true;
                 well_t?.Play();
             }
         }

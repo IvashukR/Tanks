@@ -21,8 +21,8 @@ public partial class Level1 : Trenirovka
 		Start += () => 
 		{
 			card_ivisible.Show();
-			town.on_ai.MouseEntered += () => town.set_outline(true);
-        	town.on_ai.MouseExited += () => town.set_outline(false);
+			town.on_ai.MouseEntered += () => Town1.set_outline(town, true);
+        	town.on_ai.MouseExited += () => Town1.set_outline(town, false);
 		};
 		card_ivisible.Pressed += () =>
 		{

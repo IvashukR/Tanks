@@ -21,6 +21,8 @@ public partial class GlobalManager : Node
 	public  delegate void failEventHandler();
 	[Signal]
 	public  delegate void change_moneyEventHandler();
+	[Signal]
+	public  delegate void pick_unitEventHandler();
 	Timer t;
 	private int money = 200;
 	public int Money

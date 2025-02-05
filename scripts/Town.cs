@@ -8,14 +8,15 @@ public partial class Town : CharacterBody2D
     public Marker2D marker;
     protected Timer t;
     public Node parent;
-    public bool is_death;
     protected Label patron_l;
     protected int patron = 3;
     public int proch = 75;
     private Label hp_l;
+    public bool is_boom;
     
     private void upd_h()
     {
+        if(hp_l == null)return;
         if (proch >= 0)
         {
             hp_l.Text = $"Town health: {proch}";

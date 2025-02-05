@@ -23,7 +23,7 @@ public partial class Void : State
 	}
 	public override void Exit()
 	{
-		timer.Stop();
+		if(!timer.IsQueuedForDeletion())timer.Stop();
 	}
 	
 	public override void Process(double delta)

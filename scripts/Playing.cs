@@ -12,9 +12,16 @@ public partial class Playing : State
 	private bool can_shoot = true;
 	private Timer timer;
 	private Node _parent;
+	//private BoxContainer info;
+	//private Label patron_l;
+	//private Label hp_l;
+	[Export] private string name_unit = "Voin";
 	private AnimationPlayer anim;
 	public override void _Ready()
 	{
+		//patron_l = GetNode<Label>("%patron_l");
+		//hp_l = GetNode<Label>("%hp_l");
+		//info = GetNode<BoxContainer>("%info");
 		anim = GetNode<AnimationPlayer>("%anim");
 		fsm = GetNode<Node>("%FSM");
 		var parent = fsm.GetParent();

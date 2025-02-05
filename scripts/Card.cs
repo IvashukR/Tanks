@@ -3,12 +3,12 @@ using System;
 
 public partial class Card : CanvasLayer
 {
-	private Label money_l = new Label();
-	private Label speed_l = new Label();
-	private Label per_l = new Label();
-	private Label d_cost_l = new Label();
-	private Label damage_l = new Label();
-	private Label patron_l = new Label();
+	private Label money_l;
+	private Label speed_l;
+	private Label per_l;
+	private Label d_cost_l;
+	private Label damage_l;
+	private Label patron_l;
 	private int cost = 0;
 	private VBoxContainer info;
 	private ColorRect cr_info;
@@ -82,7 +82,5 @@ public partial class Card : CanvasLayer
     	}
 	}
 
-
-	
 	
 }
