@@ -16,7 +16,7 @@ public partial class Bullet : CharacterBody2D
 	public float angle_pushka;
 	public CpuParticles2D p;
 	private Timer c;
-	
+	private bool calculete_damage;
 	public override void _Ready()
 	{
 		p = GetNode<CpuParticles2D>("%particles");
@@ -55,7 +55,7 @@ public partial class Bullet : CharacterBody2D
 		if (collision != null)
         {
             var collider = collision.GetCollider() as Node2D;
-            if (collider != null && coliide)
+            if (collider != null && coliide) 
             {
                 entered(collider, collision.GetNormal());
 				coliide = false;
@@ -72,7 +72,7 @@ public partial class Bullet : CharacterBody2D
 		
 		
 	}
-	private  async void entered(Node2D body, Vector2 normal)
+	private  void entered(Node2D body, Vector2 normal)
 	{
 		
 		if (body == null || body.IsQueuedForDeletion())
@@ -109,55 +109,29 @@ public partial class Bullet : CharacterBody2D
 				QueueFree();
 			}
 		}
-		else if (body.IsInGroup("transport") && !IsQueuedForDeletion())
+		else if (body.IsInGroup("transport"))
 		{
+			
 			int proch = 0;
 			int new_proch = 0;
 			var field = body.GetType().GetField("proch", BindingFlags.Public | BindingFlags.Instance);
-			if (field != null )
-                    {
-                        proch = (int)field.GetValue(body);
-						field.SetValue(body, proch - damage);
-						if (body.Name == "town")
-						{
-							GlobalManager.Instance.EmitSignal("del_t");
-						}
-						new_proch = (int)field.GetValue(body);
-                    }
-			CpuParticles2D boom  = null;
-			foreach (var child in body.GetChildren())
-			{
-				if (child is CpuParticles2D)
+			if (field != null && !calculete_damage)
+            {
+				calculete_damage = true;
+				proch = (int)field.GetValue(body);
+				field.SetValue(body, proch - damage);
+							if (body.Name == "town")
+							{
+								GlobalManager.Instance.EmitSignal("del_t");
+							}
+				new_proch = (int)field.GetValue(body);
+				GD.Print(new_proch);
+				if (new_proch <= 0 )
 				{
-					boom = (CpuParticles2D)child;
-					break;
+					if(body.Name == "town")GlobalManager.Instance.EmitSignal("destroyed_town");
 				}
-			}
-			if (boom != null &&  new_proch <= 0 )
-			{
-				ShaderMaterial sm = boom.Material as ShaderMaterial;
-				boom.Emitting = true;
-				Visible = false;
-				if (!IsQueuedForDeletion())
-        		{
-            		for (float i = 0.0f; i <= 1; i += 0.3f)
-            		{
-						await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
-                		sm.SetShaderParameter("glow_strength", i);
-            		}
-        		}
-				boom.Emitting = false;
-				body.QueueFree();
-        		QueueFree();
-				
-			}
-			else
-			{
 				QueueFree();
 			}
-				
-    		
-			
 		}
 	}
 }

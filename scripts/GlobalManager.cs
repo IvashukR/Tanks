@@ -23,6 +23,8 @@ public partial class GlobalManager : Node
 	public  delegate void change_moneyEventHandler();
 	[Signal]
 	public  delegate void pick_unitEventHandler();
+	[Signal]
+	public  delegate void destroyed_townEventHandler();		
 	Timer t;
 	private int money = 200;
 	public int Money
