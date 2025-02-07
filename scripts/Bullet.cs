@@ -113,23 +113,17 @@ public partial class Bullet : CharacterBody2D
 		{
 			
 			int proch = 0;
-			int new_proch = 0;
 			var field = body.GetType().GetField("proch", BindingFlags.Public | BindingFlags.Instance);
 			if (field != null && !calculete_damage)
             {
 				calculete_damage = true;
 				proch = (int)field.GetValue(body);
 				field.SetValue(body, proch - damage);
-							if (body.Name == "town")
-							{
-								GlobalManager.Instance.EmitSignal("del_t");
-							}
-				new_proch = (int)field.GetValue(body);
-				GD.Print(new_proch);
-				if (new_proch <= 0 )
+				if (body.Name == "town")
 				{
-					if(body.Name == "town")GlobalManager.Instance.EmitSignal("destroyed_town");
+					GlobalManager.Instance.EmitSignal("del_t");
 				}
+				if(body.Name == "town")GlobalManager.Instance.EmitSignal("destroyed_town");
 				QueueFree();
 			}
 		}

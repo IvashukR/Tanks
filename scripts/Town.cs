@@ -30,15 +30,26 @@ public partial class Town : CharacterBody2D
     }
     private async void Destroy()
     {
-        if(is_boom)return;
-        is_boom = true;
-        blam_particles.Emitting = true;
-        for (float i = 0.0f; i <= 1; i += 0.3f)
+        if(proch <= 0)
         {
-			await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
-            sm.SetShaderParameter("glow_strength", i);
+            if(is_boom)return;
+            is_boom = true;
+            blam_particles.Emitting = true;
+            for (float i = 0.0f; i <= 1; i += 0.3f)
+            {
+			    await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
+                sm.SetShaderParameter("glow_strength", i);
+            }
+            QueueFree();
         }
-        QueueFree();
+        else
+        {
+            Town1.set_shader(this, true, "damage");
+            await ToSignal(GetTree().CreateTimer(0.9f), "timeout");
+            Town1.set_shader(this, false, "damage");
+        }
+
+        
     }
 	public override void _Ready()
     {

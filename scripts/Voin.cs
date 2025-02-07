@@ -28,8 +28,8 @@ public partial class Voin : CharacterBody2D, IStats
 			this_is_pick_unit = true;
 			GlobalManager.Instance.EmitSignal("pick_unit");
 		};
-		on_ai.MouseEntered += () => Town1.set_outline(voin_sprite, true);
-    	on_ai.MouseExited += () => Town1.set_outline(voin_sprite, false);
+		on_ai.MouseEntered += () => Town1.set_outline(voin_sprite, true, "render");
+    	on_ai.MouseExited += () => Town1.set_outline(voin_sprite, false, "render");
 		GlobalManager.Instance.pick_unit += () =>
 		{
 			is_ai = !this_is_pick_unit;
