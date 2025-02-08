@@ -45,12 +45,13 @@ public partial class Town : CharacterBody2D
         else
         {
             Town1.set_shader(this, true, "damage");
-            await ToSignal(GetTree().CreateTimer(0.9f), "timeout");
+            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
             Town1.set_shader(this, false, "damage");
         }
 
         
     }
+
 	public override void _Ready()
     {
         blam_particles = GetNode<CpuParticles2D>("%blam");
@@ -84,6 +85,7 @@ public partial class Town : CharacterBody2D
     }
     public override void _Input(InputEvent @event)
     {
+        if(GlobalManager.Instance.block_input)return;
 		if (@event is InputEventMouseButton mouseEvent )
         {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot )
@@ -92,6 +94,7 @@ public partial class Town : CharacterBody2D
                 {
                     foreach(TextureButton btn in level.all_btn_ui)
                     {
+                        GD.Print("CHEK");
                         if(btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true)return;
                     }
                 }

@@ -14,12 +14,13 @@ public partial class Voin : CharacterBody2D, IStats
 	private Node2D voin_sprite;
 	public TextureButton on_ai;
 	private bool this_is_pick_unit;
-	private bool is_ai;
+	private bool is_ai = true;
 	public override void _Ready()
 	{
 		on_ai = GetNode<TextureButton>("%on_ai");
 		voin_sprite = GetNode<Node2D>("%pig");
 		fsm = GetNode<FSM>("%FSM");
+		on_ai.Disabled = true;
 		on_ai.Pressed += () =>
 		{
 			is_ai = !is_ai;
@@ -28,15 +29,23 @@ public partial class Voin : CharacterBody2D, IStats
 			this_is_pick_unit = true;
 			GlobalManager.Instance.EmitSignal("pick_unit");
 		};
-		on_ai.MouseEntered += () => Town1.set_outline(voin_sprite, true, "render");
-    	on_ai.MouseExited += () => Town1.set_outline(voin_sprite, false, "render");
+		on_ai.MouseEntered += () =>
+		{
+			GlobalManager.Instance.block_input = true;
+			Town1.set_shader(voin_sprite, true, "render");
+		}; 
+    	on_ai.MouseExited += () => 
+		{
+			GlobalManager.Instance.block_input = false;
+			Town1.set_shader(voin_sprite, false, "render");
+		};
 		GlobalManager.Instance.pick_unit += () =>
 		{
-			is_ai = !this_is_pick_unit;
+			if(!is_ai && !this_is_pick_unit)is_ai = true;
 			if(is_ai)fsm.change_state("AI");
 			this_is_pick_unit = false;
 		};
-		if(GetParent() is Level1 level)level.all_btn_ui.Add(on_ai);
+		//if(GetParent() is Level1 level)level.all_btn_ui.Add(on_ai);
 	}
 
 }

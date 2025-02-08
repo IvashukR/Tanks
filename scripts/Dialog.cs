@@ -48,12 +48,13 @@ public partial class Dialog : MarginContainer
 		label.Text = "";
 		display_letter();
 	}
+	private void pig_stop() => pig.Stop();
 	public void display_letter()
 	{
 		if(letter_index > text.Length - 1)
 		{
 			GlobalManager.Instance.EmitSignal("finish_d");
-			GlobalManager.Instance.finish_d += () => pig.Stop();
+			GlobalManager.Instance.finish_d += pig_stop;
 			return;
 		}
 		label.Text += text[letter_index];
@@ -85,6 +86,10 @@ public partial class Dialog : MarginContainer
 		 await _resizeTcs.Task;
 	}
 	private void resize() => _resizeTcs?.SetResult(null);
+	public override void _ExitTree()
+	{
+		GlobalManager.Instance.finish_d -= pig_stop;
+	}
 
 	
 	

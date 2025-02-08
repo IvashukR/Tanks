@@ -4,32 +4,23 @@ using System;
 public partial class Void : State
 {
 	private bool life = true;
-	private Timer timer;
 	private Voin v;
 	private FSM fsm;
 	
 	public override void _Ready()
 	{
-		GD.Print("READY_VOID");
 		var parent = GetParent();
 		v = (Voin) parent.GetParent();
-		timer = GetNode<Timer>("%t");
-		timer.Timeout += () => parent.QueueFree();
 		fsm = GetParent<FSM>();
 	}
-	public override void Enter()
-	{
-		timer.Start();
-	}
-	public override void Exit()
-	{
-		if(!timer.IsQueuedForDeletion())timer.Stop();
-	}
-	
 	public override void Process(double delta)
 	{
-
+		if (v.GlobalPosition.X < 0 || v.GlobalPosition.X > GetViewport().GetVisibleRect().Size.X || v.GlobalPosition.Y < 0 || v.GlobalPosition.Y > GetViewport().GetVisibleRect().Size.Y)
+		{
+			v.QueueFree();
+		}
 		v.GlobalPosition = GetViewport().GetMousePosition();
+		v.MoveAndSlide();
 	}
 	public override void Inp(InputEvent @event)
     {
@@ -37,7 +28,7 @@ public partial class Void : State
         {
 			GlobalManager.Instance.EmitSignal("change_money");
             fsm.change_state("Playing");
-			GD.Print(fsm.current_state);
+			v.on_ai.Disabled = false;
 
         }
         

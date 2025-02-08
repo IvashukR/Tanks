@@ -123,6 +123,7 @@ public partial class Bullet : CharacterBody2D
 				{
 					GlobalManager.Instance.EmitSignal("del_t");
 				}
+				if(body.Name == "town_enemy")GlobalManager.Instance.EmitSignal("destroyed_enemy_town");
 				if(body.Name == "town")GlobalManager.Instance.EmitSignal("destroyed_town");
 				QueueFree();
 			}

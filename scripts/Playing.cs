@@ -12,6 +12,7 @@ public partial class Playing : State
 	private bool can_shoot = true;
 	private Timer timer;
 	private Node _parent;
+	private bool pressed_on_ai = false;
 	//private BoxContainer info;
 	//private Label patron_l;
 	//private Label hp_l;
@@ -52,20 +53,28 @@ public partial class Playing : State
 	public override void PhysicsProcess(double delta)
 	{
 		dir = Input.GetVector("l", "r", "d", "u").Normalized();
-		v.Velocity = dir  * v.speed;
+		v.Velocity = dir  * v.speed * 100.0f * (float)delta;
 		v.MoveAndSlide();
 	}
 	public override void Inp(InputEvent @event)
     {
+		if(GlobalManager.Instance.block_input)return;
 		if (@event is InputEventMouseButton mouseEvent)
         {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count >= 0)
             {
 				if(_parent is Level1 level)
                 {
+					GD.Print(",CHEK");
                     foreach(TextureButton btn in level.all_btn_ui)
                     {
-                        if(btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true)return;
+						var buttonRect = btn.GlobalPosition;
+    					GD.Print($"Button {btn.Name}: Rect: {buttonRect}, Mouse Position: {mouseEvent.GlobalPosition}");
+                        if(btn.GetGlobalRect().HasPoint(mouseEvent.GlobalPosition) && btn.Visible == true)
+						{
+							GD.Print("CHEK");
+							return;
+						}
                     }
                 }
                 GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, true, marker.Rotation, new Vector2(0.1f, 0.1f), v.damage);

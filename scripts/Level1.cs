@@ -18,12 +18,7 @@ public partial class Level1 : Trenirovka
 		card_visible = GetNode<TextureButton>("%card_visible");
 		card = GetNode<CanvasLayer>("%card");
 		s =  (PackedScene)ResourceLoader.Load("res://scene/level.tscn");
-		Start += () => 
-		{
-			card_ivisible.Show();
-			town.on_ai.MouseEntered += () => Town1.set_outline(town, true);
-        	town.on_ai.MouseExited += () => Town1.set_outline(town, false);
-		};
+		Start += _Start;
 		card_ivisible.Pressed += () =>
 		{
 			card_ivisible.Visible = false;
@@ -56,10 +51,20 @@ public partial class Level1 : Trenirovka
 		Card card_obj = (Card) card;
 		card_obj.SetInfo(new Voin());
 	}
-
+	protected virtual void _Start()
+	{
+		card_ivisible.Show();
+		if(town != null)town.on_ai.MouseEntered += () => Town1.set_shader(town, true, "render");
+        if(town != null)town.on_ai.MouseExited += () => Town1.set_shader(town, false, "render");
+	}
 	
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
+	}
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		Start -= _Start;
 	}
 }

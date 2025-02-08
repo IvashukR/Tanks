@@ -24,8 +24,11 @@ public partial class GlobalManager : Node
 	[Signal]
 	public  delegate void pick_unitEventHandler();
 	[Signal]
-	public  delegate void destroyed_townEventHandler();		
+	public  delegate void destroyed_townEventHandler();
+	[Signal]
+	public  delegate void destroyed_enemy_townEventHandler();		
 	Timer t;
+	public bool block_input;
 	private int money = 200;
 	public int Money
 	{

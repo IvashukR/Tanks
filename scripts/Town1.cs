@@ -20,12 +20,9 @@ public partial class Town1 : Town
         {
             is_ai = !is_ai;
             if(is_ai)info.Hide();
-            else
-            {
-                info.Show();
-                this_is_pick_unit = true;
-                GlobalManager.Instance.EmitSignal("pick_unit");
-            }
+            info.Show();
+            this_is_pick_unit = true;
+            GlobalManager.Instance.EmitSignal("pick_unit");
             flag_area = true;
         };
         base._Ready();
@@ -33,7 +30,7 @@ public partial class Town1 : Town
     }
     private void pick_unit()
     {
-        is_ai = !this_is_pick_unit;
+        if(!is_ai && !this_is_pick_unit)is_ai = true;
         if(is_ai && !info.IsQueuedForDeletion())info.Hide();
         this_is_pick_unit = false;
     }
@@ -57,21 +54,21 @@ public partial class Town1 : Town
             }
         }
     }
-    static public void set_outline(Node parent, bool _render)
+    static public void set_shader(Node parent, bool _render, string name_param)
     {
         foreach(var child in parent.GetChildren())
         {
             if(child is Sprite2D sprite)
             {
                 ShaderMaterial shader = sprite.Material as ShaderMaterial;
-                shader.SetShaderParameter("render", _render);
+                shader.SetShaderParameter(name_param, _render);
             }
             foreach(var _child in child.GetChildren())
             {
                 if(_child is Sprite2D _sprite)
                 {
                     ShaderMaterial shader = _sprite.Material as ShaderMaterial;
-                    shader.SetShaderParameter("render", _render);
+                    shader.SetShaderParameter(name_param, _render);
                 }
                 
             }
@@ -99,5 +96,6 @@ public partial class Town1 : Town
     {
         base._ExitTree();
         GlobalManager.Instance.pick_unit -= pick_unit;
+        on_ai.QueueFree();
     }
 }
