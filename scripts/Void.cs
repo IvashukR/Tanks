@@ -28,7 +28,7 @@ public partial class Void : State
         {
 			GlobalManager.Instance.EmitSignal("change_money");
             fsm.change_state("Playing");
-			v.on_ai.Disabled = false;
+			GlobalManager.Instance.block_drop_unit = false;
 
         }
         

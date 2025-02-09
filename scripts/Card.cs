@@ -33,6 +33,7 @@ public partial class Card : CanvasLayer
 	
 	public void Buy(string _path)
 	{
+		GlobalManager.Instance.block_drop_unit = true;
 		PackedScene s  = ResourceLoader.Load<PackedScene>(this._path);
 		var sc = s.Instantiate<Node2D>();
 		Node fsm_node = sc.GetNode("%FSM");
@@ -54,7 +55,10 @@ public partial class Card : CanvasLayer
 		d_cost_l = GetNode<Label>("%death_l");
 		patron_l = GetNode<Label>("%patron_l");
 		damage_l = GetNode<Label>("%damage_l");
-		main_btn.Pressed += () => Buy(_path);
+		main_btn.Pressed += () => 
+		{
+			if(!GlobalManager.Instance.block_drop_unit)Buy(_path);
+		};
 		show_i.Pressed += () => {
 			info.Visible = true;
 			cr_info.Visible = true;

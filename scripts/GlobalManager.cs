@@ -32,6 +32,7 @@ public partial class GlobalManager : Node
 	Timer t;
 	public bool block_input;
 	private int money = 200;
+	public bool block_drop_unit;
 	public int Money
 	{
 		set

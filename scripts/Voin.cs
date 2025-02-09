@@ -16,6 +16,7 @@ public partial class Voin : CharacterBody2D, IStats
 	private bool this_is_pick_unit;
 	private bool is_ai = true;
 	private Label hp_l;
+	public bool on_ai_active;
 	[Export] public string name_unit = "Voin";
 	public override void _Ready()
 	{
@@ -23,8 +24,8 @@ public partial class Voin : CharacterBody2D, IStats
 		on_ai = GetNode<TextureButton>("%on_ai");
 		voin_sprite = GetNode<Node2D>("%pig");
 		fsm = GetNode<FSM>("%FSM");
-		on_ai.Disabled = true;
 		hp_l.Text = $"{name_unit} Health: {proch}";
+		fsm.change_state("Void");
 		on_ai.Pressed += () =>
 		{
 			is_ai = !is_ai;
