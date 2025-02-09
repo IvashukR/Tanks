@@ -23,7 +23,7 @@ public partial class Card : CanvasLayer
 		{
 			money_l.Text = $": {target.cost}";
 			patron_l.Text = $"патрони: {target.patron_count}";
-			speed_l.Text = $"скорость: {target.speed}";
+			speed_l.Text = $"скорость: {target.speed / 100}";
 			per_l.Text = $"перезарядка: {target.perezaryad}";
 			d_cost_l.Text = $"цена смерти: {target.cost_death}";
 			damage_l.Text = $"урон: {target.damage}";
@@ -72,7 +72,6 @@ public partial class Card : CanvasLayer
 	}
 	public override void _ExitTree()
 	{
-    
     	foreach (Node child in GetChildren())
     	{
         	if (child is CanvasItem)

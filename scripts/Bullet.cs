@@ -128,5 +128,10 @@ public partial class Bullet : CharacterBody2D
 				QueueFree();
 			}
 		}
+		else if(body.IsInGroup("unit"))
+		{
+			GlobalManager.Instance.EmitSignal("take_damage", body, this);
+			QueueFree();
+		}
 	}
 }

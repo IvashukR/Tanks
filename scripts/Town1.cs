@@ -96,6 +96,7 @@ public partial class Town1 : Town
     {
         base._ExitTree();
         GlobalManager.Instance.pick_unit -= pick_unit;
+        if(GetParent() is Level1 level)level.all_btn_ui.Remove(on_ai);
         on_ai.QueueFree();
     }
 }

@@ -26,7 +26,9 @@ public partial class GlobalManager : Node
 	[Signal]
 	public  delegate void destroyed_townEventHandler();
 	[Signal]
-	public  delegate void destroyed_enemy_townEventHandler();		
+	public  delegate void destroyed_enemy_townEventHandler();
+	[Signal]
+	public  delegate void take_damageEventHandler(Node2D node, Bullet bullet);		
 	Timer t;
 	public bool block_input;
 	private int money = 200;
