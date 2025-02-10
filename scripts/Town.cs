@@ -40,6 +40,7 @@ public partial class Town : CharacterBody2D
 			    await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
                 sm.SetShaderParameter("glow_strength", i);
             }
+            GlobalManager.Instance.EmitSignal("fail");
             QueueFree();
         }
         else
@@ -76,10 +77,6 @@ public partial class Town : CharacterBody2D
 		if (can_shoot && patron != 0)
         {
            pushka.RotationDegrees += 0.9f;
-        }
-        if (patron == 0 && GetNodeOrNull("%town_enemy") != null && GetTree().GetNodesInGroup("bullet").Count == 0)
-        {
-            GlobalManager.Instance.EmitSignal("fail");
         }
         
     }

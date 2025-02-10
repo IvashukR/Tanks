@@ -26,8 +26,10 @@ public partial class Town1 : Town
             flag_area = true;
         };
         base._Ready();
+        GlobalManager.Instance.card_click += ClickCard;
         
     }
+    private void ClickCard(){if(!is_ai)is_ai = true;}
     private void pick_unit()
     {
         if(!is_ai && !this_is_pick_unit)is_ai = true;
@@ -36,6 +38,7 @@ public partial class Town1 : Town
     }
     public async void  Entered(Node2D body)
     {
+        GD.Print("MONITOR");
         if(body is Bullet bullet)
         {
             if(patron > 0 && can_shoot)
@@ -95,6 +98,7 @@ public partial class Town1 : Town
     public override void _ExitTree()
     {
         base._ExitTree();
+        GlobalManager.Instance.card_click -= ClickCard;
         GlobalManager.Instance.pick_unit -= pick_unit;
         if(GetParent() is Level1 level)level.all_btn_ui.Remove(on_ai);
         on_ai.QueueFree();

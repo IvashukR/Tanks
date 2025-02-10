@@ -24,18 +24,19 @@ public partial class Ai : State
 	}
 	private void CheckUnitCollideNotCurved()
 	{
-		if(ray_flag && voin.patron_count > 0)
+		if(voin.patron_count > 0)
 		{
 			voin.Rotation += 0.04f;
-			if(detect_enemy_ray.IsColliding())
+			if(detect_enemy_ray.IsColliding() && ray_flag)
 			{
+				ray_flag = false;
 				Node2D collider = (Node2D)detect_enemy_ray.GetCollider();
-				if(collider.IsInGroup("enemy"))
+				ray_timer.Start();
+				if(collider.IsInGroup("enemy") || collider.IsInGroup("bullet"))
 				{
-					ray_flag = false;
-					ray_timer.Start();
 					voin.LookAt(collider.GlobalPosition);
-					GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, false, false, marker.Rotation, new Vector2(0.1f, 0.1f), voin.damage);
+					GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, false, false, marker.Rotation + Mathf.DegToRad(90), new Vector2(0.1f, 0.1f), voin.damage);
+					voin.patron_count--;
 				}
 
 			}

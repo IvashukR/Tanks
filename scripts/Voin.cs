@@ -44,13 +44,23 @@ public partial class Voin : CharacterBody2D, IStats
 			GlobalManager.Instance.block_input = false;
 			Town1.set_shader(voin_sprite, false, "render");
 		};
-		GlobalManager.Instance.pick_unit += () =>
-		{
-			if(!is_ai && !this_is_pick_unit)is_ai = true;
-			if(is_ai)fsm.change_state("AI");
-			this_is_pick_unit = false;
-		};
+		GlobalManager.Instance.pick_unit += PickUnit;
 		GlobalManager.Instance.take_damage += (node, bullet) => TakeDamage(node, bullet);
+		GlobalManager.Instance.card_click += CardClick;
+	}
+	private void PickUnit()
+	{
+		if(!is_ai && !this_is_pick_unit)is_ai = true;
+		if(is_ai)fsm.change_state("AI");
+		this_is_pick_unit = false;
+	}
+	private void CardClick()
+	{
+		if(!is_ai)
+		{
+			is_ai = true;
+			fsm.change_state("AI");
+		}
 	}
 	private async void TakeDamage(Node2D body, Bullet bullet)
 	{
@@ -69,5 +79,10 @@ public partial class Voin : CharacterBody2D, IStats
 			QueueFree();
 		}
 		
+	}
+	public override void _ExitTree()
+	{
+		GlobalManager.Instance.pick_unit -= PickUnit;
+		GlobalManager.Instance.card_click -= CardClick;
 	}
 }

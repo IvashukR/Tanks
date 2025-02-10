@@ -41,7 +41,7 @@ public partial class Playing : State
 	}
 	public override void Exit()
 	{
-		info.Hide();
+		if(info != null)info.Hide();
 	}
 	public override void Process(double delta)
 	{
@@ -65,7 +65,7 @@ public partial class Playing : State
 		if(GlobalManager.Instance.block_input)return;
 		if (@event is InputEventMouseButton mouseEvent)
         {
-            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count >= 0)
+            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count > 0)
             {
 				if(_parent is Level1 level)
                 {
