@@ -17,6 +17,7 @@ public partial class Void : State
 	{
 		if (v.GlobalPosition.X < 0 || v.GlobalPosition.X > GetViewport().GetVisibleRect().Size.X || v.GlobalPosition.Y < 0 || v.GlobalPosition.Y > GetViewport().GetVisibleRect().Size.Y)
 		{
+			GlobalManager.Instance.block_drop_unit = false;
 			v.QueueFree();
 		}
 		v.GlobalPosition = GetViewport().GetMousePosition();

@@ -3,13 +3,13 @@ using System;
 
 public partial class Town : CharacterBody2D
 {
-	public Sprite2D pushka;
-    public bool can_shoot = true;
-    public Marker2D marker;
-    protected Timer t;
+	public  Sprite2D pushka { get; set; }
+    public  bool can_shoot { get; set; } = true;
+    public Marker2D marker { get; set; }
+    public Timer t { get; set; }
     public Node parent;
-    protected Label patron_l;
-    protected int patron = 3;
+    public Label patron_l { get; set; }
+    public int patron  { get; set; } = 3;
     public int proch = 75;
     private Label hp_l;
     public bool is_boom;
@@ -91,7 +91,6 @@ public partial class Town : CharacterBody2D
                 {
                     foreach(TextureButton btn in level.all_btn_ui)
                     {
-                        GD.Print("CHEK");
                         if(btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true)return;
                     }
                 }

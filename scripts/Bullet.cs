@@ -5,6 +5,7 @@ using System.Reflection;
 public partial class Bullet : CharacterBody2D
 {
 	public Vector2 mouse_pos;
+	public Vector2 velocity;
 	public Vector2 player_pos;
 	public int damage = 50;
 	public int ricoshet_count = 3;
@@ -47,7 +48,7 @@ public partial class Bullet : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		
-		Vector2 velocity = dir * speed * (float)delta;
+		velocity = dir * speed * (float)delta;
 
         
         var collision = MoveAndCollide(velocity);
