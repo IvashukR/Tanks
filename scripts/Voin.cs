@@ -37,12 +37,12 @@ public partial class Voin : CharacterBody2D, IStats
 		on_ai.MouseEntered += () =>
 		{
 			GlobalManager.Instance.block_input = true;
-			Town1.set_shader(voin_sprite, true, "render");
+			GamaUtilits.set_shader(voin_sprite, true, "render");
 		}; 
     	on_ai.MouseExited += () => 
 		{
 			GlobalManager.Instance.block_input = false;
-			Town1.set_shader(voin_sprite, false, "render");
+			GamaUtilits.set_shader(voin_sprite, false, "render");
 		};
 		GlobalManager.Instance.pick_unit += PickUnit;
 		GlobalManager.Instance.take_damage += (node, bullet) => TakeDamage(node, bullet);
@@ -69,9 +69,9 @@ public partial class Voin : CharacterBody2D, IStats
 		hp_l.Text = $"{name_unit} Health: {proch}";
 		if(proch > 0)
 		{
-			Town1.set_shader(voin_sprite, true, "damage");
+			GamaUtilits.set_shader(voin_sprite, true, "damage");
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
-            Town1.set_shader(voin_sprite, false, "damage");
+            GamaUtilits.set_shader(voin_sprite, false, "damage");
 		}
 		else
 		{

@@ -45,9 +45,9 @@ public partial class Town : CharacterBody2D
         }
         else
         {
-            Town1.set_shader(this, true, "damage");
+            GamaUtilits.set_shader(this, true, "damage");
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
-            Town1.set_shader(this, false, "damage");
+            GamaUtilits.set_shader(this, false, "damage");
         }
 
         
@@ -99,7 +99,7 @@ public partial class Town : CharacterBody2D
                     can_shoot = false;
                     return;
                 }
-				GlobalManager.Instance.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50);
+				GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50, -1);
                 can_shoot = false;
                 t.Start();
                 patron--;

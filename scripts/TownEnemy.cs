@@ -7,8 +7,12 @@ public partial class TownEnemy : StaticBody2D
 	private bool is_boom;
 	private ShaderMaterial sm;
 	private CpuParticles2D blam_particles;
+    private Label hp_l;
+    private BoxContainer info;
 	public override void _Ready()
 	{
+        hp_l = GetNode<Label>("%hp_l_enemy_town");
+        info = GetNode<BoxContainer>("%info_enemy_town");
 		blam_particles = GetNode<CpuParticles2D>("%blast");
 		sm = blam_particles.Material as ShaderMaterial;
 		GlobalManager.Instance.destroyed_enemy_town += Destroy;
@@ -30,9 +34,9 @@ public partial class TownEnemy : StaticBody2D
         }
         else
         {
-            Town1.set_shader(this, true, "damage");
+            GamaUtilits.set_shader(this, true, "damage");
             await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
-            Town1.set_shader(this, false, "damage");
+            GamaUtilits.set_shader(this, false, "damage");
         }
 
         

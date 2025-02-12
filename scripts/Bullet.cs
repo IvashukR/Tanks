@@ -17,6 +17,7 @@ public partial class Bullet : CharacterBody2D
 	public float angle_pushka;
 	public CpuParticles2D p;
 	private Timer c;
+	public int invertY;
 	private bool calculete_damage;
 	public override void _Ready()
 	{
@@ -41,7 +42,7 @@ public partial class Bullet : CharacterBody2D
 		}
 		else
 		{
-			dir = new Vector2(Mathf.Cos(angle_pushka), Mathf.Sin(angle_pushka)).Normalized() * -1;
+			dir = new Vector2(Mathf.Cos(angle_pushka), Mathf.Sin(angle_pushka)).Normalized() * invertY;
 			Rotation = dir.Angle();
 		}
 	}
