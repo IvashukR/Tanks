@@ -71,5 +71,29 @@ public partial class GamaUtilits : Node
                 }
         }
     }
+    public static async void DestroyTown(int proch, bool is_boom, CpuParticles2D blam_particles, Node2D obj, ShaderMaterial blam_sm)
+    {
+        if(proch <= 0)
+        {
+            if(is_boom)return;
+            is_boom = true;
+            blam_particles.Emitting = true;
+            for (float i = 0.0f; i <= 1; i += 0.3f)
+            {
+			    await obj.ToSignal(obj.GetTree().CreateTimer(0.19f), "timeout");
+                blam_sm.SetShaderParameter("glow_strength", i);
+            }
+            GlobalManager.Instance.EmitSignal("fail");
+            obj.QueueFree();
+        }
+        else
+        {
+            GamaUtilits.set_shader(obj, true, "damage");
+            await obj.ToSignal(obj.GetTree().CreateTimer(0.2f), "timeout");
+            GamaUtilits.set_shader(obj, false, "damage");
+        }
+
+        
+    }
 
 }

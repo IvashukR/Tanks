@@ -28,31 +28,6 @@ public partial class Town : CharacterBody2D
             hp_l.Text = "Town health: 0";
         }
     }
-    private async void Destroy()
-    {
-        if(proch <= 0)
-        {
-            if(is_boom)return;
-            is_boom = true;
-            blam_particles.Emitting = true;
-            for (float i = 0.0f; i <= 1; i += 0.3f)
-            {
-			    await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
-                sm.SetShaderParameter("glow_strength", i);
-            }
-            GlobalManager.Instance.EmitSignal("fail");
-            QueueFree();
-        }
-        else
-        {
-            GamaUtilits.set_shader(this, true, "damage");
-            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
-            GamaUtilits.set_shader(this, false, "damage");
-        }
-
-        
-    }
-
 	public override void _Ready()
     {
         blam_particles = GetNode<CpuParticles2D>("%blam");
@@ -70,7 +45,7 @@ public partial class Town : CharacterBody2D
         AddChild(t);
         sm = blam_particles.Material as ShaderMaterial;
         t.Timeout += () => can_shoot = true;
-        GlobalManager.Instance.destroyed_town += Destroy;
+        GlobalManager.Instance.destroyed_town += () => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
     }
     public override void _Process(double delta)
     {
@@ -111,7 +86,6 @@ public partial class Town : CharacterBody2D
     public override void _ExitTree()
 	{
 		GlobalManager.Instance.del_t -= upd_h;
-        GlobalManager.Instance.destroyed_town -= Destroy;
 	}
 
 
