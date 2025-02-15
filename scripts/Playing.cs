@@ -77,7 +77,7 @@ public partial class Playing : State
 						}
                     }
                 }
-                GlobalManager.Instance.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, true, marker.Rotation, new Vector2(0.1f, 0.1f), v.damage);
+                GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, true, marker.Rotation, new Vector2(0.1f, 0.1f), v.damage, -1);
 				can_shoot = false;
 				v.patron_count--;
 				patron_l.Text = $"{v.name_unit} Patron: {v.patron_count}";

@@ -8,7 +8,7 @@ public partial class Town : CharacterBody2D
     public Marker2D marker { get; set; }
     public Timer t { get; set; }
     public Node parent;
-    public Label patron_l { get; set; }
+    private Label patron_l;
     public int patron  { get; set; } = 3;
     public int proch = 75;
     private Label hp_l;
@@ -16,7 +16,7 @@ public partial class Town : CharacterBody2D
     private ShaderMaterial sm;
     private CpuParticles2D blam_particles;
     
-    private void upd_h()
+    protected void upd_h()
     {
         if(hp_l == null )return;
         if (proch >= 0)
@@ -45,8 +45,9 @@ public partial class Town : CharacterBody2D
         AddChild(t);
         sm = blam_particles.Material as ShaderMaterial;
         t.Timeout += () => can_shoot = true;
-        GlobalManager.Instance.destroyed_town += () => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+        GlobalManager.Instance.destroyed_town += destroy;
     }
+    private void destroy() => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
     public override void _Process(double delta)
     {
 		if (can_shoot && patron != 0)
@@ -86,6 +87,7 @@ public partial class Town : CharacterBody2D
     public override void _ExitTree()
 	{
 		GlobalManager.Instance.del_t -= upd_h;
+        GlobalManager.Instance.destroyed_town -= destroy;
 	}
 
 

@@ -7,5 +7,6 @@ public interface IStats
 	public float speed { get; set; }
 	public int cost { get; set; }
 	public int cost_death { get; set; }
+	public FSM fsm { get; set; }
 	
 }

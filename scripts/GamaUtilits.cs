@@ -41,7 +41,7 @@ public partial class GamaUtilits : Node
                 if(_child is Sprite2D _sprite)
                 {
                     ShaderMaterial shader = _sprite.Material as ShaderMaterial;
-                    shader.SetShaderParameter(name_param, _render);
+                    if(shader != null)shader.SetShaderParameter(name_param, _render);
                 }
                 
             }
@@ -50,25 +50,25 @@ public partial class GamaUtilits : Node
     }
     public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj)
     {
-        if(body is Bullet bullet)
+        if(obj is ITown  town)
         {
-                if(obj is ITown  town)
-                {
-                    if(town.patron > 0 && town.can_shoot)
-                    {
-                        Vector2 future_pos = bullet.GlobalPosition + (bullet.dir * bullet.speed * town.bullet_area_koef);
-                        var tween = obj.CreateTween();
-                        tween.SetEase(Tween.EaseType.InOut);
-                        tween.SetTrans(Tween.TransitionType.Sine);
-                        if(obj is CharacterBody2D _town)tween.TweenProperty(town.pushka, "rotation", (_town.GlobalPosition - future_pos).Normalized().Angle(), town.time_tween);
-                        await obj.ToSignal(tween, "finished");
-                        GamaUtilits.shoot(town.pushka.GlobalPosition, town.marker.GlobalPosition, obj, false, false, town.pushka.Rotation, town.bullet_size, town.bullet_damage, -1);
-                        town.can_shoot = false;
-                        town.t.Start();
-                        town.patron--;
-                        town.patron_l.Text = $"Town patron: {town.patron}";
-                    }
-                }
+            if(town.patron > 0 && town.can_shoot)
+            {
+                Vector2 future_pos = new Vector2();
+                if(body == GlobalManager.Instance.temp_pick_unit)return;
+                if(body is Bullet bullet)future_pos = bullet.GlobalPosition + (bullet.dir * bullet.speed * town.bullet_area_koef);
+                else if(body.IsInGroup("unit") && !obj.IsInGroup("unit"))future_pos = body.GlobalPosition;
+                else return;
+                var tween = obj.CreateTween();
+                tween.SetEase(Tween.EaseType.InOut);
+                tween.SetTrans(Tween.TransitionType.Sine);
+                tween.TweenProperty(town.pushka, "rotation", (obj.GlobalPosition - future_pos).Normalized().Angle(), town.time_tween);
+                await obj.ToSignal(tween, "finished");
+                GamaUtilits.shoot(town.pushka.GlobalPosition, town.marker.GlobalPosition, obj, false, false, town.pushka.Rotation, town.bullet_size, town.bullet_damage, -1);
+                town.can_shoot = false;
+                town.t.Start();
+                town.patron--;
+            }
         }
     }
     public static async void DestroyTown(int proch, bool is_boom, CpuParticles2D blam_particles, Node2D obj, ShaderMaterial blam_sm)

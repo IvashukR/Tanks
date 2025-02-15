@@ -8,14 +8,16 @@ public partial class TownEnemy : StaticBody2D
 	private ShaderMaterial sm;
 	private CpuParticles2D blam_particles;
     private Label hp_l;
-    private BoxContainer info;
 	public override void _Ready()
 	{
-        hp_l = GetNode<Label>("%hp_l_enemy_town");
-        info = GetNode<BoxContainer>("%info_enemy_town");
 		blam_particles = GetNode<CpuParticles2D>("%blast");
 		sm = blam_particles.Material as ShaderMaterial;
-		GlobalManager.Instance.destroyed_enemy_town += () => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+		GlobalManager.Instance.destroyed_enemy_town += destroy;
+	}
+	private void destroy() => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+	public override void _ExitTree()
+	{
+		GlobalManager.Instance.destroyed_enemy_town -= destroy;
 	}
 
 

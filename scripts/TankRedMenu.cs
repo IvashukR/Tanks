@@ -125,7 +125,7 @@ public partial class TankRedMenu : StaticBody2D
             
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && isMouse && can_shoot)
             {
-                GlobalManager.Instance.shoot(tankBlue.GlobalPosition, marker.GlobalPosition, this, false, false, 0.0f, new Vector2(0.165f, 0.171f), 75);
+                GamaUtilits.shoot(tankBlue.GlobalPosition, marker.GlobalPosition, this, false, false, 0.0f, new Vector2(0.165f, 0.171f), 75, -1);
 				can_shoot = false;
             }
         }

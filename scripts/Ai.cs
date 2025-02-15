@@ -33,6 +33,7 @@ public partial class Ai : State
 			{
 				//ray_flag = false;
 				Node2D collider = (Node2D)detect_enemy_ray.GetCollider();
+				if(collider == null)return;
 				ray_timer.Start();
 				if(collider.IsInGroup("enemy") || collider.IsInGroup("bullet"))
 				{

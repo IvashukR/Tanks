@@ -10,7 +10,7 @@ public partial class Voin : CharacterBody2D, IStats
 	public float speed { get; set; } = 9000;
 	public int cost { get; set; } = 100;
 	public int cost_death { get; set; } = 120;
-	private FSM fsm;
+	public FSM fsm { get; set; }
 	private Node2D voin_sprite;
 	public TextureButton on_ai;
 	private bool this_is_pick_unit;
@@ -82,6 +82,11 @@ public partial class Voin : CharacterBody2D, IStats
 	}
 	public override void _ExitTree()
 	{
+		if(fsm.current_state.Name == "Void")
+		{
+			GlobalManager.Instance.block_drop_unit = false;
+			GlobalManager.Instance.temp_pick_unit = null;
+		}
 		GlobalManager.Instance.pick_unit -= PickUnit;
 		GlobalManager.Instance.card_click -= CardClick;
 	}

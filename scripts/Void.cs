@@ -23,6 +23,14 @@ public partial class Void : State
 		v.GlobalPosition = GetViewport().GetMousePosition();
 		v.MoveAndSlide();
 	}
+	public override void Exit()
+	{
+		GlobalManager.Instance.block_drop_unit = false;
+	}
+	public override void Enter()
+	{
+		GlobalManager.Instance.temp_pick_unit = v;
+	}
 	public override void Inp(InputEvent @event)
     {
 		if (@event is InputEventMouseButton mouseEvent)
@@ -30,6 +38,7 @@ public partial class Void : State
 			GlobalManager.Instance.EmitSignal("change_money");
             fsm.change_state("Playing");
 			GlobalManager.Instance.block_drop_unit = false;
+			GlobalManager.Instance.temp_pick_unit = null;
 
         }
         

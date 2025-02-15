@@ -23,6 +23,7 @@ public partial class Town1 : Town, ITown
         {
             _is_ai = value;
             bullet_area.Monitoring = _is_ai;
+            info.Visible = !_is_ai;
         }
     }
     public override void _Ready()
@@ -31,12 +32,13 @@ public partial class Town1 : Town, ITown
         bullet_area = GetNode<Area2D>("%bullet_area");
         on_ai = GetNode<TextureButton>("%on_ai_town");
         GlobalManager.Instance.pick_unit += pick_unit;
-        bullet_area.BodyEntered += (body) => GamaUtilits.EnteredBulletInTownZone(body, this);
+        bullet_area.BodyEntered += (body) =>{
+            GamaUtilits.EnteredBulletInTownZone(body, this);
+            upd_h();
+        };
         on_ai.Pressed += () => 
         {
             is_ai = !is_ai;
-            if(is_ai)info.Hide();
-            info.Show();
             this_is_pick_unit = true;
             GlobalManager.Instance.EmitSignal("pick_unit");
             flag_area = true;

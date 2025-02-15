@@ -31,7 +31,7 @@ public partial class Dialog : MarginContainer
 		label = GetNode<Label>("%txt");
 		Resized += resize;
 		t.Start();
-		
+		GlobalManager.Instance.finish_d += pig_stop;
 
 
 	}
@@ -54,7 +54,6 @@ public partial class Dialog : MarginContainer
 		if(letter_index > text.Length - 1)
 		{
 			GlobalManager.Instance.EmitSignal("finish_d");
-			GlobalManager.Instance.finish_d += pig_stop;
 			return;
 		}
 		label.Text += text[letter_index];
