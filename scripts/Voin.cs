@@ -56,7 +56,7 @@ public partial class Voin : CharacterBody2D, IStats
 	}
 	private void CardClick()
 	{
-		if(!is_ai)
+		if(GlobalManager.Instance.temp_pick_unit != this)
 		{
 			is_ai = true;
 			fsm.change_state("AI");

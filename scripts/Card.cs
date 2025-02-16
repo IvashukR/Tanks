@@ -57,7 +57,6 @@ public partial class Card : CanvasLayer
 		damage_l = GetNode<Label>("%damage_l");
 		main_btn.Pressed += () => 
 		{
-			GD.Print("_______Click");
 			GlobalManager.Instance.EmitSignal("card_click");
 			if(!GlobalManager.Instance.block_drop_unit)Buy(_path);
 		};

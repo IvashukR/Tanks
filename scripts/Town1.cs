@@ -6,8 +6,8 @@ public partial class Town1 : Town, ITown
     private bool _is_ai{set;get;}
     public TextureButton on_ai;
     private Area2D bullet_area;
-    [Export] public float bullet_area_koef { get; set; } = 0.3f;
-    public float time_tween { get; set; } = 0.2f;
+    [Export] public float bullet_area_koef { get; set; } = 0.08f;
+    [Export] public float time_tween { get; set; } = 0.08f;
     [Export] public Vector2 bullet_size { get; set; } = new Vector2(0.165f, 0.171f);
 
     [Export] public int bullet_damage { get; set; } = 50;
