@@ -31,6 +31,11 @@ public partial class GlobalManager : Node
 	public  delegate void take_damageEventHandler(Node2D node, Bullet bullet);
 	[Signal]
 	public  delegate void card_clickEventHandler();
+	[Signal]
+	public  delegate void pig_main_menu_audioEventHandler();
+	[Signal]
+	public  delegate void pig_main_menu_animEventHandler();
+
 	public Node2D temp_pick_unit;		
 	Timer t;
 	public bool block_input;

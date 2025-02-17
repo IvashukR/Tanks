@@ -3,20 +3,14 @@ using System;
 
 public partial class AudioServer : Node
 {
-	private AudioStreamPlayer drive_tank;
-	
+	private AudioStreamPlayer pig_main_menu;
 	
 	public override void _Ready()
 	{
-		drive_tank = GetNode<AudioStreamPlayer>("%d");
-		drive_tank.Play();
-		GlobalManager.Instance.drive_tank += () => drive_tank.Stop();
+		pig_main_menu = GetNode<AudioStreamPlayer>("%pig_main_menu");
+		GlobalManager.Instance.pig_main_menu_audio += () => pig_main_menu.Play();
 		
 	}
 
 
-	public override void _Process(double delta)
-	{
-		
-	}
 }
