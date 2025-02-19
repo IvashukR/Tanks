@@ -13,19 +13,43 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
     [Export] public int bullet_damage { get; set; } = 70;
 
     [Export] public float bullet_area_koef { get; set; } = 0.1f;
-    private Area2D bullet_detected;
+    private Area2D bullet_detected, unit_detected;
+    private float last_time_entered_unit;
+    private bool flag_unit = true;
+    private Timer t_unit;
     public override void _Ready()
     {
+        t_unit = GetNode<Timer>("%t_unit");
         bullet_detected = GetNode<Area2D>("%area_enemy_town");
+        unit_detected = GetNode<Area2D>("%area_enemy_town_unit");
         pushka = GetNode<Sprite2D>("%pushka_e");
         t = GetNode<Timer>("%t_enemy_town");
         t.Timeout += () => can_shoot = true;
         marker = GetNode<Marker2D>("%marker_enemy_town");
+        t_unit.Timeout += () => flag_unit = true;
         bullet_detected.BodyEntered += (body) => {
-            GamaUtilits.EnteredBulletInTownZone(body, this);
+            GamaUtilits.EnteredBulletInTownZone(body, this, true);
+        };
+        unit_detected.BodyEntered += (body) => 
+        {
+            GamaUtilits.EnteredBulletInTownZone(body, this, false);
+            last_time_entered_unit = Time.GetTicksMsec() / 1000;
         };
         base._Ready();
         pushka.Rotation = (Position - GetNode<CharacterBody2D>("%Bullet").Position).Angle();
+    }
+    public override void _PhysicsProcess(double delta)
+    {
+        if(Time.GetTicksMsec() / 1000 - last_time_entered_unit > 1 && flag_unit)
+        {
+            int random_body_index = GD.RandRange(0, unit_detected.GetOverlappingBodies().Count - 1);
+            if(unit_detected.GetOverlappingBodies().Count > 0)
+            {
+                GamaUtilits.EnteredBulletInTownZone(unit_detected.GetOverlappingBodies()[random_body_index], this, false);
+                flag_unit = false;
+                t_unit.Start();
+            }
+        }
     }
     
 

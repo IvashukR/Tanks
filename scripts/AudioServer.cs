@@ -9,7 +9,6 @@ public partial class AudioServer : Node
 	{
 		pig_main_menu = GetNode<AudioStreamPlayer>("%pig_main_menu");
 		GlobalManager.Instance.pig_main_menu_audio += () => pig_main_menu.Play();
-		
 	}
 
 

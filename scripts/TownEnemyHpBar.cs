@@ -12,13 +12,11 @@ public partial class TownEnemyHpBar : ProgressBar
         {
             MaxValue = enemy_town.max_proch;
             Value = enemy_town.proch;
-            GD.Print(Value, MaxValue, enemy_town.proch);
         };
     }
     private void change_value()
     {
         Value = enemy_town.proch;
-        GD.Print(Value, MaxValue, enemy_town.proch);
     }
     public override void _ExitTree()
     {

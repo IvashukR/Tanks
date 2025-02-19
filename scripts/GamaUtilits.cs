@@ -3,7 +3,7 @@ using System;
 
 public partial class GamaUtilits : Node
 {
-    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY)
+    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
 	{
 		var _bullet = (PackedScene)ResourceLoader.Load("res://scene/bullet.tscn");
 		var bullet = _bullet.Instantiate<CharacterBody2D>();
@@ -11,6 +11,7 @@ public partial class GamaUtilits : Node
 		bullet.Scale = sc;
 		var b = bullet as Bullet;
 		b.damage = damage;
+        b.speed = speed;
 		b.player_pos = tank_pos;
         b.invertY = invertY;
 		b.fallow_m = fallow_m;
@@ -48,7 +49,7 @@ public partial class GamaUtilits : Node
 
         }
     }
-    public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj)
+    public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj, bool _bullet)
     {
         if(obj is ITown  town)
         {
@@ -56,7 +57,7 @@ public partial class GamaUtilits : Node
             {
                 Vector2 future_pos = new Vector2();
                 if(body == GlobalManager.Instance.temp_pick_unit)return;
-                if(body is Bullet bullet)future_pos = bullet.GlobalPosition + (bullet.dir * bullet.speed * town.bullet_area_koef);
+                if(body is Bullet bullet && _bullet)future_pos = bullet.GlobalPosition + (bullet.dir * bullet.speed * town.bullet_area_koef);
                 else if(body.IsInGroup("unit") && !obj.IsInGroup("unit"))future_pos = body.GlobalPosition;
                 else return;
                 var tween = obj.CreateTween();
@@ -71,6 +72,7 @@ public partial class GamaUtilits : Node
             }
         }
     }
+
     public static async void DestroyTown(int proch, bool is_boom, CpuParticles2D blam_particles, Node2D obj, ShaderMaterial blam_sm)
     {
         if(proch <= 0)

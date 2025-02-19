@@ -38,7 +38,7 @@ public partial class Bullet : CharacterBody2D
 		if (fallow_m)
 		{
 			dir = (mouse_pos - player_pos).Normalized();
-			Rotation += dir.Angle();
+			Rotation = dir.Angle();
 		}
 		else
 		{

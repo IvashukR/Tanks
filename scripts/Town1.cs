@@ -5,7 +5,7 @@ public partial class Town1 : Town, ITown
 {
     private bool _is_ai{set;get;}
     public TextureButton on_ai;
-    private Area2D bullet_area;
+    private Area2D bullet_area, unit_detected;
     [Export] public float bullet_area_koef { get; set; } = 0.08f;
     [Export] public float time_tween { get; set; } = 0.08f;
     [Export] public Vector2 bullet_size { get; set; } = new Vector2(0.165f, 0.171f);
@@ -30,10 +30,11 @@ public partial class Town1 : Town, ITown
     {
         info = GetNode<BoxContainer>("%info");
         bullet_area = GetNode<Area2D>("%bullet_area");
+        unit_detected = GetNode<Area2D>("%unit_area");
         on_ai = GetNode<TextureButton>("%on_ai_town");
         GlobalManager.Instance.pick_unit += pick_unit;
         bullet_area.BodyEntered += (body) =>{
-            GamaUtilits.EnteredBulletInTownZone(body, this);
+            GamaUtilits.EnteredBulletInTownZone(body, this, true);
             upd_h();
         };
         on_ai.Pressed += () => 
@@ -42,6 +43,10 @@ public partial class Town1 : Town, ITown
             this_is_pick_unit = true;
             GlobalManager.Instance.EmitSignal("pick_unit");
             flag_area = true;
+        };
+        unit_detected.BodyEntered += (body) =>{
+            GamaUtilits.EnteredBulletInTownZone(body, this, false);
+            upd_h();
         };
         base._Ready();
         GlobalManager.Instance.card_click += ClickCard;

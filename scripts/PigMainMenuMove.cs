@@ -4,12 +4,14 @@ public partial class PigMainMenuMove : RigidBody2D
 {
     private Vector2 velocity;
     private AnimationPlayer anim_player;
-    private bool collide_flag;
+    private bool collide_flag = true;
     private Timer t_flag;
     [Export] private int speed;
     private AnimatedSprite2D anim_sheets;
+    private AudioStreamPlayer audio;
     public override void _Ready()
     {
+        audio = GetNode<AudioStreamPlayer>("%audio");
         t_flag = GetNode<Timer>("%t_flag");
         anim_player = GetNode<AnimationPlayer>("%anim_player");
         anim_sheets = GetNode<AnimatedSprite2D>("%anim_sheets");
@@ -19,6 +21,7 @@ public partial class PigMainMenuMove : RigidBody2D
         SetLinearVelocity();
         GravityScale = 0;
         GlobalManager.Instance.pig_main_menu_anim += AnimDeath;
+        BodyEntered += (body) => PhysicsProcess();
     }
     private async void AnimDeath()
     {
@@ -26,13 +29,13 @@ public partial class PigMainMenuMove : RigidBody2D
         await ToSignal(anim_player, "animation_finished");
         QueueFree();
     }
-    public override void _PhysicsProcess(double delta)
+    public  void PhysicsProcess()
     {
-        if(GetCollidingBodies().Count > 0 && collide_flag)
+        if(collide_flag)
         {
+            if(!audio.IsPlaying())audio.Play();
             collide_flag = false;
             t_flag.Start();
-            GlobalManager.Instance.EmitSignal("pig_main_menu_audio");
             SetLinearVelocity();
         }
     }
