@@ -16,6 +16,7 @@ public partial class Ai : State
 		marker = GetNode<Marker2D>("%marker");
 		ray_timer = GetNode<Timer>("%ray_timer");
 		voin = GetParent().GetParent<Voin>();
+		voin.TreeExited += () => voin = null;
 		detect_enemy_ray = GetNode<RayCast2D>("%ray_ai");
 		ray_timer.Timeout += () => ray_flag = true;
 	}

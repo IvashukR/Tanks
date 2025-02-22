@@ -75,16 +75,6 @@ public partial class Card : CanvasLayer
 		GlobalManager.Instance.change_money += () => GlobalManager.Instance.Money -= cost;
 
 	}
-	public override void _ExitTree()
-	{
-    	foreach (Node child in GetChildren())
-    	{
-        	if (child is CanvasItem)
-        	{
-            	child.QueueFree();
-        	}
-    	}
-	}
 
 	
 }

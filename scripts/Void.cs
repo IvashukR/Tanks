@@ -12,6 +12,7 @@ public partial class Void : State
 		var parent = GetParent();
 		v = (Voin) parent.GetParent();
 		fsm = GetParent<FSM>();
+		v.TreeExited += () => v = null;
 	}
 	public override void Process(double delta)
 	{

@@ -14,12 +14,15 @@ public partial class TownEnemy : StaticBody2D
 		max_proch = proch;
 		blam_particles = GetNode<CpuParticles2D>("%blast");
 		sm = blam_particles.Material as ShaderMaterial;
-		GlobalManager.Instance.destroyed_enemy_town += destroy;
+		GlobalManager.Instance.destroyed_town += destroy;
 	}
-	private void destroy() => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+	private void destroy(Node2D node)
+	{
+		if(node == this)GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+	}
 	public override void _ExitTree()
 	{
-		GlobalManager.Instance.destroyed_enemy_town -= destroy;
+		GlobalManager.Instance.destroyed_town -= destroy;
 	}
 
 

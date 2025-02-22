@@ -57,7 +57,16 @@ public partial class GamaUtilits : Node
             {
                 Vector2 future_pos = new Vector2();
                 if(body == GlobalManager.Instance.temp_pick_unit)return;
-                if(body is Bullet bullet && _bullet)future_pos = bullet.GlobalPosition + (bullet.dir * bullet.speed * town.bullet_area_koef);
+                if(body is Bullet bullet && _bullet)
+                {
+                    if(bullet.ray_cast_town.IsColliding())
+                    {
+                        var collider = (Node2D)bullet.ray_cast_town.GetCollider();
+                        if(collider.IsInGroup("transport"))future_pos = bullet.Position;
+                        else return;
+                    }
+                    else return;
+                }
                 else if(body.IsInGroup("unit") && !obj.IsInGroup("unit"))future_pos = body.GlobalPosition;
                 else return;
                 var tween = obj.CreateTween();
@@ -97,5 +106,26 @@ public partial class GamaUtilits : Node
 
         
     }
+    public static async void TakeDamageUnit(Node2D body, Bullet bullet)
+	{
+        GD.Print(body.Name);
+        if(body is IUnit _unit)
+        {
+            _unit.proch -= bullet.damage;
+            _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.proch}";
+            if(_unit.proch > 0)
+            {
+                GamaUtilits.set_shader(_unit.voin_sprite, true, "damage");
+                await body.ToSignal(body.GetTree().CreateTimer(0.2f), "timeout");
+                GamaUtilits.set_shader(_unit.voin_sprite, false, "damage");
+            }
+            else
+            {
+
+                body.QueueFree();
+            }
+        }
+		
+	}
 
 }

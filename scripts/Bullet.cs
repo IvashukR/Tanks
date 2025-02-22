@@ -18,10 +18,12 @@ public partial class Bullet : CharacterBody2D
 	public CpuParticles2D p;
 	private Timer c;
 	public int invertY;
+	public RayCast2D ray_cast_town;
 	private bool calculete_damage;
 	public override void _Ready()
 	{
 		p = GetNode<CpuParticles2D>("%particles");
+		ray_cast_town = GetNode<RayCast2D>("%ray_cast");
 		mouse_pos = GetGlobalMousePosition();
 		UpdDir();
 		col = new Timer();
@@ -125,8 +127,10 @@ public partial class Bullet : CharacterBody2D
 				{
 					GlobalManager.Instance.EmitSignal("del_t");
 				}
-				if(body.Name == "town_enemy")GlobalManager.Instance.EmitSignal("destroyed_enemy_town");
-				if(body.Name == "town")GlobalManager.Instance.EmitSignal("destroyed_town");
+				if(body.IsInGroup("town"))
+				{
+					GlobalManager.Instance.EmitSignal("destroyed_town", body);
+				}
 				QueueFree();
 			}
 		}

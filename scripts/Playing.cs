@@ -34,6 +34,7 @@ public partial class Playing : State
 		marker = GetNode<Marker2D>("%marker");
 		timer.Timeout += () => can_shoot = true;
 		patron_l.Text = $"{v.name_unit} Patron: {v.patron_count}";
+		v.TreeExited += () => v = null;
 	}
 	public override void Enter()
 	{

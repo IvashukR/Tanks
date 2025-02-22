@@ -36,15 +36,15 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
             last_time_entered_unit = Time.GetTicksMsec() / 1000;
         };
         base._Ready();
-        pushka.Rotation = (Position - GetNode<CharacterBody2D>("%Bullet").Position).Angle();
+        //pushka.Rotation = (Position - GetNode<CharacterBody2D>("%Bullet").Position).Angle();
     }
     public override void _PhysicsProcess(double delta)
     {
-        if(Time.GetTicksMsec() / 1000 - last_time_entered_unit > 1 && flag_unit)
+        if(Time.GetTicksMsec() / 1000 - last_time_entered_unit > 0.4 && flag_unit)
         {
-            int random_body_index = GD.RandRange(0, unit_detected.GetOverlappingBodies().Count - 1);
             if(unit_detected.GetOverlappingBodies().Count > 0)
             {
+                int random_body_index = GD.RandRange(0, unit_detected.GetOverlappingBodies().Count - 1);
                 GamaUtilits.EnteredBulletInTownZone(unit_detected.GetOverlappingBodies()[random_body_index], this, false);
                 flag_unit = false;
                 t_unit.Start();

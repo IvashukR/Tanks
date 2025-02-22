@@ -99,6 +99,10 @@ public partial class Trenirovka : Node
 	}
 	public override void _ExitTree()
 	{
+		foreach(var obj in GetTree().CurrentScene.GetChildren())
+		{
+			GD.Print(obj.GetType().Name);
+		}
 		GlobalManager.Instance.skip_d -= skip;
 		GlobalManager.Instance.fail -= losse;
 	}

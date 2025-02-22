@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Voin : CharacterBody2D, IStats
+public partial class Voin : CharacterBody2D, IStats, IUnit
 {
 	public int patron_count { get; set; } = 10;
 	public float perezaryad { get; set; } = 0.5f;
@@ -11,13 +11,13 @@ public partial class Voin : CharacterBody2D, IStats
 	public int cost { get; set; } = 100;
 	public int cost_death { get; set; } = 120;
 	public FSM fsm { get; set; }
-	private Node2D voin_sprite;
+	public Node2D voin_sprite { get; set; }
 	public TextureButton on_ai;
 	private bool this_is_pick_unit;
 	private bool is_ai = true;
-	private Label hp_l;
+	public  Label hp_l { get; set; }
 	public bool on_ai_active;
-	[Export] public string name_unit = "Voin";
+	[Export] public string name_unit { get; set; } = "Voin";
 	public override void _Ready()
 	{
 		hp_l = GetNode<Label>("%hp_l");
@@ -45,7 +45,7 @@ public partial class Voin : CharacterBody2D, IStats
 			GamaUtilits.set_shader(voin_sprite, false, "render");
 		};
 		GlobalManager.Instance.pick_unit += PickUnit;
-		GlobalManager.Instance.take_damage += (node, bullet) => TakeDamage(node, bullet);
+		GlobalManager.Instance.take_damage += GamaUtilits.TakeDamageUnit;
 		GlobalManager.Instance.card_click += CardClick;
 	}
 	private void PickUnit()
@@ -62,24 +62,6 @@ public partial class Voin : CharacterBody2D, IStats
 			fsm.change_state("AI");
 		}
 	}
-	private async void TakeDamage(Node2D body, Bullet bullet)
-	{
-		if(body != this)return;
-		proch -= bullet.damage;
-		hp_l.Text = $"{name_unit} Health: {proch}";
-		if(proch > 0)
-		{
-			GamaUtilits.set_shader(voin_sprite, true, "damage");
-            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
-            GamaUtilits.set_shader(voin_sprite, false, "damage");
-		}
-		else
-		{
-
-			QueueFree();
-		}
-		
-	}
 	public override void _ExitTree()
 	{
 		if(fsm.current_state.Name == "Void")
@@ -87,6 +69,7 @@ public partial class Voin : CharacterBody2D, IStats
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;
 		}
+		GlobalManager.Instance.take_damage -= GamaUtilits.TakeDamageUnit;
 		GlobalManager.Instance.pick_unit -= PickUnit;
 		GlobalManager.Instance.card_click -= CardClick;
 	}

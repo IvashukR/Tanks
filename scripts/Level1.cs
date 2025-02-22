@@ -54,10 +54,10 @@ public partial class Level1 : Trenirovka
 	protected virtual void _Start()
 	{
 		card_ivisible.Show();
-		if(town != null)town.on_ai.MouseEntered += () => GamaUtilits.set_shader(town, true, "render");
-        if(town != null)town.on_ai.MouseExited += () => GamaUtilits.set_shader(town, false, "render");
+		if(town != null)town.on_ai.MouseEntered += () => outline_set(true);
+        if(town != null)town.on_ai.MouseExited += () => outline_set(false);
 	}
-	
+	private void outline_set(bool value) => GamaUtilits.set_shader(town, value, "render");
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
@@ -65,6 +65,7 @@ public partial class Level1 : Trenirovka
 	public override void _ExitTree()
 	{
 		base._ExitTree();
+		GlobalManager.Instance.temp_pick_unit = null;
 		Start -= _Start;
 	}
 }

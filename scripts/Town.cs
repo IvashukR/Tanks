@@ -47,7 +47,10 @@ public partial class Town : CharacterBody2D
         t.Timeout += () => can_shoot = true;
         GlobalManager.Instance.destroyed_town += destroy;
     }
-    private void destroy() => GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+    private void destroy(Node2D node)
+    {
+        if(node == this)GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+    }
     public override void _Process(double delta)
     {
 		if (can_shoot && patron != 0)
