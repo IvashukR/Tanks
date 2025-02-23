@@ -45,7 +45,7 @@ public partial class Voin : CharacterBody2D, IStats, IUnit
 			GamaUtilits.set_shader(voin_sprite, false, "render");
 		};
 		GlobalManager.Instance.pick_unit += PickUnit;
-		GlobalManager.Instance.take_damage += GamaUtilits.TakeDamageUnit;
+		GlobalManager.Instance.take_damage += TakeDamage;
 		GlobalManager.Instance.card_click += CardClick;
 	}
 	private void PickUnit()
@@ -53,6 +53,11 @@ public partial class Voin : CharacterBody2D, IStats, IUnit
 		if(!is_ai && !this_is_pick_unit)is_ai = true;
 		if(is_ai)fsm.change_state("AI");
 		this_is_pick_unit = false;
+	}
+	private void TakeDamage(Node2D body, Bullet bullet)
+	{
+		if(body != this)return;
+		GamaUtilits.TakeDamageUnit(body, bullet);
 	}
 	private void CardClick()
 	{
@@ -69,7 +74,7 @@ public partial class Voin : CharacterBody2D, IStats, IUnit
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;
 		}
-		GlobalManager.Instance.take_damage -= GamaUtilits.TakeDamageUnit;
+		GlobalManager.Instance.take_damage -= TakeDamage;
 		GlobalManager.Instance.pick_unit -= PickUnit;
 		GlobalManager.Instance.card_click -= CardClick;
 	}

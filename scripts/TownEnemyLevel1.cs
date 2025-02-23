@@ -12,13 +12,20 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
     [Export] public Vector2 bullet_size { get; set; } = new Vector2(0.165f, 0.171f);
     [Export] public int bullet_damage { get; set; } = 70;
 
-    [Export] public float bullet_area_koef { get; set; } = 0.1f;
     private Area2D bullet_detected, unit_detected;
     private float last_time_entered_unit;
-    private bool flag_unit = true;
-    private Timer t_unit;
+    private bool flag_unit = true, flag_attacked;
+    private Timer t_unit, t_attack, t_flag_attack;
+    private Well hit_well;
+    private RandomNumberGenerator rng;
+    [Export] private bool attacked = true;
     public override void _Ready()
     {
+        rng = new RandomNumberGenerator();
+        rng.Randomize();
+        hit_well = GetNode<Well>("%well");
+        t_attack = GetNode<Timer>("%t_attack");
+        t_flag_attack = GetNode<Timer>("%t_flag_attack");
         t_unit = GetNode<Timer>("%t_unit");
         bullet_detected = GetNode<Area2D>("%area_enemy_town");
         unit_detected = GetNode<Area2D>("%area_enemy_town_unit");
@@ -36,10 +43,36 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
             last_time_entered_unit = Time.GetTicksMsec() / 1000;
         };
         base._Ready();
-        //pushka.Rotation = (Position - GetNode<CharacterBody2D>("%Bullet").Position).Angle();
+        t_attack.WaitTime = GD.RandRange(20, 100);
+        t_attack.Timeout += () => flag_attacked = false;
+        t_attack.Start();
+        t_attack.Timeout += Attack;
     }
-    public override void _PhysicsProcess(double delta)
+    private async void Attack()
     {
+        if(!attacked)return;
+        pushka.Rotation = (Position - GetNode<Marker2D>("%marker_attack").Position).Angle();
+        for(int i = 0; i < 3; i++)
+        {
+            if(can_shoot && patron > 0)
+            {
+                can_shoot = false;
+                t.Start();
+                patron--;
+                GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, bullet_size, 50, -1);
+            }
+            pushka.Rotate(rng.RandfRange(Mathf.DegToRad(0.2f), Mathf.DegToRad(1.1f)));
+            await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
+        }
+    }
+    public override void _Process(double delta)
+    {
+        if(hit_well == null && !flag_attacked)
+        {
+            flag_attacked = true;
+            t_flag_attack.Start();
+            Attack();
+        }
         if(Time.GetTicksMsec() / 1000 - last_time_entered_unit > 0.4 && flag_unit)
         {
             if(unit_detected.GetOverlappingBodies().Count > 0)
