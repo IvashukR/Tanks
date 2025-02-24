@@ -87,7 +87,6 @@ public partial class GamaUtilits : Node
         if(proch <= 0)
         {
             if(is_boom)return;
-            is_boom = true;
             blam_particles.Emitting = true;
             for (float i = 0.0f; i <= 1; i += 0.3f)
             {

@@ -1,6 +1,6 @@
 using Godot;
 using System;
-
+using System.Collections.Generic;
 public partial class GlobalManager : Node
 {
 	
@@ -46,6 +46,11 @@ public partial class GlobalManager : Node
 		}
 		get{return money;}
 	}
+	public List<PackedScene> GameLevels = new List<PackedScene>
+	{
+		ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn")
+	};
+	
 	
 	
 	public override void _Ready()

@@ -43,14 +43,15 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
             last_time_entered_unit = Time.GetTicksMsec() / 1000;
         };
         base._Ready();
-        t_attack.WaitTime = GD.RandRange(20, 100);
-        t_attack.Timeout += () => flag_attacked = false;
+        t_flag_attack.Timeout += () => flag_attacked = false;
         t_attack.Start();
         t_attack.Timeout += Attack;
+        hit_well.TreeExited += () => hit_well = null;
     }
     private async void Attack()
     {
         if(!attacked)return;
+        t_attack.Start();
         pushka.Rotation = (Position - GetNode<Marker2D>("%marker_attack").Position).Angle();
         for(int i = 0; i < 3; i++)
         {
@@ -61,8 +62,7 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
                 patron--;
                 GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, bullet_size, 50, -1);
             }
-            pushka.Rotate(rng.RandfRange(Mathf.DegToRad(0.2f), Mathf.DegToRad(1.1f)));
-            await ToSignal(GetTree().CreateTimer(0.19f), "timeout");
+            await ToSignal(GetTree().CreateTimer(0.4f), "timeout");
         }
     }
     public override void _Process(double delta)
