@@ -44,13 +44,14 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
         };
         base._Ready();
         t_flag_attack.Timeout += () => flag_attacked = false;
-        t_attack.Start();
+        t_attack.WaitTime = rng.RandiRange(20, 50);
         t_attack.Timeout += Attack;
         hit_well.TreeExited += () => hit_well = null;
     }
     private async void Attack()
     {
         if(!attacked)return;
+        t.WaitTime = 2;
         t_attack.Start();
         pushka.Rotation = (Position - GetNode<Marker2D>("%marker_attack").Position).Angle();
         for(int i = 0; i < 3; i++)
