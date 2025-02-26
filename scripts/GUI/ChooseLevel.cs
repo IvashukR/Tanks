@@ -37,4 +37,9 @@ public partial class ChooseLevel : Control
             btn_level.TreeExited += () => btn_level = null;
         }
     }
+    public override void _ExitTree()
+    {
+        texture_btn_level.Dispose();
+        texture_btn_level_locked.Dispose();
+    }
 }

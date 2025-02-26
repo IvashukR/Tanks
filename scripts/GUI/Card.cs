@@ -9,7 +9,7 @@ public partial class Card : CanvasLayer
 	private Label d_cost_l;
 	private Label damage_l;
 	private Label patron_l;
-	private int cost = 0;
+	private int cost;
 	private VBoxContainer info;
 	private ColorRect cr_info;
 	public TextureButton show_i;
@@ -58,7 +58,7 @@ public partial class Card : CanvasLayer
 		main_btn.Pressed += () => 
 		{
 			GlobalManager.Instance.EmitSignal("card_click");
-			if(!GlobalManager.Instance.block_drop_unit)Buy(_path);
+			if(!GlobalManager.Instance.block_drop_unit &&  GlobalManager.Instance.money - Convert.ToInt32(cost) >= 0)Buy(_path);
 		};
 		show_i.Pressed += () => {
 			info.Visible = true;
@@ -72,7 +72,6 @@ public partial class Card : CanvasLayer
 			hide_i.Visible = false;
 			show_i.Visible = true;
 		};
-		GlobalManager.Instance.change_money += () => GlobalManager.Instance.Money -= cost;
 
 	}
 

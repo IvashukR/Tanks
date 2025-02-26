@@ -116,7 +116,7 @@ public partial class Bullet : CharacterBody2D
 		else if (body.IsInGroup("transport"))
 		{
 			
-			int proch = 0;
+			int proch;
 			var field = body.GetType().GetField("proch", BindingFlags.Public | BindingFlags.Instance);
 			if (field != null && !calculete_damage)
             {

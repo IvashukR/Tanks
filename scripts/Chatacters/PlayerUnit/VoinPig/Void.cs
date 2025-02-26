@@ -36,7 +36,7 @@ public partial class Void : State
     {
 		if (@event is InputEventMouseButton mouseEvent)
         {
-			GlobalManager.Instance.EmitSignal("change_money");
+			GlobalManager.Instance.EmitSignal("change_money", v.cost_death);
             fsm.change_state("Playing");
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;

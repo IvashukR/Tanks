@@ -18,7 +18,7 @@ public partial class GlobalManager : Node
 	[Signal]
 	public  delegate void failEventHandler();
 	[Signal]
-	public  delegate void change_moneyEventHandler();
+	public  delegate void change_moneyEventHandler(int money);
 	[Signal]
 	public  delegate void pick_unitEventHandler();
 	[Signal]
@@ -35,17 +35,8 @@ public partial class GlobalManager : Node
 	public Node2D temp_pick_unit;		
 	Timer t;
 	public bool block_input;
-	private int money = 200;
+	public int money;
 	public bool block_drop_unit;
-	public int Money
-	{
-		set
-		{
-			money = value;
-			
-		}
-		get{return money;}
-	}
 	public List<PackedScene> GameLevels = new List<PackedScene>
 	{
 		ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn")
