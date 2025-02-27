@@ -66,6 +66,7 @@ public partial class Level1 : Trenirovka
 	{
 		base._ExitTree();
 		GlobalManager.Instance.temp_pick_unit = null;
+		GlobalManager.Instance.money = 0;
 		Start -= _Start;
 	}
 }

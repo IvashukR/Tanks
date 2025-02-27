@@ -9,9 +9,11 @@ public partial class PigMainMenuMove : RigidBody2D
     [Export] private int speed;
     private AnimatedSprite2D anim_sheets;
     private AudioStreamPlayer audio;
+    private AudioStreamPlayer audio2;
     public override void _Ready()
     {
         audio = GetNode<AudioStreamPlayer>("%audio");
+        audio2 = GetNode<AudioStreamPlayer>("%audio2");
         t_flag = GetNode<Timer>("%t_flag");
         anim_player = GetNode<AnimationPlayer>("%anim_player");
         anim_sheets = GetNode<AnimatedSprite2D>("%anim_sheets");
@@ -26,6 +28,7 @@ public partial class PigMainMenuMove : RigidBody2D
     private async void AnimDeath()
     {
         anim_player.Play("death");
+        audio2.Play();
         await ToSignal(anim_player, "animation_finished");
         QueueFree();
     }

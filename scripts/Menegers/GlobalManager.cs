@@ -28,9 +28,9 @@ public partial class GlobalManager : Node
 	[Signal]
 	public  delegate void card_clickEventHandler();
 	[Signal]
-	public  delegate void pig_main_menu_audioEventHandler();
-	[Signal]
 	public  delegate void pig_main_menu_animEventHandler();
+	[Signal]
+	public  delegate void havent_moneyEventHandler();
 
 	public Node2D temp_pick_unit;		
 	Timer t;
