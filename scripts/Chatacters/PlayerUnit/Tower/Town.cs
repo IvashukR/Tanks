@@ -9,7 +9,7 @@ public partial class Town : CharacterBody2D
     public Timer t { get; set; }
     public Node parent;
     private Label patron_l;
-    public int patron  { get; set; } = 3;
+    [Export] public int patron  { get; set; } = 3;
     public int proch = 75;
     private Label hp_l;
     public bool is_boom;
@@ -27,7 +27,9 @@ public partial class Town : CharacterBody2D
         {
             hp_l.Text = "Town health: 0";
         }
+        
     }
+    protected void upd_patron_l() => patron_l.Text = $"Town patron: {patron}";
 	public override void _Ready()
     {
         blam_particles = GetNode<CpuParticles2D>("%blam");

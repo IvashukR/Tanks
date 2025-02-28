@@ -25,7 +25,7 @@ public partial class MoneySprite : TextureRect
     private void ShowMoney() => Show();
     private void HaventMoney()
     {
-        if(!anim_money_havent.IsPlaying())anim_money_havent.Play();
+        if(!anim_money_havent.IsPlaying())anim_money_havent.Play("start");
     }
     private async void ChangeMoney(int money)
     {
@@ -40,6 +40,7 @@ public partial class MoneySprite : TextureRect
     {
         level.Start -= ShowMoney;
         GlobalManager.Instance.havent_money -= HaventMoney;
+        GlobalManager.Instance.change_money -= ChangeMoney;
     }
 }
 

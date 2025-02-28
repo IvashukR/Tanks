@@ -35,7 +35,7 @@ public partial class Town1 : Town, ITown
         GlobalManager.Instance.pick_unit += pick_unit;
         bullet_area.BodyEntered += (body) =>{
             GamaUtilits.EnteredBulletInTownZone(body, this, true);
-            upd_h();
+            upd_patron_l();
         };
         on_ai.Pressed += () => 
         {
@@ -46,7 +46,7 @@ public partial class Town1 : Town, ITown
         };
         unit_detected.BodyEntered += (body) =>{
             GamaUtilits.EnteredBulletInTownZone(body, this, false);
-            upd_h();
+            upd_patron_l();
         };
         base._Ready();
         GlobalManager.Instance.card_click += ClickCard;
