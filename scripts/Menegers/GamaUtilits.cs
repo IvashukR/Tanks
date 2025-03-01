@@ -62,6 +62,7 @@ public partial class GamaUtilits : Node
                     if(bullet.ray_cast_town.IsColliding())
                     {
                         var collider = (Node2D)bullet.ray_cast_town.GetCollider();
+                        if(collider == null)return;
                         if(collider.IsInGroup("transport"))future_pos = bullet.Position;
                         else return;
                     }
