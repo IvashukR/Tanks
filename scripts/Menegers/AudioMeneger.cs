@@ -35,7 +35,6 @@ public partial class AudioMeneger : Control
         cfg.SetValue("AudioSlider", "Master", master_s.Value);
         cfg.SetValue("AudioSlider", "SFX", sfx_s.Value);
         cfg.SetValue("AudioSlider", "Music", music_s.Value);
-        //if(ExistsFile(path_cfg))return;
         Error error = cfg.Save(path_cfg);
         if(error != Error.Ok)throw new Exception("Dont Save File!");
     }
@@ -47,6 +46,9 @@ public partial class AudioMeneger : Control
             sfx_s.Value = (double)cfg.GetValue("AudioSlider", "SFX");
             master_s.Value = (double)cfg.GetValue("AudioSlider", "Master");
             music_s.Value = (double)cfg.GetValue("AudioSlider", "Music");
+            SetDb(sfx_s.Value, 1);
+            SetDb(music_s.Value, 2);
+            SetDb(master_s.Value, 0);
         }
         else SetValueSlider();
     }

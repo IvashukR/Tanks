@@ -18,6 +18,7 @@ public partial class Trenirovka : Node
 	[Signal]
 	public delegate void StartEventHandler();
 	private TextureButton restart;
+	private Label fps_l;
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
 	private Texture2D[] go = {
@@ -35,10 +36,12 @@ public partial class Trenirovka : Node
 	{
 		GetTree().Paused = true;
 		Node p = GetNode("%Phone");
+		fps_l = GetNode<Label>("%fps_l");
 		Phone phone = (Phone)p;
 		phone.anim_phone.Play("open");
 		phone.anim_phone.AnimationFinished += (animationName) => phone.Hide();
 		GlobalManager.Instance.fail += losse;
+		GlobalManager.Instance.fps += fps;
 		restart = GetNode<TextureButton>("%restart");
 		restart.Pressed += () => {
 			//GetTree().ChangeSceneToPacked(s);
@@ -64,6 +67,7 @@ public partial class Trenirovka : Node
 		GlobalManager.Instance.GameLevels.Add(s);
 
 	}
+	private void fps(bool value) => fps_l.Visible = value;
 	protected void losse() => restart.Visible = true;
 	protected void win()
 	{
@@ -95,7 +99,9 @@ public partial class Trenirovka : Node
 			w = true;
 			win();
 		}
-
+    
+        if(fps_l.Visible)fps_l.Text = $"FPS: {Engine.GetFramesPerSecond()}";
+    
 
 	}
 	public override void _ExitTree()

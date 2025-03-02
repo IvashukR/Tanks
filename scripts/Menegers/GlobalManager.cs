@@ -31,11 +31,12 @@ public partial class GlobalManager : Node
 	public  delegate void pig_main_menu_animEventHandler();
 	[Signal]
 	public  delegate void havent_moneyEventHandler();
+	[Signal]
+	public  delegate void fpsEventHandler(bool value);
 
 	public Node2D temp_pick_unit;		
 	Timer t;
 	public bool block_input;
-	public bool invertY;
 	public int money;
 	public bool block_drop_unit;
 	public List<PackedScene> GameLevels = new List<PackedScene>

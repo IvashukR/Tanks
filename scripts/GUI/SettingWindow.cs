@@ -4,15 +4,15 @@ using System;
 public partial class SettingWindow : Control
 {
     private OptionButton resolution_w;
-    private CheckBox invert_y;
+    private CheckBox fps;
     private Button save_btn;
     private readonly string path_cfg = "user://save_data.cfg";
     public override void _Ready()
     {
-        invert_y = GetNode<CheckBox>("%ivertY");
+        fps = GetNode<CheckBox>("%fps");
         resolution_w = GetNode<OptionButton>("%resolution_w");
         resolution_w.ItemSelected += ClickWindowSizes;
-        invert_y.Toggled += CheckedInvertY;
+        fps.Toggled += CheckedFps;
         save_btn = GetNode<Button>("%save_btn");
         save_btn.Pressed += SaveCfg;
         LoadCfg();
@@ -37,7 +37,6 @@ public partial class SettingWindow : Control
         ConfigFile cfg = new ConfigFile();
         if(AudioMeneger.ExistsFile(path_cfg))cfg.Load(path_cfg);
         cfg.SetValue("Other Setting", "Window Size", resolution_w.GetItemText(resolution_w.Selected));
-        cfg.SetValue("Other Setting", "InvertY", invert_y.ButtonPressed);
         cfg.Save(path_cfg);
     }
     private void LoadCfg()
@@ -46,8 +45,6 @@ public partial class SettingWindow : Control
         if(cfg.Load(path_cfg) != Error.Ok)return;
         string text = (string)cfg.GetValue("Other Setting", "Window Size");
         resolution_w.Select(GetIndexByText(text));
-        invert_y.ButtonPressed = (bool)cfg.GetValue("Other Setting", "InvertY");
-        CheckedInvertY(invert_y.ButtonPressed);
         ClickWindowSizes(resolution_w.GetSelectedId());
 
     }
@@ -60,8 +57,8 @@ public partial class SettingWindow : Control
         }
         return 0;
     }
-    private void CheckedInvertY(bool check)
+    private void CheckedFps(bool check)
     {
-        
+        GlobalManager.Instance.EmitSignal("fps", check);
     }
 }
