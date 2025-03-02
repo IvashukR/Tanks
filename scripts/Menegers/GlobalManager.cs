@@ -35,6 +35,7 @@ public partial class GlobalManager : Node
 	public Node2D temp_pick_unit;		
 	Timer t;
 	public bool block_input;
+	public bool invertY;
 	public int money;
 	public bool block_drop_unit;
 	public List<PackedScene> GameLevels = new List<PackedScene>

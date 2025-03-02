@@ -12,7 +12,6 @@ public partial class AudioMeneger : Control
         sfx_s = GetNode<HSlider>("%sfx_s");
         music_s = GetNode<HSlider>("%music_s");
         master_s = GetNode<HSlider>("%master_s");
-        SetValueSlider();
         master_s.ValueChanged += (value) => SetDb(value, 0);
         sfx_s.ValueChanged += (value) => SetDb(value, 1);
         music_s.ValueChanged += (value) => SetDb(value, 2);
@@ -32,9 +31,11 @@ public partial class AudioMeneger : Control
     private void SaveCfg()
     {
         ConfigFile cfg = new ConfigFile();
+        if(ExistsFile(path_cfg))cfg.Load(path_cfg);
         cfg.SetValue("AudioSlider", "Master", master_s.Value);
         cfg.SetValue("AudioSlider", "SFX", sfx_s.Value);
         cfg.SetValue("AudioSlider", "Music", music_s.Value);
+        //if(ExistsFile(path_cfg))return;
         Error error = cfg.Save(path_cfg);
         if(error != Error.Ok)throw new Exception("Dont Save File!");
     }
@@ -46,10 +47,11 @@ public partial class AudioMeneger : Control
             sfx_s.Value = (double)cfg.GetValue("AudioSlider", "SFX");
             master_s.Value = (double)cfg.GetValue("AudioSlider", "Master");
             music_s.Value = (double)cfg.GetValue("AudioSlider", "Music");
-            SetDb(sfx_s.Value, 1);
-            SetDb(master_s.Value, 0);
-            SetDb(music_s.Value, 2);
         }
-        else GD.Print("NOT LOAD CFG");
+        else SetValueSlider();
+    }
+    public static bool ExistsFile(string ph)
+    {
+        return FileAccess.FileExists(ph);
     }
 }

@@ -17,6 +17,7 @@ public partial class MainMenu : Control
     private Phone background;
     public override void _Ready()
     {
+        camera = GetNode<Camera2D>("%camera");
         background = GetNode<Phone>("%Phone");
         anim_btn = GetNode<AnimationPlayer>("%anim_btn");
         level_btn = GetNode<TextureButton>("%Level");
