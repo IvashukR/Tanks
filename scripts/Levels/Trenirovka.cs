@@ -18,6 +18,7 @@ public partial class Trenirovka : Node
 	[Signal]
 	public delegate void StartEventHandler();
 	private TextureButton restart;
+	private Phone phone;
 	private Label fps_l;
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
@@ -35,13 +36,13 @@ public partial class Trenirovka : Node
 	public override  void _Ready()
 	{
 		GetTree().Paused = true;
-		Node p = GetNode("%Phone");
+		phone = GetNode<Phone>("%Phone");
 		fps_l = GetNode<Label>("%fps_l");
-		Phone phone = (Phone)p;
+		phone.Show();
 		phone.anim_phone.Play("open");
 		phone.anim_phone.AnimationFinished += (animationName) => phone.Hide();
 		GlobalManager.Instance.fail += losse;
-		GlobalManager.Instance.fps += fps;
+		GlobalManager.Instance.win += win;
 		restart = GetNode<TextureButton>("%restart");
 		restart.Pressed += () => {
 			//GetTree().ChangeSceneToPacked(s);
@@ -52,6 +53,7 @@ public partial class Trenirovka : Node
 		blast = GetNode<CpuParticles2D>("%blast");
 		sh = blast.Material as ShaderMaterial;
 		go_s = GetNode<Sprite2D>("%go");
+		GlobalManager.Instance._fps += fps;
 		timer = new Timer();
 		timer.WaitTime = 1;
 		AddChild(timer);
@@ -64,8 +66,7 @@ public partial class Trenirovka : Node
 		Dialog dialog = (Dialog) d;
 		GlobalManager.Instance.skip_d += skip;
 		dialog.display_text(inp);
-		GlobalManager.Instance.GameLevels.Add(s);
-
+		fps_l.Visible = GlobalManager.Instance.fps;
 	}
 	private void fps(bool value) => fps_l.Visible = value;
 	protected void losse() => restart.Visible = true;
@@ -85,22 +86,9 @@ public partial class Trenirovka : Node
 			go_s.Visible = false;
 			info.Visible = true;
 			EmitSignal("Start");
-			GD.Print(a);
 			
 		}
-		if (GetNodeOrNull("%town") == null && GetTree().GetNodesInGroup("bullet").Count == 0 && flag )
-		{
-			flag = false;
-			losse();
-
-		}
-		if (GetNodeOrNull("%town_enemy") == null && !w)
-		{
-			w = true;
-			win();
-		}
-    
-        if(fps_l.Visible)fps_l.Text = $"FPS: {Engine.GetFramesPerSecond()}";
+        if(GlobalManager.Instance.fps)fps_l.Text = $"FPS: {Engine.GetFramesPerSecond()}";
     
 
 	}
@@ -108,5 +96,7 @@ public partial class Trenirovka : Node
 	{
 		GlobalManager.Instance.skip_d -= skip;
 		GlobalManager.Instance.fail -= losse;
+		GlobalManager.Instance.win -= win;
+		GlobalManager.Instance._fps -= fps;
 	}
 }

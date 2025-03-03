@@ -18,7 +18,11 @@ public partial class TownEnemy : StaticBody2D
 	}
 	private void destroy(Node2D node)
 	{
-		if(node == this)GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+		if(node == this)
+		{
+			GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+			if(proch <= 0)GlobalManager.Instance.EmitSignal("win");
+		}
 	}
 	public override void _ExitTree()
 	{

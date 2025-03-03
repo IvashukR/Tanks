@@ -37,6 +37,7 @@ public partial class SettingWindow : Control
         ConfigFile cfg = new ConfigFile();
         if(AudioMeneger.ExistsFile(path_cfg))cfg.Load(path_cfg);
         cfg.SetValue("Other Setting", "Window Size", resolution_w.GetItemText(resolution_w.Selected));
+        cfg.SetValue("Other Setting", "FPS", fps.ButtonPressed);
         cfg.Save(path_cfg);
     }
     private void LoadCfg()
@@ -45,6 +46,9 @@ public partial class SettingWindow : Control
         if(cfg.Load(path_cfg) != Error.Ok)return;
         string text = (string)cfg.GetValue("Other Setting", "Window Size");
         resolution_w.Select(GetIndexByText(text));
+        fps.ButtonPressed = (bool)cfg.GetValue("Other Setting", "FPS");
+        CheckedFps(fps.ButtonPressed);
+        GD.Print(fps.ButtonPressed);
         ClickWindowSizes(resolution_w.GetSelectedId());
 
     }
@@ -59,6 +63,7 @@ public partial class SettingWindow : Control
     }
     private void CheckedFps(bool check)
     {
-        GlobalManager.Instance.EmitSignal("fps", check);
+        GlobalManager.Instance.fps = check;
+        GlobalManager.Instance.EmitSignal("_fps", check);
     }
 }

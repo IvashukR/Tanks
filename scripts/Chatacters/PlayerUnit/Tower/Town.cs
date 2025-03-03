@@ -51,7 +51,11 @@ public partial class Town : CharacterBody2D
     }
     private void destroy(Node2D node)
     {
-        if(node == this)GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+        if(node == this)
+		{
+			GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+			GlobalManager.Instance.EmitSignal("fail");
+		}
     }
     public override void _Process(double delta)
     {

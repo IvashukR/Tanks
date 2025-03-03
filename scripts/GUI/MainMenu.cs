@@ -12,7 +12,6 @@ public partial class MainMenu : Control
     private AnimationPlayer anim_btn;
     private AnimationPlayer anim_btn2;
     private TextureButton setting_btn;
-    private PackedScene setting_menu = (PackedScene)ResourceLoader.Load("res://scene/setting_window.tscn");
 
     private Phone background;
     private Label fps_l;
@@ -29,12 +28,12 @@ public partial class MainMenu : Control
         timer_pig_spawn = GetNode<Timer>("%t_pig");
         SpawnPig();
         timer_pig_spawn.Start();
+        GlobalManager.Instance._fps += fps;
         timer_pig_spawn.Timeout += SpawnPig;
-        GlobalManager.Instance.fps += fps;
         setting_btn.Pressed += async () =>
         {
             await PlayingAnimAsync(anim_btn2, "a");
-            
+            setting.Visible = !setting.Visible;
             
         };
         level_btn.Pressed += async () =>
@@ -42,13 +41,14 @@ public partial class MainMenu : Control
             await PlayingAnimAsync(anim_btn, "a");
             background.Show();
             await PlayingAnimAsync(background.anim_phone, "close");
-            GetTree().ChangeSceneToFile("res://scene/trenirovka.tscn");
+            GetTree().ChangeSceneToFile("res://scene/choose_level.tscn");
         };
+        fps_l.Visible = GlobalManager.Instance.fps;
     }
     private void fps(bool value) => fps_l.Visible = value;
     public override void _Process(double delta)
     {
-        if(fps_l.Visible)fps_l.Text = $"FPS: {Engine.GetFramesPerSecond()}";
+        if(GlobalManager.Instance.fps)fps_l.Text = $"FPS: {Engine.GetFramesPerSecond()}";
     }
     private async Task PlayingAnimAsync(AnimationPlayer anim, string anim_name)
     {
@@ -68,6 +68,7 @@ public partial class MainMenu : Control
     }
     public override void _ExitTree()
     {
-        GlobalManager.Instance.fps -= fps;
+        GlobalManager.Instance._fps -= fps;
     }
+    
 }
