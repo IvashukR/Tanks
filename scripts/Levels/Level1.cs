@@ -7,13 +7,12 @@ public partial class Level1 : Trenirovka
 	private TextureButton card_ivisible;
 	private TextureButton card_visible;
 	private CanvasLayer card;
-	private Control control;
+	private CanvasLayer control;
 	private Town1 town;
-	public List<TextureButton> all_btn_ui = new List<TextureButton>();
 	public override void _Ready()
 	{
 		town = GetNode<Town1>("%town");
-		control = GetNode<Control>("%Control");
+		control = GetNode<CanvasLayer>("%Control");
 		card_ivisible = GetNode<TextureButton>("%card_invisible");
 		card_visible = GetNode<TextureButton>("%card_visible");
 		card = GetNode<CanvasLayer>("%card");

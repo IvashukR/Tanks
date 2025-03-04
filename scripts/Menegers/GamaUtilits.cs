@@ -16,6 +16,7 @@ public partial class GamaUtilits : Node
         b.invertY = invertY;
 		b.fallow_m = fallow_m;
 		b.angle_pushka = angle_pushka;
+        
 		i.GetParent().AddChild(bullet);
 		b.p.Emitting = particl;
 		

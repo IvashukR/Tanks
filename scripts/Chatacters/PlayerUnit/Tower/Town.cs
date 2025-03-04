@@ -33,7 +33,7 @@ public partial class Town : CharacterBody2D
 	public override void _Ready()
     {
         blam_particles = GetNode<CpuParticles2D>("%blam");
-        parent = GetParent();
+        parent = GetParent().GetParent();
         patron_l = GetNode<Label>("%patron_l");
         patron_l.Text = $"Town patron: {patron}";
         hp_l = GetNode<Label>("%hp_l");
@@ -54,7 +54,7 @@ public partial class Town : CharacterBody2D
         if(node == this)
 		{
 			GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
-			GlobalManager.Instance.EmitSignal("fail");
+			if(proch <= 0)GlobalManager.Instance.EmitSignal("fail");
 		}
     }
     public override void _Process(double delta)
@@ -72,7 +72,7 @@ public partial class Town : CharacterBody2D
         {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot )
             {
-                if(parent is Level1 level)
+                if(parent is Trenirovka level)
                 {
                     foreach(TextureButton btn in level.all_btn_ui)
                     {

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 public partial class Trenirovka : Node
 {
 	public MarginContainer d;
@@ -20,8 +21,12 @@ public partial class Trenirovka : Node
 	private TextureButton restart;
 	private Phone phone;
 	private Label fps_l;
+	private TextureButton resume_btn;
+	private ColorRect resume_menu;
+	private Texture2D resume_press = (Texture2D)ResourceLoader.Load("res://textures/unresume_btn.png");
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
+	public List<TextureButton> all_btn_ui = new List<TextureButton>();
 	private Texture2D[] go = {
 		(Texture2D)ResourceLoader.Load("res://textures/two.png"),
 		(Texture2D)ResourceLoader.Load("res://textures/three.png"),
@@ -38,8 +43,27 @@ public partial class Trenirovka : Node
 		GetTree().Paused = true;
 		phone = GetNode<Phone>("%Phone");
 		fps_l = GetNode<Label>("%fps_l");
+		resume_menu = GetNode<ColorRect>("%resume_menu");
+		resume_btn = GetNode<TextureButton>("%resume_btn");
+		all_btn_ui.Add(resume_btn);
 		phone.Show();
 		phone.anim_phone.Play("open");
+		var texture_resume = resume_btn.TextureNormal;
+		resume_btn.Pressed += () =>
+		{
+			if(resume_btn.TextureNormal == texture_resume)
+			{
+				GetTree().Paused = true;
+				resume_menu.Show();
+				resume_btn.TextureNormal = resume_press;
+			}
+			else
+			{
+				GetTree().Paused = false;
+				resume_menu.Hide();
+				resume_btn.TextureNormal = texture_resume;
+			}
+		};
 		phone.anim_phone.AnimationFinished += (animationName) => phone.Hide();
 		GlobalManager.Instance.fail += losse;
 		GlobalManager.Instance.win += win;
