@@ -18,15 +18,17 @@ public partial class Trenirovka : Node
 	private bool w = false;
 	[Signal]
 	public delegate void StartEventHandler();
-	private TextureButton restart;
 	private Phone phone;
 	private Label fps_l;
 	private TextureButton resume_btn;
-	private ColorRect resume_menu;
+	private ResumeMenu resume_menu;
 	private Texture2D resume_press = (Texture2D)ResourceLoader.Load("res://textures/unresume_btn.png");
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
 	public List<TextureButton> all_btn_ui = new List<TextureButton>();
+	private ResumeMenu win_menu;
+	private bool fail;
+	[Export] int n_level;
 	private Texture2D[] go = {
 		(Texture2D)ResourceLoader.Load("res://textures/two.png"),
 		(Texture2D)ResourceLoader.Load("res://textures/three.png"),
@@ -43,11 +45,13 @@ public partial class Trenirovka : Node
 		GetTree().Paused = true;
 		phone = GetNode<Phone>("%Phone");
 		fps_l = GetNode<Label>("%fps_l");
-		resume_menu = GetNode<ColorRect>("%resume_menu");
+		resume_menu = GetNode<ResumeMenu>("%resume_menu");
+		win_menu = GetNode<ResumeMenu>("%resume_menu2");
 		resume_btn = GetNode<TextureButton>("%resume_btn");
 		all_btn_ui.Add(resume_btn);
 		phone.Show();
 		phone.anim_phone.Play("open");
+		win_menu.index_next_level = n_level++;
 		var texture_resume = resume_btn.TextureNormal;
 		resume_btn.Pressed += () =>
 		{
@@ -55,6 +59,8 @@ public partial class Trenirovka : Node
 			{
 				GetTree().Paused = true;
 				resume_menu.Show();
+				resume_menu.fail_l.Hide();
+				resume_menu.pause_l.Show();
 				resume_btn.TextureNormal = resume_press;
 			}
 			else
@@ -67,11 +73,6 @@ public partial class Trenirovka : Node
 		phone.anim_phone.AnimationFinished += (animationName) => phone.Hide();
 		GlobalManager.Instance.fail += losse;
 		GlobalManager.Instance.win += win;
-		restart = GetNode<TextureButton>("%restart");
-		restart.Pressed += () => {
-			//GetTree().ChangeSceneToPacked(s);
-			GetTree().ReloadCurrentScene();
-		};
 		info = GetNode<BoxContainer>("%info");
 		enemy = GetNode<StaticBody2D>("%town_enemy");
 		blast = GetNode<CpuParticles2D>("%blast");
@@ -93,10 +94,18 @@ public partial class Trenirovka : Node
 		fps_l.Visible = GlobalManager.Instance.fps;
 	}
 	private void fps(bool value) => fps_l.Visible = value;
-	protected void losse() => restart.Visible = true;
+	protected void losse()
+	{
+		fail = true;
+		resume_menu.fail_l.Show();
+		resume_menu.pause_l.Hide();
+		resume_menu.Show();
+	}
 	protected void win()
 	{
-
+		if(fail)return;
+		GlobalManager.Instance.last_level = n_level++;
+		win_menu.Show();
 	}
 	
 	public override async void _Process(double delta)
@@ -110,7 +119,7 @@ public partial class Trenirovka : Node
 			go_s.Visible = false;
 			info.Visible = true;
 			EmitSignal("Start");
-			
+			resume_btn.Show();
 		}
         if(GlobalManager.Instance.fps)fps_l.Text = $"FPS: {Engine.GetFramesPerSecond()}";
     

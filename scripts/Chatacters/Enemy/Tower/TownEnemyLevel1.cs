@@ -5,7 +5,7 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
 {
     public bool can_shoot { get; set; } = true;
     public float time_tween { get; set; } = 0.2f;
-    public int patron { get; set; } = 10;
+    public int patron { get; set; } = 20;
     public Timer t { get; set; }
     public Sprite2D pushka { get; set; }
     public Marker2D marker { get; set; }
@@ -18,9 +18,13 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
     private Timer t_unit, t_attack, t_flag_attack;
     private Well hit_well;
     private RandomNumberGenerator rng;
+    private RayCast2D ray_attack;
+    private Town tower;
     [Export] private bool attacked = true;
     public override void _Ready()
     {
+        tower = GetNode<Town>("%town");
+        ray_attack = GetNode<RayCast2D>("%ray_attack");
         rng = new RandomNumberGenerator();
         rng.Randomize();
         hit_well = GetNode<Well>("%well");
@@ -51,24 +55,33 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
     private async void Attack()
     {
         if(!attacked)return;
+        if(tower == null)
+        {
+            attacked = false;
+            return;
+        }
         t.WaitTime = 2;
         t_attack.Start();
         pushka.Rotation = (Position - GetNode<Marker2D>("%marker_attack").Position).Angle();
         for(int i = 0; i < 3; i++)
         {
-            if(can_shoot && patron > 0)
-            {
-                can_shoot = false;
-                t.Start();
-                patron--;
-                GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, bullet_size, 50, -1);
-            }
-            await ToSignal(GetTree().CreateTimer(0.4f), "timeout");
+            Shoot();
+            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+        }
+    }
+    protected void Shoot()
+    {
+        if(can_shoot && patron > 0)
+        {
+            can_shoot = false;
+            t.Start();
+            patron--;
+            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, bullet_size, 50, -1);
         }
     }
     public override void _Process(double delta)
     {
-        if(hit_well == null && !flag_attacked)
+        if(hit_well == null && !flag_attacked && tower != null)
         {
             flag_attacked = true;
             t_flag_attack.Start();
@@ -83,6 +96,10 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
                 flag_unit = false;
                 t_unit.Start();
             }
+        }
+        if(GamaUtilits.CheckRayCollide(ray_attack, "unit"))
+        {
+            Shoot();
         }
     }
     

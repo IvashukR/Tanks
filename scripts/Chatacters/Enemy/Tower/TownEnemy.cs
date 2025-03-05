@@ -9,6 +9,7 @@ public partial class TownEnemy : StaticBody2D
 	private ShaderMaterial sm;
 	private CpuParticles2D blam_particles;
     private Label hp_l;
+	[Export] private bool main_town;
 	public override void _Ready()
 	{
 		max_proch = proch;
@@ -21,6 +22,7 @@ public partial class TownEnemy : StaticBody2D
 		if(node == this)
 		{
 			GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+			if(!main_town)return;
 			if(proch <= 0)GlobalManager.Instance.EmitSignal("win");
 		}
 	}

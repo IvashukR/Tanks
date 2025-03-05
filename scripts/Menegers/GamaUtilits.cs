@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 
 public partial class GamaUtilits : Node
 {
@@ -29,6 +31,15 @@ public partial class GamaUtilits : Node
 		dialog.GlobalPosition = pos;
 		dialog.Scale = sc;
 	}
+    public static bool CheckRayCollide(RayCast2D ray, string group)
+    {
+        if(ray.IsColliding())
+        {
+            var collider = (Node)ray.GetCollider();
+            if(collider.IsInGroup(group))return true;
+        }
+        return false;
+    }
     public static void set_shader(Node parent, bool _render, string name_param)
     {
         foreach(var child in parent.GetChildren())

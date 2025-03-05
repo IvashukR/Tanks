@@ -7,7 +7,7 @@ public partial class Town : CharacterBody2D
     public  bool can_shoot { get; set; } = true;
     public Marker2D marker { get; set; }
     public Timer t { get; set; }
-    public Node parent;
+    [Export] public Node parent;
     private Label patron_l;
     [Export] public int patron  { get; set; } = 3;
     public int proch = 75;
@@ -33,7 +33,6 @@ public partial class Town : CharacterBody2D
 	public override void _Ready()
     {
         blam_particles = GetNode<CpuParticles2D>("%blam");
-        parent = GetParent().GetParent();
         patron_l = GetNode<Label>("%patron_l");
         patron_l.Text = $"Town patron: {patron}";
         hp_l = GetNode<Label>("%hp_l");
