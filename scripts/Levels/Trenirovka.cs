@@ -97,6 +97,7 @@ public partial class Trenirovka : Node
 	protected void losse()
 	{
 		fail = true;
+		resume_btn.Hide();
 		resume_menu.fail_l.Show();
 		resume_menu.pause_l.Hide();
 		resume_menu.Show();
@@ -104,6 +105,7 @@ public partial class Trenirovka : Node
 	protected void win()
 	{
 		if(fail)return;
+		resume_btn.Hide();
 		GlobalManager.Instance.last_level = n_level++;
 		win_menu.Show();
 	}

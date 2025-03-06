@@ -38,6 +38,7 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
         t.Timeout += () => can_shoot = true;
         marker = GetNode<Marker2D>("%marker_enemy_town");
         t_unit.Timeout += () => flag_unit = true;
+        tower.TreeExited += () => tower = null;
         bullet_detected.BodyEntered += (body) => {
             GamaUtilits.EnteredBulletInTownZone(body, this, true);
         };
@@ -76,7 +77,7 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
             can_shoot = false;
             t.Start();
             patron--;
-            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, bullet_size, 50, -1);
+            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false,pushka.Rotation, bullet_size, 50, -1);
         }
     }
     public override void _Process(double delta)

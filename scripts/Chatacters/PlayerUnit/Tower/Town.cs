@@ -12,7 +12,6 @@ public partial class Town : CharacterBody2D
     [Export] public int patron  { get; set; } = 3;
     public int proch = 75;
     private Label hp_l;
-    public bool is_boom;
     private ShaderMaterial sm;
     private CpuParticles2D blam_particles;
     
@@ -52,7 +51,7 @@ public partial class Town : CharacterBody2D
     {
         if(node == this)
 		{
-			GamaUtilits.DestroyTown(proch, is_boom, blam_particles, this, sm);
+			GamaUtilits.DestroyTown(proch,blam_particles, this, sm);
 			if(proch <= 0)GlobalManager.Instance.EmitSignal("fail");
 		}
     }
@@ -83,7 +82,7 @@ public partial class Town : CharacterBody2D
                     can_shoot = false;
                     return;
                 }
-				GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50, -1);
+				GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50, -1);
                 can_shoot = false;
                 t.Start();
                 patron--;

@@ -15,14 +15,21 @@ public partial class Bullet : CharacterBody2D
 	private Timer col;
 	public bool fallow_m;
 	public float angle_pushka;
-	public CpuParticles2D p;
 	private Timer c;
 	public int invertY;
 	public RayCast2D ray_cast_town;
 	private bool calculete_damage;
+	private CpuParticles2D cpu_particles;
+	private ShaderMaterial sm_blast;
+	private AudioStreamPlayer audio_ricoshet;
+	private AudioStreamPlayer audio_blast;
+
 	public override void _Ready()
 	{
-		p = GetNode<CpuParticles2D>("%particles");
+		cpu_particles = GetNode<CpuParticles2D>("%blast");
+		audio_blast = GetNode<AudioStreamPlayer>("%audio_blast");
+		sm_blast = cpu_particles.Material as ShaderMaterial;
+		audio_ricoshet = GetNode<AudioStreamPlayer>("%audio_ricoshet");
 		ray_cast_town = GetNode<RayCast2D>("%ray_cast");
 		mouse_pos = GetGlobalMousePosition();
 		UpdDir();
@@ -86,12 +93,12 @@ public partial class Bullet : CharacterBody2D
 		if (body.Name == "TankRed")
 		{
 			GlobalManager.Instance.EmitSignal("del_tank");
-			QueueFree();
+			_QueueFree();
 		}
 		else if (body.IsInGroup("bullet"))
 		{
 			if(!body.IsQueuedForDeletion())body.QueueFree();
-			QueueFree();
+			_QueueFree();
 		}
 
 
@@ -106,11 +113,12 @@ public partial class Bullet : CharacterBody2D
 			}
 			
     		dir = dir - 2 * dir.Dot(normal) * normal;
+			if(!audio_ricoshet.IsPlaying())audio_ricoshet.Play();
 			Rotation = dir.Angle();
 			ricoshet_count--;
 			if (ricoshet_count <= 0)
 			{
-				QueueFree();
+				_QueueFree();
 			}
 		}
 		else if (body.IsInGroup("transport"))
@@ -131,13 +139,17 @@ public partial class Bullet : CharacterBody2D
 				{
 					GlobalManager.Instance.EmitSignal("destroyed_town", body);
 				}
-				QueueFree();
+				_QueueFree();
 			}
 		}
 		else if(body.IsInGroup("unit"))
 		{
 			GlobalManager.Instance.EmitSignal("take_damage", body, this);
-			QueueFree();
+			_QueueFree();
 		}
+	}
+	private void _QueueFree()
+	{
+		GamaUtilits.DestroyTown(0,cpu_particles, this, sm_blast);
 	}
 }

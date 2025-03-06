@@ -1,11 +1,9 @@
 using Godot;
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 
 public partial class GamaUtilits : Node
 {
-    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool particl, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
+    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
 	{
 		var _bullet = (PackedScene)ResourceLoader.Load("res://scene/bullet.tscn");
 		var bullet = _bullet.Instantiate<CharacterBody2D>();
@@ -18,10 +16,7 @@ public partial class GamaUtilits : Node
         b.invertY = invertY;
 		b.fallow_m = fallow_m;
 		b.angle_pushka = angle_pushka;
-        
 		i.GetParent().AddChild(bullet);
-		b.p.Emitting = particl;
-		
 
 	}
 	public static void spawn_d (Vector2 pos, Vector2 sc)
@@ -87,7 +82,7 @@ public partial class GamaUtilits : Node
                 tween.SetTrans(Tween.TransitionType.Sine);
                 tween.TweenProperty(town.pushka, "rotation", (obj.GlobalPosition - future_pos).Normalized().Angle(), town.time_tween);
                 await obj.ToSignal(tween, "finished");
-                GamaUtilits.shoot(town.pushka.GlobalPosition, town.marker.GlobalPosition, obj, false, false, town.pushka.Rotation, town.bullet_size, town.bullet_damage, -1);
+                shoot(town.pushka.GlobalPosition, town.marker.GlobalPosition, obj, false,town.pushka.Rotation, town.bullet_size, town.bullet_damage, -1);
                 town.can_shoot = false;
                 town.t.Start();
                 town.patron--;
@@ -95,25 +90,41 @@ public partial class GamaUtilits : Node
         }
     }
 
-    public static async void DestroyTown(int proch, bool is_boom, CpuParticles2D blam_particles, Node2D obj, ShaderMaterial blam_sm)
+    public static async void DestroyTown(int proch,CpuParticles2D blam_particles, Node2D obj, ShaderMaterial blam_sm)
     {
         if(proch <= 0)
         {
-            if(is_boom)return;
+            if(obj is Bullet body)
+            {
+                body.speed = 0;
+            }
             blam_particles.Emitting = true;
             for (float i = 0.0f; i <= 1; i += 0.3f)
             {
-			    await obj.ToSignal(obj.GetTree().CreateTimer(0.19f), "timeout");
+			    await obj.ToSignal(obj.GetTree().CreateTimer(0.03f), "timeout");
                 blam_sm.SetShaderParameter("glow_strength", i);
             }
-            GlobalManager.Instance.EmitSignal("fail");
+            foreach(var child in obj.GetChildren())
+            {
+                if(child is CollisionObject2D collision)
+                {
+                    collision.CollisionLayer = 0;
+                    collision.CollisionMask = 0;
+                }
+                if(child is CanvasItem node && !node.IsInGroup("boom"))
+                {
+                    node.Hide();
+                }
+            }
+            await obj.ToSignal(obj.GetTree().CreateTimer(blam_particles.Lifetime), "timeout");
+            GD.Print(obj.Name);
             obj.QueueFree();
         }
         else
         {
-            GamaUtilits.set_shader(obj, true, "damage");
+            set_shader(obj, true, "damage");
             await obj.ToSignal(obj.GetTree().CreateTimer(0.2f), "timeout");
-            GamaUtilits.set_shader(obj, false, "damage");
+            set_shader(obj, false, "damage");
         }
 
         

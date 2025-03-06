@@ -40,7 +40,7 @@ public partial class Ai : State
 				{
 					ray_flag = false;
 					voin.LookAt(collider.GlobalPosition);
-					GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, false, voin.Rotation , new Vector2(0.1f, 0.1f), voin.damage, 1, 500);
+					GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false,voin.Rotation , new Vector2(0.1f, 0.1f), voin.damage, 1, 500);
 					voin.patron_count--;
 				}
 
