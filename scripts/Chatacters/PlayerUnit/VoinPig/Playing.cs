@@ -10,7 +10,6 @@ public partial class Playing : State
 	private Marker2D marker;
 	private bool can_shoot = true;
 	private Timer timer;
-	private Node _parent;
 	private bool pressed_on_ai = false;
 	private AnimationPlayer anim;
 	private Label patron_l;
@@ -21,12 +20,7 @@ public partial class Playing : State
 		patron_l = GetNode<Label>("%patron_l");
 		anim = GetNode<AnimationPlayer>("%anim");
 		fsm = GetNode<Node>("%FSM");
-		var parent = fsm.GetParent();
-    	if (parent is Voin)
-    	{
-        	v = (Voin)parent;
-    	}
-		_parent = v.GetParent();
+		v = (Voin)fsm.GetParent();
 		timer = new Timer();
 		timer.WaitTime = v.perezaryad;
 		timer.OneShot = true;
@@ -68,32 +62,18 @@ public partial class Playing : State
         {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count > 0)
             {
-				if(_parent is Level1 level)
-                {
-                    foreach(TextureButton btn in level.all_btn_ui)
-                    {
-                        if(btn.GetGlobalRect().HasPoint(mouseEvent.GlobalPosition) && btn.Visible)
-						{
-							return;
-						}
-                    }
-                }
-                GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true,marker.Rotation, new Vector2(0.1f, 0.1f), v.damage, -1, 500);
-				can_shoot = false;
-				v.patron_count--;
-				patron_l.Text = $"{v.name_unit} Patron: {v.patron_count}";
-				timer.Start();
+                Shoot();
             }
         }
         
     }
-	public override void _ExitTree()
+	private void Shoot()
 	{
-    	if (v != null)
-    	{
-        	v.QueueFree();
-    	}
+		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true,marker.Rotation, new Vector2(0.1f, 0.1f), v.damage, -1, 500);
+		can_shoot = false;
+		v.patron_count--;
+		patron_l.Text = $"{v.name_unit} Patron: {v.patron_count}";
+		timer.Start();
 	}
-
 
 }

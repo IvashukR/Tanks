@@ -7,7 +7,6 @@ public partial class Town : CharacterBody2D
     public  bool can_shoot { get; set; } = true;
     public Marker2D marker { get; set; }
     public Timer t { get; set; }
-    [Export] public Node parent;
     private Label patron_l;
     [Export] public int patron  { get; set; } = 3;
     public int proch = 75;
@@ -63,33 +62,31 @@ public partial class Town : CharacterBody2D
         }
         
     }
-    public override void _Input(InputEvent @event)
+    
+    public override void _UnhandledInput(InputEvent @event)
     {
         if(GlobalManager.Instance.block_input)return;
 		if (@event is InputEventMouseButton mouseEvent )
         {
-            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot )
+            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot)
             {
-                if(parent is Trenirovka level)
-                {
-                    foreach(TextureButton btn in level.all_btn_ui)
-                    {
-                        if(btn.GetGlobalRect().HasPoint(mouseEvent.Position) && btn.Visible == true)return;
-                    }
-                }
-                if (patron <= 0)
-                {
-                    can_shoot = false;
-                    return;
-                }
-				GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50, -1);
-                can_shoot = false;
-                t.Start();
-                patron--;
-                patron_l.Text = $"Town patron: {patron}";
+                Shoot();
             }
         }
         
+    }
+    protected void Shoot()
+    {
+        if (patron <= 0)
+        {
+            can_shoot = false;
+            return;
+        }
+		GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, pushka.Rotation, new Vector2(0.165f, 0.171f), 50, -1);
+        can_shoot = false;
+        t.Start();
+        patron--;
+        patron_l.Text = $"Town patron: {patron}";
     }
     public override void _ExitTree()
 	{

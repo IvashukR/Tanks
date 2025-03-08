@@ -6,7 +6,6 @@ public partial class Town1 : Town, ITown
     private bool _is_ai{set;get;}
     public TextureButton on_ai;
     private Area2D bullet_area, unit_detected;
-    [Export] public float bullet_area_koef { get; set; } = 0.08f;
     [Export] public float time_tween { get; set; } = 0.08f;
     [Export] public Vector2 bullet_size { get; set; } = new Vector2(0.165f, 0.171f);
 
@@ -59,9 +58,9 @@ public partial class Town1 : Town, ITown
         if(is_ai && !info.IsQueuedForDeletion())info.Hide();
         this_is_pick_unit = false;
     }
-    public override void _Input(InputEvent @event)
+    public override void _UnhandledInput(InputEvent @event)
     {
-        if(!is_ai)base._Input(@event);
+        if(!is_ai)base._UnhandledInput(@event);
     }
     public override  void  _Process(double delta)
     {
@@ -76,7 +75,6 @@ public partial class Town1 : Town, ITown
         base._ExitTree();
         GlobalManager.Instance.card_click -= ClickCard;
         GlobalManager.Instance.pick_unit -= pick_unit;
-        if(GetParent() is Level1 level)level.all_btn_ui.Remove(on_ai);
         on_ai.QueueFree();
     }
 }

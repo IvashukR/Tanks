@@ -48,7 +48,7 @@ public partial class FSM : Node
     {
         current_state.PhysicsProcess(delta);
     }
-	public override void _Input(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
 		current_state.Inp(@event);
 	}

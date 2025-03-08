@@ -25,7 +25,6 @@ public partial class Trenirovka : Node
 	private Texture2D resume_press = (Texture2D)ResourceLoader.Load("res://textures/unresume_btn.png");
 	[Export] protected string inp = "Привет друг, вижу по твоему личному делу что у тебя не нету никакого оптита в военом деле но парень смишленний. Как ты знаеш  у нас тут война с коровами за ресурси, управляй войсками чтоб уничтожить вражескую станцию ";
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
-	public List<TextureButton> all_btn_ui = new List<TextureButton>();
 	private ResumeMenu win_menu;
 	private bool fail;
 	[Export] int n_level;
@@ -48,7 +47,6 @@ public partial class Trenirovka : Node
 		resume_menu = GetNode<ResumeMenu>("%resume_menu");
 		win_menu = GetNode<ResumeMenu>("%resume_menu2");
 		resume_btn = GetNode<TextureButton>("%resume_btn");
-		all_btn_ui.Add(resume_btn);
 		phone.Show();
 		phone.anim_phone.Play("open");
 		win_menu.index_next_level = n_level++;
