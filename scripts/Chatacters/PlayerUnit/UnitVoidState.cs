@@ -1,10 +1,10 @@
 using Godot;
 using System;
 
-public partial class Void : State
+public partial class UnitVoidState : State
 {
-	private bool life = true;
-	[Export] private CharacterBody2D v;
+    private bool life = true;
+	[Export] private Node2D v;
 	[Export] public UnitLogic unit;
 	private FSM fsm;
 	
@@ -21,7 +21,7 @@ public partial class Void : State
 			v.QueueFree();
 		}
 		v.GlobalPosition = GetViewport().GetMousePosition();
-		v.MoveAndSlide();
+		if(v is  CharacterBody2D body)body.MoveAndSlide();
 	}
 	public override void Exit()
 	{
@@ -43,3 +43,4 @@ public partial class Void : State
         
     }
 }
+

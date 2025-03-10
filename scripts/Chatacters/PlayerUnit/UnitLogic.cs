@@ -5,6 +5,7 @@ public partial class UnitLogic : Node2D
 {
     [Export] public string name_unit = "Voin";
 	[Export] public UnitStats stats;
+	[Export] private Node2D unit;
     protected TextureButton on_ai;
 	protected bool this_is_pick_unit;
     public FSM fsm;
@@ -17,6 +18,7 @@ public partial class UnitLogic : Node2D
         on_ai = GetNode<TextureButton>("%on_ai");
 		unit_sprite = GetNode<Node2D>("%unit_sprite");
 		fsm = GetNode<FSM>("%FSM");
+		hp_l.Text = $"{name_unit} Health: {stats.proch}";
         on_ai.Pressed += () =>
 		{
 			is_ai = !is_ai;
@@ -36,12 +38,10 @@ public partial class UnitLogic : Node2D
 			GamaUtilits.set_shader(unit_sprite, false, "render");
 		};
         GlobalManager.Instance.pick_unit += PickUnit;
-		GlobalManager.Instance.take_damage += TakeDamage;
 		GlobalManager.Instance.card_click += CardClick;
     }
-    protected virtual void TakeDamage(Node2D body, Bullet bullet)
+    public virtual void TakeDamage(Node2D body, Bullet bullet)
 	{
-		if(body != this)return;
 		GamaUtilits.TakeDamageUnit(body, bullet);
 	}
     protected virtual void PickUnit()
@@ -65,7 +65,6 @@ public partial class UnitLogic : Node2D
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;
 		}
-		GlobalManager.Instance.take_damage -= TakeDamage;
 		GlobalManager.Instance.pick_unit -= PickUnit;
 		GlobalManager.Instance.card_click -= CardClick;
 	}

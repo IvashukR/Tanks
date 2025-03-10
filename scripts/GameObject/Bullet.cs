@@ -145,7 +145,7 @@ public partial class Bullet : CharacterBody2D
 		}
 		else if(body.IsInGroup("unit"))
 		{
-			GlobalManager.Instance.EmitSignal("take_damage", body, this);
+			if(body.GetNodeOrNull("%logic") is UnitLogic unit)unit.TakeDamage(body, this);
 			_QueueFree();
 		}
 	}

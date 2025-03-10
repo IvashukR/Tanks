@@ -132,8 +132,9 @@ public partial class GamaUtilits : Node
     }
     public static async void TakeDamageUnit(Node2D body, Bullet bullet)
 	{
-        if(body.GetNode("%logic") is UnitLogic _unit)
+        if(body.GetNodeOrNull("%logic") is UnitLogic _unit)
         {
+            GD.Print("DAMAGE");
             _unit.stats.proch -= bullet.damage;
             _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.stats.proch}";
             if(_unit.stats.proch > 0)
