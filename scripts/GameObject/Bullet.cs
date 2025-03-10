@@ -113,6 +113,7 @@ public partial class Bullet : CharacterBody2D
 			}
 			
     		dir = dir - 2 * dir.Dot(normal) * normal;
+			if(ricoshet_count - 1 > 0)
 			if(!audio_ricoshet.IsPlaying())audio_ricoshet.Play();
 			Rotation = dir.Angle();
 			ricoshet_count--;
@@ -150,6 +151,7 @@ public partial class Bullet : CharacterBody2D
 	}
 	private void _QueueFree()
 	{
+		audio_blast.Play();
 		GamaUtilits.DestroyTown(0,cpu_particles, this, sm_blast);
 	}
 }

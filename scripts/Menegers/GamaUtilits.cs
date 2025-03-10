@@ -31,6 +31,7 @@ public partial class GamaUtilits : Node
         if(ray.IsColliding())
         {
             var collider = (Node)ray.GetCollider();
+            if(collider == null)return false;
             if(collider.IsInGroup(group))return true;
         }
         return false;
@@ -131,16 +132,15 @@ public partial class GamaUtilits : Node
     }
     public static async void TakeDamageUnit(Node2D body, Bullet bullet)
 	{
-        GD.Print(body.Name);
-        if(body is IUnit _unit)
+        if(body.GetNode("%logic") is UnitLogic _unit)
         {
-            _unit.proch -= bullet.damage;
-            _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.proch}";
-            if(_unit.proch > 0)
+            _unit.stats.proch -= bullet.damage;
+            _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.stats.proch}";
+            if(_unit.stats.proch > 0)
             {
-                GamaUtilits.set_shader(_unit.voin_sprite, true, "damage");
+                GamaUtilits.set_shader(_unit.unit_sprite, true, "damage");
                 await body.ToSignal(body.GetTree().CreateTimer(0.2f), "timeout");
-                GamaUtilits.set_shader(_unit.voin_sprite, false, "damage");
+                GamaUtilits.set_shader(_unit.unit_sprite, false, "damage");
             }
             else
             {

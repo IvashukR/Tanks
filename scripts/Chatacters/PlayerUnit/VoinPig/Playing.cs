@@ -4,9 +4,8 @@ using System;
 public partial class Playing : State
 {
 	private Vector2 dir;
-	[Export] private CharacterBody2D voin = new CharacterBody2D();
 	private Node fsm;
-	public Voin v;
+	[Export] private UnitLogic unit;
 	private Marker2D marker;
 	private bool can_shoot = true;
 	private Timer timer;
@@ -14,21 +13,21 @@ public partial class Playing : State
 	private AnimationPlayer anim;
 	private Label patron_l;
 	private BoxContainer info;
+	[Export] private CharacterBody2D v;
 	public override void _Ready()
 	{
 		info = GetNode<BoxContainer>("%info");
 		patron_l = GetNode<Label>("%patron_l");
 		anim = GetNode<AnimationPlayer>("%anim");
 		fsm = GetNode<Node>("%FSM");
-		v = (Voin)fsm.GetParent();
 		timer = new Timer();
-		timer.WaitTime = v.perezaryad;
+		timer.WaitTime = unit.stats.perezaryad;
 		timer.OneShot = true;
 		AddChild(timer);
 		marker = GetNode<Marker2D>("%marker");
 		timer.Timeout += () => can_shoot = true;
-		patron_l.Text = $"{v.name_unit} Patron: {v.patron_count}";
-		v.TreeExited += () => v = null;
+		patron_l.Text = $"{unit.name_unit} Patron: {unit.stats.patron_count}";
+		unit.TreeExited += () => unit = null;
 	}
 	public override void Enter()
 	{
@@ -52,7 +51,7 @@ public partial class Playing : State
 	public override void PhysicsProcess(double delta)
 	{
 		dir = Input.GetVector("l", "r", "d", "u").Normalized();
-		v.Velocity = dir  * v.speed * (float)delta;
+		v.Velocity = dir  * unit.stats.speed * (float)delta;
 		v.MoveAndSlide();
 	}
 	public override void Inp(InputEvent @event)
@@ -60,7 +59,7 @@ public partial class Playing : State
 		if(GlobalManager.Instance.block_input)return;
 		if (@event is InputEventMouseButton mouseEvent)
         {
-            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && v.patron_count > 0)
+            if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed && can_shoot && unit.stats.patron_count > 0)
             {
                 Shoot();
             }
@@ -69,10 +68,10 @@ public partial class Playing : State
     }
 	private void Shoot()
 	{
-		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true,marker.Rotation, new Vector2(0.1f, 0.1f), v.damage, -1, 500);
+		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true,marker.Rotation, new Vector2(0.1f, 0.1f), unit.stats.damage, -1, 500);
 		can_shoot = false;
-		v.patron_count--;
-		patron_l.Text = $"{v.name_unit} Patron: {v.patron_count}";
+		unit.stats.patron_count--;
+		patron_l.Text = $"{unit.name_unit} Patron: {unit.stats.patron_count}";
 		timer.Start();
 	}
 

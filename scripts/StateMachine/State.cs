@@ -21,4 +21,7 @@ public partial class State : Node
 	public virtual void Inp(InputEvent @event)
 	{
 	}
+	public virtual void _Inp(InputEvent @event)
+	{
+	}
 }

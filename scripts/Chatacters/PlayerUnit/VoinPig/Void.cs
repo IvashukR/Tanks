@@ -4,15 +4,14 @@ using System;
 public partial class Void : State
 {
 	private bool life = true;
-	private Voin v;
+	[Export] private CharacterBody2D v;
+	[Export] public UnitLogic unit;
 	private FSM fsm;
 	
 	public override void _Ready()
 	{
 		var parent = GetParent();
-		v = (Voin) parent.GetParent();
 		fsm = GetParent<FSM>();
-		v.TreeExited += () => v = null;
 	}
 	public override void Process(double delta)
 	{
@@ -32,15 +31,14 @@ public partial class Void : State
 	{
 		GlobalManager.Instance.temp_pick_unit = v;
 	}
-	public override void Inp(InputEvent @event)
+	public override void _Inp(InputEvent @event)
     {
 		if (@event is InputEventMouseButton mouseEvent)
         {
-			GlobalManager.Instance.EmitSignal("change_money", v.cost);
-            fsm.change_state("Playing");
+			GlobalManager.Instance.EmitSignal("change_money", unit.stats.cost);
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;
-
+			fsm.change_state("Playing");
         }
         
     }

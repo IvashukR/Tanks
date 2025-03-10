@@ -37,7 +37,7 @@ public partial class Level1 : Trenirovka
 		};
 		base._Ready();
 		Card card_obj = (Card) card;
-		card_obj.SetInfo(new Voin());
+		card_obj.SetInfo((UnitStats)ResourceLoader.Load("res://CustomResources/DefaultVoinStats.tres"));
 	}
 	protected virtual void _Start()
 	{

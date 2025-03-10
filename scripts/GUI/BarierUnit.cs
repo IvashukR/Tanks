@@ -7,7 +7,7 @@ public partial class BarierUnit : Area2D
 	{
 		BodyEntered += (body) =>
         {
-            if(body is IStats unit)
+            if(body.GetNode("logic") is UnitLogic unit)
             {
                 if(unit.fsm.current_state.Name == "Void")body.QueueFree();
             }

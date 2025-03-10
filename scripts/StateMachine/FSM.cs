@@ -52,4 +52,8 @@ public partial class FSM : Node
 	{
 		current_state.Inp(@event);
 	}
+	public override void _Input(InputEvent @event)
+	{
+		current_state._Inp(@event);
+	}
 }

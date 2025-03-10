@@ -27,7 +27,7 @@ public partial class Trenirovka : Node
 	protected PackedScene s  = ResourceLoader.Load<PackedScene>("res://scene/trenirovka.tscn");
 	private ResumeMenu win_menu;
 	private bool fail;
-	[Export] int n_level;
+	[Export] int next_level;
 	private Texture2D[] go = {
 		(Texture2D)ResourceLoader.Load("res://textures/two.png"),
 		(Texture2D)ResourceLoader.Load("res://textures/three.png"),
@@ -49,7 +49,7 @@ public partial class Trenirovka : Node
 		resume_btn = GetNode<TextureButton>("%resume_btn");
 		phone.Show();
 		phone.anim_phone.Play("open");
-		win_menu.index_next_level = n_level++;
+		win_menu.index_next_level = next_level;
 		var texture_resume = resume_btn.TextureNormal;
 		resume_btn.Pressed += () =>
 		{
@@ -104,7 +104,7 @@ public partial class Trenirovka : Node
 	{
 		if(fail)return;
 		resume_btn.Hide();
-		GlobalManager.Instance.last_level = n_level++;
+		GlobalManager.Instance.last_level = next_level;
 		win_menu.Show();
 	}
 	

@@ -42,7 +42,7 @@ public partial class GlobalManager : Node
 	public bool block_input;
 	public int money;
 	public bool block_drop_unit;
-	public int last_level;
+	public int last_level = 0;
 	public List<string> PathLevels = new List<string>
 	{
 		"res://scene/trenirovka.tscn",

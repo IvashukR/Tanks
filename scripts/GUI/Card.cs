@@ -17,18 +17,15 @@ public partial class Card : CanvasLayer
 	public TextureButton main_btn;
 	[Export] public string _path;
 
-	public void SetInfo(object obj)
+	public void SetInfo(UnitStats stats)
 	{
-		if (obj is IStats target)
-		{
-			money_l.Text = $": {target.cost}";
-			patron_l.Text = $"патрони: {target.patron_count}";
-			speed_l.Text = $"скорость: {target.speed / 100}";
-			per_l.Text = $"перезарядка: {target.perezaryad}";
-			d_cost_l.Text = $"цена смерти: {target.cost_death}";
-			damage_l.Text = $"урон: {target.damage}";
-			cost = target.cost;
-		}
+		money_l.Text = $": {stats.cost}";
+		patron_l.Text = $"патрони: {stats.patron_count}";
+		speed_l.Text = $"скорость: {stats.speed / 100}";
+		per_l.Text = $"перезарядка: {stats.perezaryad}";
+		d_cost_l.Text = $"цена смерти: {stats.cost_death}";
+		damage_l.Text = $"урон: {stats.damage}";
+		cost = stats.cost;
 	}
 	
 	public void Buy(string _path)

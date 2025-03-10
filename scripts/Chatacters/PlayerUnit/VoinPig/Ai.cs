@@ -4,7 +4,8 @@ using System;
 public partial class Ai : State
 {
 	private bool curved_path_clear = true;
-	private Voin voin;
+	[Export] private CharacterBody2D voin;
+	[Export] private UnitLogic unit;
 	private bool ray_flag = true;
 	private Timer ray_timer;
 	private Sprite2D pushka;
@@ -15,8 +16,6 @@ public partial class Ai : State
 		pushka = GetNode<Sprite2D>("%pushka_voin");
 		marker = GetNode<Marker2D>("%marker");
 		ray_timer = GetNode<Timer>("%ray_timer");
-		voin = GetParent().GetParent<Voin>();
-		voin.TreeExited += () => voin = null;
 		detect_enemy_ray = GetNode<RayCast2D>("%ray_ai");
 		ray_timer.Timeout += () => ray_flag = true;
 	}
@@ -27,7 +26,7 @@ public partial class Ai : State
 	}
 	private void CheckUnitCollideNotCurved()
 	{
-		if(voin.patron_count > 0)
+		if(unit.stats.patron_count > 0)
 		{
 			voin.Rotation += 0.04f;
 			if(detect_enemy_ray.IsColliding() && ray_flag)
@@ -40,8 +39,8 @@ public partial class Ai : State
 				{
 					ray_flag = false;
 					voin.LookAt(collider.GlobalPosition);
-					GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false,voin.Rotation , new Vector2(0.1f, 0.1f), voin.damage, 1, 500);
-					voin.patron_count--;
+					GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false,voin.Rotation , new Vector2(0.1f, 0.1f), unit.stats.damage, 1, 500);
+					unit.stats.patron_count--;
 				}
 
 			}

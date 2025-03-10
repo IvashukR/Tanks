@@ -19,9 +19,11 @@ public partial class ChooseLevel : Control
         {
             if(child is TextureButton btn)
             {
+                if(GlobalManager.Instance.last_level < index)
+                btn.TextureNormal = (Texture2D)ResourceLoader.Load("res://textures/levels_btn_locked.png");
                 btn.Pressed += () =>
                 {
-                    if(GlobalManager.Instance.last_level <= index)
+                    if(GlobalManager.Instance.last_level >= index)
                     {
                         ph.Show();
                         ph.anim_phone.Play("close");
