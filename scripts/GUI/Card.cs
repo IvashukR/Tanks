@@ -12,6 +12,8 @@ public partial class Card : CanvasLayer
 	private int cost;
 	private VBoxContainer info;
 	private ColorRect cr_info;
+	private Label hp_l;
+	private Label ai_l;
 	public TextureButton show_i;
 	public TextureButton hide_i;
 	public TextureButton main_btn;
@@ -20,11 +22,13 @@ public partial class Card : CanvasLayer
 	public void SetInfo(UnitStats stats)
 	{
 		money_l.Text = $": {stats.cost}";
-		patron_l.Text = $"патрони: {stats.patron_count}";
-		speed_l.Text = $"скорость: {stats.speed / 100}";
-		per_l.Text = $"перезарядка: {stats.perezaryad}";
-		d_cost_l.Text = $"цена смерти: {stats.cost_death}";
-		damage_l.Text = $"урон: {stats.damage}";
+		patron_l.Text = $"ammo: {stats.patron_count}";
+		speed_l.Text = $"speed: {stats.speed / 100}";
+		per_l.Text = $"reload: {stats.perezaryad}";
+		d_cost_l.Text = $"cost death: {stats.cost_death}";
+		damage_l.Text = $"damage: {stats.damage}";
+		hp_l.Text = $"health: {stats.proch}";
+		ai_l.Text = $"ai iq: {stats.iq_ai}";
 		cost = stats.cost;
 	}
 	
@@ -43,10 +47,12 @@ public partial class Card : CanvasLayer
 	{
 		cr_info = GetNode<ColorRect>("%cr_info");
 		main_btn = GetNode<TextureButton>("%main_btn");
+		ai_l = GetNode<Label>("%ai_l");
 		info = GetNode<VBoxContainer>("%info");
 		show_i = GetNode<TextureButton>("%show_i");
 		hide_i = GetNode<TextureButton>("%hide_i");
 		money_l = GetNode<Label>("%money_l");
+		hp_l = GetNode<Label>("%hp_l");
 		speed_l = GetNode<Label>("%speed_l");
 		per_l = GetNode<Label>("%per_l");
 		d_cost_l = GetNode<Label>("%death_l");

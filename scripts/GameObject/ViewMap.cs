@@ -5,7 +5,6 @@ public partial class ViewMap : Camera2D
 {
     [Export] private Vector2 limit;
     [Export] private float shappiness;
-    [Export] private Sprite2D fake_mouse;
     public override void _Process(double _delta)
     {
         if(Input.IsMouseButtonPressed(MouseButton.Left))

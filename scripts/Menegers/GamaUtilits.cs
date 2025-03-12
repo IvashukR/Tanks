@@ -134,7 +134,6 @@ public partial class GamaUtilits : Node
 	{
         if(body.GetNodeOrNull("%logic") is UnitLogic _unit)
         {
-            GD.Print("DAMAGE");
             _unit.stats.proch -= bullet.damage;
             _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.stats.proch}";
             if(_unit.stats.proch > 0)

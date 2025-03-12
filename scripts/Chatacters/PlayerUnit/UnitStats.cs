@@ -11,4 +11,5 @@ public partial class UnitStats : Resource
 	[Export] public float speed;
 	[Export] public int cost;
 	[Export] public int cost_death;
+	[Export] public int iq_ai;
 }
