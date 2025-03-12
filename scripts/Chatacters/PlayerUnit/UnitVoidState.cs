@@ -6,11 +6,12 @@ public partial class UnitVoidState : State
     private bool life = true;
 	[Export] private Node2D v;
 	[Export] public UnitLogic unit;
+	[Export] private Area2D area_void;
+
 	private FSM fsm;
 	
 	public override void _Ready()
 	{
-		var parent = GetParent();
 		fsm = GetParent<FSM>();
 	}
 	public override void Process(double delta)
@@ -26,15 +27,28 @@ public partial class UnitVoidState : State
 	public override void Exit()
 	{
 		GlobalManager.Instance.block_drop_unit = false;
+		area_void.QueueFree();
+		area_void = null;
 	}
 	public override void Enter()
 	{
 		GlobalManager.Instance.temp_pick_unit = v;
 	}
+	private void CheckCollideUnit()
+	{
+		foreach(Node2D node in area_void.GetOverlappingBodies())
+		{
+			if(node.IsInGroup("unit"))
+			{
+				return;
+			}
+		}
+	}
 	public override void _Inp(InputEvent @event)
     {
 		if (@event is InputEventMouseButton mouseEvent)
         {
+			CheckCollideUnit();
 			GlobalManager.Instance.EmitSignal("change_money", unit.stats.cost);
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;
@@ -43,4 +57,3 @@ public partial class UnitVoidState : State
         
     }
 }
-

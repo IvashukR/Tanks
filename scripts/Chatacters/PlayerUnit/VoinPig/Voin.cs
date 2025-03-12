@@ -4,11 +4,14 @@ using System;
 public partial class Voin : CharacterBody2D
 {
     [Export] private UnitLogic unit;
+    [Export] private Vector2 scale_bullet = new Vector2(0.1f, 0.1f);
+    [Export] private float speed_bullet = 498.9f;
     private Sprite2D pushka;
     private Marker2D marker;
-    private bool can_shoot = true;
+    public bool can_shoot = true;
     private Label patron_l;
     private Timer t_shoot;
+    
 
     public override void _Ready()
     {
@@ -23,10 +26,11 @@ public partial class Voin : CharacterBody2D
         t_shoot.TreeExited += () => t_shoot = null;
         patron_l.Text = $"{unit.name_unit} Patron: {unit.stats.patron_count}";
     }
-    public void Shoot()
+    public void Shoot(bool mouse_fallow)
 	{
         if(!can_shoot || unit.stats.patron_count <= 0)return;
-		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true,marker.Rotation, new Vector2(0.1f, 0.1f), unit.stats.damage, -1, 500);
+		if(mouse_fallow)GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, marker.Rotation, scale_bullet, unit.stats.damage , -1, speed_bullet);
+        else GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, Rotation , scale_bullet ,unit.stats.damage, 1, speed_bullet);
 		can_shoot = false;
 		unit.stats.patron_count--;
 		patron_l.Text = $"{unit.name_unit} Patron: {unit.stats.patron_count}";
