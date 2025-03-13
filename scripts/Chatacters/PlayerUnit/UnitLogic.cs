@@ -6,7 +6,7 @@ public partial class UnitLogic : Node2D
     [Export] public string name_unit = "Voin";
 	[Export] public UnitStats stats;
 	[Export] private Node2D unit;
-    protected TextureButton on_ai;
+    public TextureButton on_ai;
 	protected bool this_is_pick_unit;
     public FSM fsm;
     public  Node2D unit_sprite;
@@ -19,8 +19,10 @@ public partial class UnitLogic : Node2D
 		unit_sprite = GetNode<Node2D>("%unit_sprite");
 		fsm = GetNode<FSM>("%FSM");
 		hp_l.Text = $"{name_unit} Health: {stats.proch}";
-        on_ai.Pressed += () =>
+		on_ai.Pressed += () =>
 		{
+			if(ReturnCantPick())return;
+			if(fsm.current_state.Name == "Void")return;
 			is_ai = !is_ai;
 			if(is_ai)fsm.change_state("AI");
 			else fsm.change_state("Playing");
@@ -29,11 +31,13 @@ public partial class UnitLogic : Node2D
 		};
         on_ai.MouseEntered += () =>
 		{
+			if(ReturnCantPick())return;
 			GlobalManager.Instance.block_input = true;
 			GamaUtilits.set_shader(unit_sprite, true, "render");
 		}; 
         on_ai.MouseExited += () => 
 		{
+			if(ReturnCantPick())return;
 			GlobalManager.Instance.block_input = false;
 			GamaUtilits.set_shader(unit_sprite, false, "render");
 		};
@@ -67,5 +71,15 @@ public partial class UnitLogic : Node2D
 		}
 		GlobalManager.Instance.pick_unit -= PickUnit;
 		GlobalManager.Instance.card_click -= CardClick;
+	}
+	private bool ReturnCantPick()
+	{
+		if(GlobalManager.Instance.temp_pick_unit != null)
+		if(!CanPick())return true;
+		return false;
+	}
+	private bool CanPick()
+	{
+		return GlobalManager.Instance.temp_pick_unit ==  unit;
 	}
 }

@@ -10,6 +10,7 @@ public partial class Level1 : Trenirovka
 	private Town1 town;
 	private Timer lvl_t;
 	private Label lvl_t_l;
+	private AnimationPlayer anim_cant_pick_unit;
 	public override void _Ready()
 	{
 		town = GetNode<Town1>("%town");
@@ -18,6 +19,7 @@ public partial class Level1 : Trenirovka
 		card_visible = GetNode<TextureButton>("%card_visible");
 		card = GetNode<CanvasLayer>("%card");
 		lvl_t = GetNode<Timer>("%lvl_t");
+		anim_cant_pick_unit = GetNode<AnimationPlayer>("%anim_cant_pick_unit");
 		lvl_t_l = GetNode<Label>("%lvl_t_l");
 		lvl_t.Timeout += TimeoutLvl;
 		s =  (PackedScene)ResourceLoader.Load("res://scene/level.tscn");
@@ -43,6 +45,11 @@ public partial class Level1 : Trenirovka
 		base._Ready();
 		Card card_obj = (Card) card;
 		card_obj.SetInfo((UnitStats)ResourceLoader.Load("res://CustomResources/DefaultVoinStats.tres"));
+		GlobalManager.Instance.cant_pick_unit += CantPickUnit;
+	}
+	private void CantPickUnit()
+	{
+		if(!anim_cant_pick_unit.IsPlaying())anim_cant_pick_unit.Play("start");
 	}
 	protected virtual void _Start()
 	{
@@ -79,6 +86,7 @@ public partial class Level1 : Trenirovka
 	{
 		base._ExitTree();
 		GlobalManager.Instance.temp_pick_unit = null;
+		GlobalManager.Instance.cant_pick_unit -= CantPickUnit;
 		GlobalManager.Instance.money = 0;
 		Start -= _Start;
 	}

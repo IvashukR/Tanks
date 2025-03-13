@@ -33,6 +33,8 @@ public partial class GlobalManager : Node
 	public  delegate void pig_main_menu_animEventHandler();
 	[Signal]
 	public  delegate void havent_moneyEventHandler();
+	[Signal]
+	public  delegate void cant_pick_unitEventHandler();
 	public  bool fps;
 
 	public Node2D temp_pick_unit;

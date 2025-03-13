@@ -9,7 +9,7 @@ public partial class UnitVoidState : State
 	[Export] private Area2D area_void;
 
 	private FSM fsm;
-	
+
 	public override void _Ready()
 	{
 		fsm = GetParent<FSM>();
@@ -34,21 +34,24 @@ public partial class UnitVoidState : State
 	{
 		GlobalManager.Instance.temp_pick_unit = v;
 	}
-	private void CheckCollideUnit()
+	private bool CheckCollideUnit()
 	{
 		foreach(Node2D node in area_void.GetOverlappingBodies())
 		{
+			if(node == v)continue;
 			if(node.IsInGroup("unit"))
 			{
-				return;
+				GlobalManager.Instance.EmitSignal("cant_pick_unit");
+				return true;
 			}
 		}
+		return false;
 	}
 	public override void _Inp(InputEvent @event)
     {
-		if (@event is InputEventMouseButton mouseEvent)
+		if (@event is InputEventMouseButton)
         {
-			CheckCollideUnit();
+			if(CheckCollideUnit())return;
 			GlobalManager.Instance.EmitSignal("change_money", unit.stats.cost);
 			GlobalManager.Instance.block_drop_unit = false;
 			GlobalManager.Instance.temp_pick_unit = null;

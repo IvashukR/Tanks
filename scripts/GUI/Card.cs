@@ -61,7 +61,7 @@ public partial class Card : CanvasLayer
 		main_btn.Pressed += () => 
 		{
 			GlobalManager.Instance.EmitSignal("card_click");
-			if(!GlobalManager.Instance.block_drop_unit &&  GlobalManager.Instance.money - Convert.ToInt32(cost) >= 0 && GlonalManager.Instance.temp_pick_unit == null)Buy(_path);
+			if(!GlobalManager.Instance.block_drop_unit &&  GlobalManager.Instance.money - Convert.ToInt32(cost) >= 0 && GlobalManager.Instance.temp_pick_unit == null)Buy(_path);
 			else GlobalManager.Instance.EmitSignal("havent_money");
 		};
 		show_i.Pressed += () => {
