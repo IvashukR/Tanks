@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using GameUnit.Stats;
 
+namespace GameView;
 public partial class Card : CanvasLayer
 {
 	private Label money_l;

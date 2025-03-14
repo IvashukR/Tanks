@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using GameLevels;
 
+namespace GameView;
 public partial class MoneySprite : TextureRect
 {
     private Label label_money;

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
+namespace GameObjects;
 public partial class Well : StaticBody2D
 {
     public float low;

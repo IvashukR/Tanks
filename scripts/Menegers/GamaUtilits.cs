@@ -1,6 +1,9 @@
 using Godot;
 using System;
+using GameUnit;
+using GameObjects;
 
+namespace TanksUtilits;
 public partial class GamaUtilits : Node
 {
     public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
@@ -17,7 +20,7 @@ public partial class GamaUtilits : Node
 		b.fallow_m = fallow_m;
 		b.angle_pushka = angle_pushka;
 		i.GetParent().AddChild(bullet);
-
+        
 	}
 	public static void spawn_d (Vector2 pos, Vector2 sc)
 	{

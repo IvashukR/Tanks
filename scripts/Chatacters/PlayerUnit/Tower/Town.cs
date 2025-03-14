@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using TanksUtilits;
 
+namespace GameObjects;
 public partial class Town : CharacterBody2D
 {
 	public  Sprite2D pushka { get; set; }

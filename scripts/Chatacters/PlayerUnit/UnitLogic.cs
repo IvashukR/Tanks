@@ -1,6 +1,10 @@
 using Godot;
 using System;
+using TanksUtilits;
+using GameUnit.Stats;
+using GameObjects;
 
+namespace GameUnit;
 public partial class UnitLogic : Node2D
 {
     [Export] public string name_unit = "Voin";

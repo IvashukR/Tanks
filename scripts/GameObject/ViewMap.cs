@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace GameObjects;
 public partial class ViewMap : Camera2D
 {
     [Export] private Vector2 limit;

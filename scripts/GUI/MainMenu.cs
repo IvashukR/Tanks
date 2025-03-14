@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
+namespace GameView;
 public partial class MainMenu : Control
 {
     private Timer timer_pig_spawn;

@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using TanksUtilits;
 
+namespace GameUnit.Voin;
 public partial class Voin : CharacterBody2D
 {
     [Export] private UnitLogic unit;
@@ -11,11 +13,13 @@ public partial class Voin : CharacterBody2D
     public bool can_shoot = true;
     private Label patron_l;
     private Timer t_shoot;
+    private Area2D ak_control;
     
 
     public override void _Ready()
     {
         pushka = GetNode<Sprite2D>("%pushka_voin");
+        ak_control = GetNode<Area2D>("%ak_control");
 		marker = GetNode<Marker2D>("%marker");
         patron_l = GetNode<Label>("%patron_l");
         t_shoot = new Timer();
@@ -28,6 +32,10 @@ public partial class Voin : CharacterBody2D
     }
     public void Shoot(bool mouse_fallow)
 	{
+        foreach(Node2D node in ak_control.GetOverlappingBodies())
+        {
+            if(node.IsInGroup("well"))return;
+        }
         if(!can_shoot || unit.stats.patron_count <= 0)return;
 		if(mouse_fallow)GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, marker.Rotation, scale_bullet, unit.stats.damage , -1, speed_bullet);
         else GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, Rotation , scale_bullet ,unit.stats.damage, 1, speed_bullet);

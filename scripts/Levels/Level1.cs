@@ -1,6 +1,11 @@
 using Godot;
 using System;
+using TanksUtilits;
+using GameUnit.Stats;
+using GameView;
+using GameObjects;
 
+namespace GameLevels;
 public partial class Level1 : Trenirovka
 {
 	private TextureButton card_ivisible;

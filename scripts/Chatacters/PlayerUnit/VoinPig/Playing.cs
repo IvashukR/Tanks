@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace GameUnit.Voin.States;
 public partial class Playing : State
 {
 	private Vector2 dir;

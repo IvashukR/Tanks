@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace GameUnit.Voin.States;
 public partial class Ai : State
 {
 	[Export] private Voin voin;

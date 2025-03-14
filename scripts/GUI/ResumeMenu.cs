@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
+namespace GameModels;
 public partial class ResumeMenu : ColorRect
 {
     private TextureButton turn_menu;

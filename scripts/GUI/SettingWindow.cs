@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace GameView;
 public partial class SettingWindow : Control
 {
     private OptionButton resolution_w;

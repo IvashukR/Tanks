@@ -1,6 +1,9 @@
 using Godot;
 using System;
-using System.Collections.Generic;
+using GameView;
+
+namespace GameLevels;
+
 public partial class Trenirovka : Node
 {
 	public MarginContainer d;

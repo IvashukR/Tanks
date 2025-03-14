@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using TanksUtilits;
 
+namespace Enemy.Tower;
 public partial class TownEnemyLevel1 : TownEnemy, ITown
 {
     public bool can_shoot { get; set; } = true;
