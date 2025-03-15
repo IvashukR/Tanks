@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using GameUnit.Stats;
+using GameUnit;
 
 namespace GameView;
 public partial class Card : CanvasLayer

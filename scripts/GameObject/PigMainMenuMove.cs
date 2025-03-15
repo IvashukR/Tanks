@@ -1,5 +1,6 @@
 using Godot;
 
+namespace GameObjects;
 public partial class PigMainMenuMove : RigidBody2D
 {
     private Vector2 velocity;

@@ -1,9 +1,11 @@
 using Godot;
 using System;
+using TanksUtilits;
 
+namespace Enemy.Tower;
 public partial class TownEnemy : StaticBody2D
 {
-	public int proch = 50;
+	[Export] public int proch = 50;
 	public int max_proch;
 	private ShaderMaterial sm;
 	private CpuParticles2D blam_particles;

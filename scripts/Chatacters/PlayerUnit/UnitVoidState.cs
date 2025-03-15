@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace GameUnit;
 public partial class UnitVoidState : State
 {
     private bool life = true;

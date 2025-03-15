@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace GameUnit;
 [GlobalClass]
 public partial class UnitStats : Resource
 {

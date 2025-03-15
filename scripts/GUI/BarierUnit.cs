@@ -1,6 +1,8 @@
 using Godot;
 using System;
+using GameUnit;
 
+namespace GameView;
 public partial class BarierUnit : Area2D
 {
     public override void _Ready()

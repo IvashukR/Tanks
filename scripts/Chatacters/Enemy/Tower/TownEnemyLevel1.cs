@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using TanksUtilits;
+using GameObjects;
 
 namespace Enemy.Tower;
 public partial class TownEnemyLevel1 : TownEnemy, ITown

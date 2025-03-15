@@ -1,7 +1,7 @@
 using Godot;
 using System;
 using TanksUtilits;
-using GameUnit.Stats;
+using GameUnit;
 using GameView;
 using GameObjects;
 
@@ -51,6 +51,16 @@ public partial class Level1 : Trenirovka
 		Card card_obj = (Card) card;
 		card_obj.SetInfo((UnitStats)ResourceLoader.Load("res://CustomResources/DefaultVoinStats.tres"));
 		GlobalManager.Instance.cant_pick_unit += CantPickUnit;
+	}
+	protected override void losse()
+	{
+		base.losse();
+		lvl_t_l.Hide();
+	}
+	protected override void win()
+	{
+		base.win();
+		lvl_t_l.Hide();
 	}
 	private void CantPickUnit()
 	{

@@ -33,7 +33,8 @@ public partial class GamaUtilits : Node
     {
         if(ray.IsColliding())
         {
-            var collider = (Node)ray.GetCollider();
+            var collider = (Node2D)ray.GetCollider();
+            if(collider == GlobalManager.Instance.temp_pick_unit)return false;
             if(collider == null)return false;
             if(collider.IsInGroup(group))return true;
         }
@@ -62,6 +63,7 @@ public partial class GamaUtilits : Node
     }
     public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj, bool _bullet)
     {
+        if(body == GlobalManager.Instance.temp_pick_unit)return;
         if(obj is ITown  town)
         {
             if(town.patron > 0 && town.can_shoot)
@@ -121,7 +123,6 @@ public partial class GamaUtilits : Node
                 }
             }
             await obj.ToSignal(obj.GetTree().CreateTimer(blam_particles.Lifetime), "timeout");
-            GD.Print(obj.Name);
             obj.QueueFree();
         }
         else

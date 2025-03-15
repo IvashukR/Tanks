@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+namespace Enemy.Tower;
 public partial class TownEnemyHpBar : ProgressBar
 {
     private TownEnemy enemy_town;

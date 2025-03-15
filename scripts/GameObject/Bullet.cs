@@ -4,7 +4,7 @@ using System.Reflection;
 using TanksUtilits;
 using GameUnit;
 
-
+namespace GameObjects;
 public partial class Bullet : CharacterBody2D
 {
 	public Vector2 mouse_pos;
@@ -89,7 +89,7 @@ public partial class Bullet : CharacterBody2D
 	private  void entered(Node2D body, Vector2 normal)
 	{
 		
-		if (body == null || body.IsQueuedForDeletion())
+		if (body == null || body.IsQueuedForDeletion() || body == GlobalManager.Instance.temp_pick_unit)
     	{
         	return; 
     	}

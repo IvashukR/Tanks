@@ -95,7 +95,7 @@ public partial class Trenirovka : Node
 		fps_l.Visible = GlobalManager.Instance.fps;
 	}
 	private void fps(bool value) => fps_l.Visible = value;
-	protected void losse()
+	protected virtual void losse()
 	{
 		fail = true;
 		resume_btn.Hide();
@@ -103,7 +103,7 @@ public partial class Trenirovka : Node
 		resume_menu.pause_l.Hide();
 		resume_menu.Show();
 	}
-	protected void win()
+	protected virtual void win()
 	{
 		if(fail)return;
 		resume_btn.Hide();

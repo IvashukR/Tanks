@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using TanksUtilits;
-using GameUnit.Stats;
 using GameObjects;
 
 namespace GameUnit;
