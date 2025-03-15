@@ -47,9 +47,9 @@ public partial class UnitLogic : Node2D
         GlobalManager.Instance.pick_unit += PickUnit;
 		GlobalManager.Instance.card_click += CardClick;
     }
-    public virtual void TakeDamage(Node2D body, Bullet bullet)
+    public virtual void TakeDamage(Bullet bullet)
 	{
-		GamaUtilits.TakeDamageUnit(body, bullet);
+		GamaUtilits.TakeDamageUnit(unit, bullet);
 	}
     protected virtual void PickUnit()
 	{

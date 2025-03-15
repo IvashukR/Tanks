@@ -44,6 +44,10 @@ public partial class Bullet : CharacterBody2D
 		c = GetNode<Timer>("%t");
 		c.Timeout +=  () => CollisionMask = 1 | 2;
 	}
+	public Bullet(int damage)
+	{
+		this.damage = damage;
+	}
 
 	private void UpdDir()
 	{
@@ -98,6 +102,10 @@ public partial class Bullet : CharacterBody2D
 			GlobalManager.Instance.EmitSignal("del_tank");
 			_QueueFree();
 		}
+		if(body.Name == "bomba")
+		{
+			_QueueFree();
+		}
 		else if (body.IsInGroup("bullet"))
 		{
 			if(!body.IsQueuedForDeletion())body.QueueFree();
@@ -148,7 +156,7 @@ public partial class Bullet : CharacterBody2D
 		}
 		else if(body.IsInGroup("unit"))
 		{
-			if(body.GetNodeOrNull("%logic") is UnitLogic unit)unit.TakeDamage(body, this);
+			if(body.GetNodeOrNull("%logic") is UnitLogic unit)unit.TakeDamage(this);
 			_QueueFree();
 		}
 	}
