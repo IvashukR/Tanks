@@ -1,13 +1,16 @@
 using Godot;
 using System;
 
+namespace GameView;
 public partial class ChooseLevel : Control
 {
 
     private Phone ph;
+    private AnimationPlayer anim;
     public override void _Ready()
     {
         ph =  GetNode<Phone>("Phone");
+        anim = GetNode<AnimationPlayer>("%anim");
         ph.anim_phone.Play("open");
         ph.anim_phone.AnimationFinished += (animationName) => ph.Hide();
         SetHandlersBtnLevel();
@@ -19,15 +22,20 @@ public partial class ChooseLevel : Control
         {
             if(child is TextureButton btn)
             {
-                if(GlobalManager.Instance.last_level < index)
-                btn.TextureNormal = (Texture2D)ResourceLoader.Load("res://textures/levels_btn_locked.png");
-                btn.Pressed += () =>
+                int local_index = index;
+                btn.Pressed += async () =>
                 {
-                    if(GlobalManager.Instance.last_level >= index)
+                    GD.Print(local_index);
+                    if(GlobalManager.Instance.last_level >= local_index)
                     {
                         ph.Show();
                         ph.anim_phone.Play("close");
-                        GetTree().ChangeSceneToFile(GlobalManager.Instance.PathLevels[index]);
+                        await ToSignal(ph.anim_phone, AnimationPlayer.SignalName.AnimationFinished);
+                        GetTree().ChangeSceneToFile(GlobalManager.Instance.PathLevels[local_index]);
+                    }
+                    else
+                    {
+                        if(!anim.IsPlaying())anim.Play("start");
                     }
                 };
                 index++;
@@ -35,8 +43,5 @@ public partial class ChooseLevel : Control
         }
     }
     
-    public override void _ExitTree()
-    {
-        
-    }
+    
 }
