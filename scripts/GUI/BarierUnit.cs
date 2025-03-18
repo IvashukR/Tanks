@@ -13,6 +13,7 @@ public partial class BarierUnit : Area2D
             if(body.GetNodeOrNull("logic") is UnitLogic unit)
             {
                 if(unit.fsm.current_state.Name == "Void")body.QueueFree();
+                GlobalManager.Instance.EmitSignal("cant_pick_unit");
             }
 
         };

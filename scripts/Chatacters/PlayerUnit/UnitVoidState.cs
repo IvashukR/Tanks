@@ -1,3 +1,4 @@
+using GameView;
 using Godot;
 using System;
 
@@ -28,6 +29,7 @@ public partial class UnitVoidState : State
 	public override void Exit()
 	{
 		GlobalManager.Instance.block_drop_unit = false;
+		GlobalManager.Instance.temp_pick_unit = null;
 		area_void.QueueFree();
 		area_void = null;
 	}
@@ -40,7 +42,7 @@ public partial class UnitVoidState : State
 		foreach(Node2D node in area_void.GetOverlappingBodies())
 		{
 			if(node == v)continue;
-			if(node.IsInGroup("unit"))
+			if(node is PhysicsBody2D || node is BarierUnit)
 			{
 				GlobalManager.Instance.EmitSignal("cant_pick_unit");
 				return true;

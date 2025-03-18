@@ -5,17 +5,14 @@ public partial class AudioMeneger : Control
 {
     private HSlider sfx_s, music_s, master_s;
     private readonly string path_cfg = "user://save_data.cfg";
-    private Button save_btn;
     public override void _Ready()
     {
-        save_btn = GetNode<Button>("%save_btn");
         sfx_s = GetNode<HSlider>("%sfx_s");
         music_s = GetNode<HSlider>("%music_s");
         master_s = GetNode<HSlider>("%master_s");
         master_s.ValueChanged += (value) => SetDb(value, 0);
         sfx_s.ValueChanged += (value) => SetDb(value, 1);
         music_s.ValueChanged += (value) => SetDb(value, 2);
-        save_btn.Pressed += SaveCfg;
         LoadCfg();
     }
     private void SetValueSlider()
@@ -38,7 +35,7 @@ public partial class AudioMeneger : Control
         Error error = cfg.Save(path_cfg);
         if(error != Error.Ok)throw new Exception("Dont Save File!");
     }
-    private void LoadCfg()
+    public void LoadCfg()
     {
         ConfigFile cfg = new ConfigFile();
         if (cfg.Load(path_cfg) == Error.Ok)
@@ -52,8 +49,13 @@ public partial class AudioMeneger : Control
         }
         else SetValueSlider();
     }
+    
     public static bool ExistsFile(string ph)
     {
         return FileAccess.FileExists(ph);
+    }
+    public override void _ExitTree()
+    {
+        SaveCfg();
     }
 }

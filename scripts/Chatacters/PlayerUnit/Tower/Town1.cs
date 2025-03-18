@@ -40,6 +40,7 @@ public partial class Town1 : Town, ITown
         };
         on_ai.Pressed += () => 
         {
+            if(GlobalManager.Instance.temp_pick_unit != null)return;
             is_ai = !is_ai;
             this_is_pick_unit = true;
             GlobalManager.Instance.EmitSignal("pick_unit");

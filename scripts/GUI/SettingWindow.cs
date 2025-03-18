@@ -6,16 +6,19 @@ public partial class SettingWindow : Control
 {
     private OptionButton resolution_w;
     private CheckBox fps;
-    private Button save_btn;
+    private Button def_cfg_btn;
+    private AudioMeneger audio;
     private readonly string path_cfg = "user://save_data.cfg";
+    private readonly string def_path_cfg = "res://default_setting.cfg";
     public override void _Ready()
     {
+        audio = GetNode<AudioMeneger>("%audio_m");
         fps = GetNode<CheckBox>("%fps");
         resolution_w = GetNode<OptionButton>("%resolution_w");
         resolution_w.ItemSelected += ClickWindowSizes;
         fps.Toggled += CheckedFps;
-        save_btn = GetNode<Button>("%save_btn");
-        save_btn.Pressed += SaveCfg;
+        def_cfg_btn = GetNode<Button>("%def_cfg_btn");
+        def_cfg_btn.Pressed += LoadDefCfg;
         LoadCfg();
     }
     private void ClickWindowSizes(long index)
@@ -49,7 +52,6 @@ public partial class SettingWindow : Control
         resolution_w.Select(GetIndexByText(text));
         fps.ButtonPressed = (bool)cfg.GetValue("Other Setting", "FPS");
         CheckedFps(fps.ButtonPressed);
-        GD.Print(fps.ButtonPressed);
         ClickWindowSizes(resolution_w.GetSelectedId());
 
     }
@@ -66,5 +68,25 @@ public partial class SettingWindow : Control
     {
         GlobalManager.Instance.fps = check;
         GlobalManager.Instance.EmitSignal("_fps", check);
+    }
+    private void LoadDefCfg()
+    {
+        ConfigFile src_cfg = new ConfigFile();
+        if(src_cfg.Load(def_path_cfg) != Error.Ok)return;
+        ConfigFile target_cfg = new ConfigFile();
+        foreach (string section in src_cfg.GetSections())
+        {
+            foreach (string key in src_cfg.GetSectionKeys(section))
+            {
+                target_cfg.SetValue(section, key, src_cfg.GetValue(section, key));
+            }
+        }
+        target_cfg.Save(path_cfg);
+        audio.LoadCfg();
+        LoadCfg();
+    }
+    public override void _ExitTree()
+    {
+        SaveCfg();
     }
 }

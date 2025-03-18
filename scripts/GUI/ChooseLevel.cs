@@ -9,7 +9,7 @@ public partial class ChooseLevel : Control
     private AnimationPlayer anim;
     public override void _Ready()
     {
-        ph =  GetNode<Phone>("Phone");
+        ph =  GetNode<Phone>("%Phone");
         anim = GetNode<AnimationPlayer>("%anim");
         ph.anim_phone.Play("open");
         ph.anim_phone.AnimationFinished += (animationName) => ph.Hide();

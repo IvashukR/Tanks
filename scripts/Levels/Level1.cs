@@ -5,6 +5,7 @@ using GameUnit;
 using GameView;
 using GameObjects;
 
+
 namespace GameLevels;
 public partial class Level1 : Trenirovka
 {
@@ -71,8 +72,16 @@ public partial class Level1 : Trenirovka
 		card_ivisible.Show();
 		lvl_t_l.Show();
 		lvl_t.Start();
-		town.on_ai.MouseEntered += () => outline_set(true);
-        town.on_ai.MouseExited += () => outline_set(false);
+		town.on_ai.MouseEntered += () =>
+		{
+			if(GlobalManager.Instance.temp_pick_unit != null)return;
+			outline_set(true);
+		};
+        town.on_ai.MouseExited += () =>
+		{
+			if(GlobalManager.Instance.temp_pick_unit != null)return;
+			outline_set(false);
+		};
 	}
 	private void TimeoutLvl()
 	{

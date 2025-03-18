@@ -48,6 +48,10 @@ public partial class Bullet : CharacterBody2D
 	{
 		this.damage = damage;
 	}
+	public Bullet()
+    {
+        
+    }
 
 	private void UpdDir()
 	{

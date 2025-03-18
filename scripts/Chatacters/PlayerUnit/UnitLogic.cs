@@ -49,6 +49,7 @@ public partial class UnitLogic : Node2D
     }
     public virtual void TakeDamage(Bullet bullet)
 	{
+		if(unit == null || bullet == null)return;
 		GamaUtilits.TakeDamageUnit(unit, bullet);
 	}
     protected virtual void PickUnit()
