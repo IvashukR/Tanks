@@ -160,7 +160,7 @@ public partial class Bullet : CharacterBody2D
 		}
 		else if(body.IsInGroup("unit"))
 		{
-			if(body.GetNodeOrNull("%logic") is UnitLogic unit)unit.TakeDamage(this);
+			if(body.GetNodeOrNull("%logic") is UnitLogic unit)GamaUtilits.TakeDamageUnit(body, this);
 			_QueueFree();
 		}
 	}

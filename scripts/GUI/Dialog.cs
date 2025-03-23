@@ -3,6 +3,7 @@ using System;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
+namespace GameView;
 public partial class Dialog : MarginContainer
 {
 	private Timer t;
