@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using TanksUtilits;
 
 namespace GameUnit;
 public partial class UnitVoidState : State
@@ -11,10 +12,12 @@ public partial class UnitVoidState : State
 	private uint collision_mask;
 	private int zindex_sprite;
 	private FSM fsm;
+	private Area2D barier;
 
 	public override void _Ready()
 	{
 		fsm = GetParent<FSM>();
+		barier = GetNode<Area2D>("%barier");
 	}
 	public override void Process(double delta)
 	{
@@ -32,6 +35,7 @@ public partial class UnitVoidState : State
 		v.CollisionLayer = collision_layer; 
 		v.CollisionMask  = collision_mask;
 		unit.unit_sprite.ZIndex = zindex_sprite;
+		GamaUtilits.set_shader(unit.unit_sprite, false, "darked");
 		Unfocused();
 		area_void.QueueFree();
 		area_void = null;
@@ -48,13 +52,14 @@ public partial class UnitVoidState : State
 		//set unit collision mask and layer on barier unit
 		v.CollisionLayer = (1 << 6);
 		v.CollisionMask = (1 << 7);
-		CallDeferred("SetZIndex");
+		CallDeferred("SetRender");
 		GlobalManager.Instance.temp_pick_unit = v;
 	}
-	private void SetZIndex()
+	private void SetRender()
 	{
 		zindex_sprite = unit.unit_sprite.ZIndex;
 		unit.unit_sprite.ZIndex = 1000;
+		GamaUtilits.set_shader(unit.unit_sprite, true, "darked");
 	}
 	private bool CheckCollideUnit()
 	{
@@ -73,6 +78,11 @@ public partial class UnitVoidState : State
     {
 		if (@event is InputEventMouseButton)
         {
+			if(barier.GetOverlappingBodies().Contains(unit))
+			{
+				GlobalManager.Instance.EmitSignal("cant_pick_unit");
+				return;
+			}
 			if(CheckCollideUnit())return;
 			GlobalManager.Instance.EmitSignal("change_money", unit.stats.cost);
 			GlobalManager.Instance.block_drop_unit = false;
