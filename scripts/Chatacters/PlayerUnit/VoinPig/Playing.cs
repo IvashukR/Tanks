@@ -34,7 +34,7 @@ public partial class Playing : State
 		{
 			anim.Play("go");
 		}
-		else anim.Stop();
+		else if(anim.CurrentAnimation == "go")anim.Stop();
 	}
 	public override void PhysicsProcess(double delta)
 	{

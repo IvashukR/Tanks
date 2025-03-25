@@ -15,7 +15,8 @@ public partial class Voin : CharacterBody2D
     private Timer t_shoot;
     private Area2D ak_control;
     private AnimationPlayer anim;
-
+    [Signal]
+	public delegate void NullAmmoEventHandler();
     public override void _Ready()
     {
         pushka = GetNode<Sprite2D>("%pushka_voin");
@@ -43,11 +44,16 @@ public partial class Voin : CharacterBody2D
         else GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, Rotation , scale_bullet ,unit.stats.damage, 1, speed_bullet);
 		can_shoot = false;
 		unit.stats.patron_count--;
+        if(unit.stats.patron_count <= 0)EmitSignal("NullAmmo");
 		patron_l.Text = $"{unit.name_unit} Patron: {unit.stats.patron_count}";
 		t_shoot.Start();
 	}
     public bool CheckAmmoNull()
     {
         return unit.stats.patron_count <= 0;
+    }
+    public override void _ExitTree()
+    {
+        t_shoot.QueueFree();
     }
 }
