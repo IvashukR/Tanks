@@ -14,10 +14,12 @@ public partial class UnitLogic : Node2D
     public FSM fsm;
     public  Node2D unit_sprite;
     public  Label hp_l;
+	public CpuParticles2D bloom;
     private bool is_ai;
     public override void _Ready()
     {
         hp_l = GetNode<Label>("%hp_l");
+		bloom = GetNode<CpuParticles2D>("%bloom");
         on_ai = GetNode<TextureButton>("%on_ai");
 		unit_sprite = GetNode<Node2D>("%unit_sprite");
 		fsm = GetNode<FSM>("%FSM");

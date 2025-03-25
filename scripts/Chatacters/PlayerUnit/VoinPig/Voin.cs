@@ -14,12 +14,13 @@ public partial class Voin : CharacterBody2D
     private Label patron_l;
     private Timer t_shoot;
     private Area2D ak_control;
-    
+    private AnimationPlayer anim;
 
     public override void _Ready()
     {
         pushka = GetNode<Sprite2D>("%pushka_voin");
         ak_control = GetNode<Area2D>("%ak_control");
+        anim = GetNode<AnimationPlayer>("%anim");
 		marker = GetNode<Marker2D>("%marker");
         patron_l = GetNode<Label>("%patron_l");
         t_shoot = new Timer();
@@ -37,6 +38,7 @@ public partial class Voin : CharacterBody2D
             if(node.IsInGroup("well"))return;
         }
         if(!can_shoot || unit.stats.patron_count <= 0)return;
+        if(!anim.IsPlaying())anim.Play("shoot");
 		if(mouse_fallow)GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, marker.Rotation, scale_bullet, unit.stats.damage , -1, speed_bullet);
         else GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, Rotation , scale_bullet ,unit.stats.damage, 1, speed_bullet);
 		can_shoot = false;

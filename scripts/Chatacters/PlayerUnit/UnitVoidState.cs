@@ -1,3 +1,4 @@
+using GameView;
 using Godot;
 using System;
 using TanksUtilits;
@@ -12,12 +13,10 @@ public partial class UnitVoidState : State
 	private uint collision_mask;
 	private int zindex_sprite;
 	private FSM fsm;
-	private Area2D barier;
 
 	public override void _Ready()
 	{
 		fsm = GetParent<FSM>();
-		barier = GetNode<Area2D>("%barier");
 	}
 	public override void Process(double delta)
 	{
@@ -74,11 +73,19 @@ public partial class UnitVoidState : State
 		}
 		return false;
 	}
+	private bool InDeathZone()
+	{
+		foreach (var area in area_void.GetOverlappingAreas())
+		{
+			if(area is BarierUnit)return true;
+		}
+		return false;
+	}
 	public override void _Inp(InputEvent @event)
     {
 		if (@event is InputEventMouseButton)
         {
-			if(barier.GetOverlappingBodies().Contains(unit))
+			if(InDeathZone())
 			{
 				GlobalManager.Instance.EmitSignal("cant_pick_unit");
 				return;

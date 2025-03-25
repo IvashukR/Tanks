@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 using GameUnit;
 using GameObjects;
 
@@ -104,26 +105,12 @@ public partial class GamaUtilits : Node
             {
                 body.speed = 0;
             }
-            blam_particles.Emitting = true;
             for (float i = 0.0f; i <= 1; i += 0.3f)
             {
 			    await obj.ToSignal(obj.GetTree().CreateTimer(0.03f), "timeout");
                 blam_sm.SetShaderParameter("glow_strength", i);
             }
-            foreach(var child in obj.GetChildren())
-            {
-                if(child is CollisionObject2D collision)
-                {
-                    collision.CollisionLayer = 0;
-                    collision.CollisionMask = 0;
-                }
-                if(child is CanvasItem node && !node.IsInGroup("boom"))
-                {
-                    node.Hide();
-                }
-            }
-            await obj.ToSignal(obj.GetTree().CreateTimer(blam_particles.Lifetime), "timeout");
-            obj.QueueFree();
+            await DestroyObjectParticles(obj, blam_particles);
         }
         else
         {
@@ -134,6 +121,24 @@ public partial class GamaUtilits : Node
 
         
     }
+    private static async Task DestroyObjectParticles(Node2D obj, CpuParticles2D blam)
+    {
+        blam.Emitting = true;
+        foreach(var child in obj.GetChildren())
+        {
+            if(child is CollisionObject2D collision)
+            {
+                collision.CollisionLayer = 0;
+                collision.CollisionMask = 0;
+            }
+            if(child is CanvasItem node && !node.IsInGroup("boom"))
+            {
+                node.Hide();
+            }
+        }
+        await obj.ToSignal(obj.GetTree().CreateTimer(blam.Lifetime), "timeout");
+        obj.QueueFree();
+    }
     public static async void TakeDamageUnit(Node2D body, Bullet bullet)
 	{
         if(body.GetNodeOrNull("%logic") is UnitLogic _unit)
@@ -142,14 +147,14 @@ public partial class GamaUtilits : Node
             _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.stats.proch}";
             if(_unit.stats.proch > 0)
             {
-                GamaUtilits.set_shader(_unit.unit_sprite, true, "damage");
+                set_shader(_unit.unit_sprite, true, "damage");
                 await body.ToSignal(body.GetTree().CreateTimer(0.2f), "timeout");
-                GamaUtilits.set_shader(_unit.unit_sprite, false, "damage");
+                set_shader(_unit.unit_sprite, false, "damage");
             }
             else
             {
-
-                body.QueueFree();
+                await DestroyObjectParticles(body, _unit.bloom);
+                
             }
         }
 		

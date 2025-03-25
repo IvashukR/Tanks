@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 namespace GameView;
 public partial class SettingWindow : Control
@@ -18,7 +19,7 @@ public partial class SettingWindow : Control
         resolution_w.ItemSelected += ClickWindowSizes;
         fps.Toggled += CheckedFps;
         def_cfg_btn = GetNode<Button>("%def_cfg_btn");
-        def_cfg_btn.Pressed += LoadDefCfg;
+        def_cfg_btn.Pressed += LoadDefCfgTask;
         LoadCfg();
     }
     private void ClickWindowSizes(long index)
@@ -82,8 +83,14 @@ public partial class SettingWindow : Control
             }
         }
         target_cfg.Save(path_cfg);
-        audio.LoadCfg();
-        LoadCfg();
+    }
+    public async void LoadDefCfgTask()
+    {
+        await Task.Run(() => {
+            LoadDefCfg();
+        });
+        audio.CallDeferred("LoadCfg");
+        CallDeferred("LoadCfg");
     }
     public override void _ExitTree()
     {
