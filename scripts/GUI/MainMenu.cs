@@ -28,6 +28,7 @@ public partial class MainMenu : Control
         setting_btn = GetNode<TextureButton>("%setting_btn");
         timer_pig_spawn = GetNode<Timer>("%t_pig");
         SpawnPig();
+        DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.ResizeDisabled, true);
         timer_pig_spawn.Start();
         GlobalManager.Instance._fps += fps;
         timer_pig_spawn.Timeout += SpawnPig;

@@ -1,9 +1,9 @@
 using Godot;
 using System;
-using GameUnit;
+using TanksUtilits;
 
 namespace GameObjects;
-public partial class Bomba : StaticBody2D
+public partial class Bomba : Sprite2D
 {
     private PathFollow2D path_move;
     private Area2D area_collide;
@@ -22,14 +22,16 @@ public partial class Bomba : StaticBody2D
     }
     private void AreaCollideEntered(Node2D body)
     {
-        if(!anim.IsPlaying())anim.Play();
-        if(body.GetNodeOrNull("%logic") is UnitLogic unit)
+        if(body.IsInGroup("unit"))
         {
+            if(!anim.IsPlaying())anim.Play("1");
             using(var bullet_damage = new Bullet(1000))
             {
-                unit.TakeDamage(bullet_damage);
+                GamaUtilits.TakeDamageUnit(body, bullet_damage);
             }
             
         }
+        else if(body.IsInGroup("bullet"))
+        if(!anim.IsPlaying())anim.Play("1");
     }
 }

@@ -18,7 +18,7 @@ public partial class UnitVoidState : State
 	{
 		fsm = GetParent<FSM>();
 	}
-	public override void Process(double delta)
+	public override void PhysicsProcess(double delta)
 	{
 		if (v.GlobalPosition.X < 0 || v.GlobalPosition.X > GetViewport().GetVisibleRect().Size.X || v.GlobalPosition.Y < 0 || v.GlobalPosition.Y > GetViewport().GetVisibleRect().Size.Y)
 		{
@@ -37,7 +37,7 @@ public partial class UnitVoidState : State
 		GamaUtilits.set_shader(unit.unit_sprite, false, "darked");
 		Unfocused();
 		area_void.QueueFree();
-		area_void = null;
+		area_void.Dispose();
 	}
 	private void Unfocused()
 	{

@@ -26,15 +26,18 @@ public partial class Bullet : CharacterBody2D
 	private ShaderMaterial sm_blast;
 	private AudioStreamPlayer audio_ricoshet;
 	private AudioStreamPlayer audio_blast;
+	private Area2D area_collide;
 
 	public override void _Ready()
 	{
 		cpu_particles = GetNode<CpuParticles2D>("%blast");
 		audio_blast = GetNode<AudioStreamPlayer>("%audio_blast");
 		sm_blast = cpu_particles.Material as ShaderMaterial;
+		area_collide = GetNode<Area2D>("%area_collide");
 		audio_ricoshet = GetNode<AudioStreamPlayer>("%audio_ricoshet");
 		ray_cast_town = GetNode<RayCast2D>("%ray_cast");
 		mouse_pos = GetGlobalMousePosition();
+		area_collide.AreaEntered += AreaCollideEnteredArea;
 		UpdDir();
 		col = new Timer();
 		AddChild(col);
@@ -66,7 +69,12 @@ public partial class Bullet : CharacterBody2D
 			Rotation = dir.Angle();
 		}
 	}
-	public override void _Process(double delta)
+	private void AreaCollideEnteredArea(Area2D area)
+	{
+		if(area.IsInGroup("bomba"))
+		_QueueFree();
+	}
+	public override void _PhysicsProcess(double delta)
 	{
 		
 		velocity = dir * speed * (float)delta;
@@ -104,10 +112,6 @@ public partial class Bullet : CharacterBody2D
 		if (body.Name == "TankRed")
 		{
 			GlobalManager.Instance.EmitSignal("del_tank");
-			_QueueFree();
-		}
-		if(body.Name == "bomba")
-		{
 			_QueueFree();
 		}
 		else if (body.IsInGroup("bullet"))
@@ -168,5 +172,9 @@ public partial class Bullet : CharacterBody2D
 	{
 		audio_blast.Play();
 		GamaUtilits.DestroyTown(0,cpu_particles, this, sm_blast);
+	}
+	public override void _ExitTree()
+	{
+		col.QueueFree();
 	}
 }
