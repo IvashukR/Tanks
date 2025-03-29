@@ -21,8 +21,9 @@ func _init_index() -> void:
 	n_level = parent.index_level
 func save() -> void:
 	var data = {}
+	var file
 	if not FileAccess.file_exists((path_json)):
-		var file = FileAccess.open(path_json, FileAccess.ModeFlags.WRITE)
+		file = FileAccess.open(path_json, FileAccess.ModeFlags.WRITE)
 		data = {
 			"diamand balance": str(G.diamand_balance),
 			"levels":{
@@ -33,7 +34,28 @@ func save() -> void:
 				}
 			}
 		}
-		file.store_string(JSON.stringify(data, "\t"))
+	else:
+		file = FileAccess.open(path_json, FileAccess.ModeFlags.READ)
+		if file:
+			var content = file.get_as_text()
+			var _data = JSON.parse_string(content)
+			file.close()
+			var levels = _data["levels"]
+			if not levels.has(str(n_level)):
+				levels[str(n_level)] = {
+					"diamand":{
+						id : collected
+					}
+				}
+				print("not has")
+			
+			else:
+				_data["levels"][str(n_level)]["diamand"][str(id)] = collected
+			file = FileAccess.open(path_json, FileAccess.WRITE)
+			data = _data
+			print(data)
+	
+	file.store_string(JSON.stringify(data, "\t"))
 	pass
 func _exit_tree() -> void:
 	save()
@@ -47,11 +69,12 @@ func parse_data_loader(data : Dictionary) -> void:
 	print(data)
 	var levels = data["levels"]
 	var diamand = levels[str(n_level)]["diamand"]
-	if diamand[id]:
+	if diamand[str(id)]:
 		queue_free()
 func load() -> void:
-	if FileAccess.file_exists((path_json)):
-		parse_data_loader(get_load_data())
+	if not FileAccess.file_exists((path_json)):
+		return
+	parse_data_loader(get_load_data())
 	
 	
 	
