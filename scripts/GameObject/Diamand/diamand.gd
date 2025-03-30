@@ -47,13 +47,11 @@ func save() -> void:
 						id : collected
 					}
 				}
-				print("not has")
 			
 			else:
 				_data["levels"][str(n_level)]["diamand"][str(id)] = collected
 			file = FileAccess.open(path_json, FileAccess.WRITE)
 			data = _data
-			print(data)
 	
 	file.store_string(JSON.stringify(data, "\t"))
 	pass
@@ -66,7 +64,6 @@ func get_load_data() -> Dictionary:
 	file.close()
 	return data
 func parse_data_loader(data : Dictionary) -> void:
-	print(data)
 	var levels = data["levels"]
 	var diamand = levels[str(n_level)]["diamand"]
 	if diamand[str(id)]:

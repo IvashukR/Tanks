@@ -5,12 +5,9 @@ using System;
 public partial class LevelSprite : Node2D
 {
     [Export] int level;
-    private Label n_lvl_l;
-    private Label n_lvl_l_2;
+    private Label n_lvl_l, n_lvl_l_2;
     private AnimationPlayer anim;
-    private Polygon2D galka;
-    private Polygon2D red_osnova;
-    private Polygon2D gray_osnova;
+    private Polygon2D galka, red_osnova, gray_osnova;
     public override void _Ready()
     {
         n_lvl_l = GetNode<Label>("Polygon2D16/Label");
