@@ -21,7 +21,7 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
     private Timer t_unit, t_attack, t_flag_attack;
     private Well hit_well;
     private RandomNumberGenerator rng;
-    private RayCast2D ray_attack;
+    public RayCast2D ray_attack { get; set; }
     private Town tower;
     [Export] private bool attacked = true;
     public override void _Ready()
@@ -30,7 +30,6 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
         ray_attack = GetNode<RayCast2D>("%ray_attack");
         rng = new RandomNumberGenerator();
         rng.Randomize();
-        hit_well = GetNode<Well>("%well");
         t_attack = GetNode<Timer>("%t_attack");
         t_flag_attack = GetNode<Timer>("%t_flag_attack");
         t_unit = GetNode<Timer>("%t_unit");
@@ -51,10 +50,14 @@ public partial class TownEnemyLevel1 : TownEnemy, ITown
             last_time_entered_unit = Time.GetTicksMsec() / 1000;
         };
         base._Ready();
-        t_flag_attack.Timeout += () => flag_attacked = false;
-        t_attack.WaitTime = rng.RandiRange(20, 50);
-        t_attack.Timeout += Attack;
-        hit_well.TreeExited += () => hit_well = null;
+        if(attacked)
+        {
+            t_flag_attack.Timeout += () => flag_attacked = false;
+            t_attack.WaitTime = rng.RandiRange(20, 50);
+            t_attack.Timeout += Attack;
+            hit_well.TreeExited += () => hit_well = null;
+            hit_well = GetNode<Well>("%well");
+        }
     }
     private async void Attack()
     {

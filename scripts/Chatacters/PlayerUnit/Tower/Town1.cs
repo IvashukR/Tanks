@@ -13,7 +13,7 @@ public partial class Town1 : Town, ITown
 
     [Export] public int bullet_damage { get; set; } = 50;
 
-
+    public RayCast2D ray_attack { get; set; }
     private bool flag_area = true;
     private BoxContainer info;
     private bool this_is_pick_unit;
@@ -31,6 +31,7 @@ public partial class Town1 : Town, ITown
     {
         info = GetNode<BoxContainer>("%info");
         bullet_area = GetNode<Area2D>("%bullet_area");
+        ray_attack = GetNode<RayCast2D>("%ray_attack_tower");
         unit_detected = GetNode<Area2D>("%unit_area");
         on_ai = GetNode<TextureButton>("%on_ai_town");
         GlobalManager.Instance.pick_unit += pick_unit;

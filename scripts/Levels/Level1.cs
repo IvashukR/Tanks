@@ -89,17 +89,23 @@ public partial class Level1 : Trenirovka
 		if(lvl_l_int != 0)
 		{
 			lvl_t_l.Text = $"{lvl_l_int - 1}";
-			if(Convert.ToInt32(lvl_t_l.Text) == 3)
+			int new_value = Convert.ToInt32(lvl_t_l.Text);
+			switch (new_value)
 			{
+				case 3:
 				lvl_t_l.AddThemeColorOverride("font_color", new Color(1, 0, 0));
+				break;
+				case 0:
+				ShowLosse();
+				break;
 			}
 		}
-		else
-		{
-			lvl_t.Stop();
-			losse();
-			lvl_t_l.Hide();
-		}
+	}
+	private void ShowLosse()
+	{
+		lvl_t.Stop();
+		losse();
+		lvl_t_l.Hide();
 	}
 	private void outline_set(bool value) => GamaUtilits.set_shader(town, value, "render");
 	public override void _Process(double delta)

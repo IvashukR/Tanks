@@ -9,6 +9,6 @@ public interface ITown
     public Marker2D marker { get; set; }
     public Vector2 bullet_size { get; set; }
     public int bullet_damage { get; set; }
-
+    public RayCast2D ray_attack { get; set; }
 
 }

@@ -5,7 +5,7 @@ using GameUnit;
 using GameObjects;
 
 namespace TanksUtilits;
-public partial class GamaUtilits : Node
+public partial class GamaUtilits
 {
     public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
 	{
@@ -35,7 +35,6 @@ public partial class GamaUtilits : Node
         if(ray.IsColliding())
         {
             var collider = (Node2D)ray.GetCollider();
-            if(collider == GlobalManager.Instance.temp_pick_unit)return false;
             if(collider == null)return false;
             if(collider.IsInGroup(group))return true;
         }
@@ -64,7 +63,6 @@ public partial class GamaUtilits : Node
     }
     public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj, bool _bullet)
     {
-        if(body == GlobalManager.Instance.temp_pick_unit)return;
         if(obj is ITown  town)
         {
             if(town.patron > 0 && town.can_shoot)
@@ -89,6 +87,7 @@ public partial class GamaUtilits : Node
                 tween.SetTrans(Tween.TransitionType.Sine);
                 tween.TweenProperty(town.pushka, "rotation", (obj.GlobalPosition - future_pos).Normalized().Angle(), town.time_tween);
                 await obj.ToSignal(tween, "finished");
+                if(CheckRayCollide(town.ray_attack, "well"))return;
                 shoot(town.pushka.GlobalPosition, town.marker.GlobalPosition, obj, false,town.pushka.Rotation, town.bullet_size, town.bullet_damage, -1);
                 town.can_shoot = false;
                 town.t.Start();
@@ -121,19 +120,31 @@ public partial class GamaUtilits : Node
 
         
     }
+    private static void UnSetCollision(Node obj)
+    {
+        if(obj is PhysicsBody2D body)
+        {
+            body.CollisionLayer = 0;
+            body.CollisionMask = 0;
+        }
+    }
     private static async Task DestroyObjectParticles(Node2D obj, CpuParticles2D blam)
     {
         blam.Emitting = true;
+        UnSetCollision(obj);
         foreach(var child in obj.GetChildren())
         {
-            if(child is CollisionObject2D collision)
-            {
-                collision.CollisionLayer = 0;
-                collision.CollisionMask = 0;
-            }
+            UnSetCollision(child);
             if(child is CanvasItem node && !node.IsInGroup("boom"))
             {
                 node.Hide();
+            }
+            else if(child is CanvasLayer hud)
+            {
+                foreach(CanvasItem item in hud.GetChildren())
+                {
+                    item.Hide();
+                }
             }
         }
         await obj.ToSignal(obj.GetTree().CreateTimer(blam.Lifetime), "timeout");
