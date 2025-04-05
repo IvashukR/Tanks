@@ -2,11 +2,8 @@ using Godot;
 using System;
 using TanksUtilits;
 
-<<<<<<< HEAD
 namespace Player.Transport;
-=======
-namespace GameObjects;
->>>>>>> a5c0e3187446ca1006d4a127187244c240887b08
+
 public partial class Town : CharacterBody2D
 {
 	public  Sprite2D pushka { get; set; }

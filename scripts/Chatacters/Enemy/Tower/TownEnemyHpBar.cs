@@ -1,11 +1,10 @@
 using Godot;
 using System;
 
-<<<<<<< HEAD
+
 namespace Enemy.Transport;
-=======
-namespace Enemy.Tower;
->>>>>>> a5c0e3187446ca1006d4a127187244c240887b08
+
+
 public partial class TownEnemyHpBar : ProgressBar
 {
     private TownEnemy enemy_town;
