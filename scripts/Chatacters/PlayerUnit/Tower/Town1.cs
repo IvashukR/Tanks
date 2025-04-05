@@ -2,7 +2,9 @@ using Godot;
 using System;
 using TanksUtilits;
 
+
 namespace Player.Transport;
+
 public partial class Town1 : Town, ITown
 {
     private bool _is_ai{set;get;}

@@ -2,13 +2,21 @@ using Godot;
 using System;
 using TanksUtilits;
 
+<<<<<<< HEAD
 namespace Enemy.Transport;
+=======
+namespace Enemy.Tower;
+>>>>>>> a5c0e3187446ca1006d4a127187244c240887b08
 public partial class TownEnemy : StaticBody2D
 {
 	[Export] public int proch = 50;
 	public int max_proch;
 	private ShaderMaterial sm;
 	private CpuParticles2D blam_particles;
+<<<<<<< HEAD
+=======
+    private Label hp_l;
+>>>>>>> a5c0e3187446ca1006d4a127187244c240887b08
 	[Export] private bool main_town;
 	public override void _Ready()
 	{

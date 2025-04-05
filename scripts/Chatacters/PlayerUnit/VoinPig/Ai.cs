@@ -1,7 +1,11 @@
 using Godot;
 using System;
 
+<<<<<<< HEAD
 namespace Player.Actor;
+=======
+namespace GameUnit.Voin;
+>>>>>>> a5c0e3187446ca1006d4a127187244c240887b08
 public partial class Ai : State
 {
 	[Export] private Voin voin;

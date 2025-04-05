@@ -14,6 +14,7 @@ public partial class Bomba : Sprite2D
         area_collide = GetNode<Area2D>("%area_collide");
         area_collide.BodyEntered += AreaCollideEntered;
         path_move.Progress = GD.RandRange(20, 360);
+        
     }
     public override void _Process(double delta)
     {

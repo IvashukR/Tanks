@@ -5,6 +5,7 @@ using GameObjects;
 using Player.Transport;
 
 namespace Enemy.Transport;
+
 public partial class TownEnemyLevel1 : TownEnemy, ITown
 {
     public bool can_shoot { get; set; } = true;
