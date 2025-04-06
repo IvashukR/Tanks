@@ -5,7 +5,6 @@ using GameUnit;
 namespace Player.Actor;
 
 
-
 public partial class Playing : State
 {
 	private Vector2 dir;
