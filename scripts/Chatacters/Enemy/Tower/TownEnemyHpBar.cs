@@ -7,23 +7,23 @@ namespace Enemy.Transport;
 
 public partial class TownEnemyHpBar : ProgressBar
 {
-    private TownEnemy enemy_town;
+    [Export] private TowerEnemy tower;
     public override void _Ready()
     {
-        enemy_town = GetNode<TownEnemy>("%town_enemy");
-        GlobalManager.Instance.destroyed_town += change_value;
-        enemy_town.Ready += () => 
+        tower.change_hp += change_value;
+        tower.Ready += () => 
         {
-            MaxValue = enemy_town.max_proch;
-            Value = enemy_town.proch;
+            MaxValue = tower._logic.max_proch;
+            Value = tower._logic.proch;
         };
     }
-    private void change_value(Node2D node)
+    private void change_value()
     {
-        if(node == GetParent())Value = enemy_town.proch;
+        Value = tower._logic.proch;
     }
+    
     public override void _ExitTree()
     {
-        GlobalManager.Instance.destroyed_town -= change_value;
+        tower.change_hp -= change_value;
     }
 }

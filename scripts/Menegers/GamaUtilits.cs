@@ -63,9 +63,9 @@ public partial class GamaUtilits
     }
     public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj, bool _bullet)
     {
-        if(obj is ITown  town)
+        if(obj is ITower  tower)
         {
-            if(town.patron > 0 && town.can_shoot)
+            if(tower.logic.patron > 0 && tower.logic.can_shoot)
             {
                 Vector2 future_pos = new Vector2();
                 if(body == GlobalManager.Instance.temp_pick_unit)return;
@@ -85,13 +85,10 @@ public partial class GamaUtilits
                 var tween = obj.CreateTween();
                 tween.SetEase(Tween.EaseType.InOut);
                 tween.SetTrans(Tween.TransitionType.Sine);
-                tween.TweenProperty(town.pushka, "rotation", (obj.GlobalPosition - future_pos).Normalized().Angle(), town.time_tween);
+                tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - future_pos).Normalized().Angle(), tower.logic.time_tween);
                 await obj.ToSignal(tween, "finished");
-                if(CheckRayCollide(town.ray_attack, "well"))return;
-                shoot(town.pushka.GlobalPosition, town.marker.GlobalPosition, obj, false,town.pushka.Rotation, town.bullet_size, town.bullet_damage, -1);
-                town.can_shoot = false;
-                town.t.Start();
-                town.patron--;
+                if(CheckRayCollide(tower.ray_attack, "well"))return;
+                tower.Shoot();
             }
         }
     }

@@ -49,11 +49,7 @@ public partial class UnitLogic : Node2D
         GlobalManager.Instance.pick_unit += PickUnit;
 		GlobalManager.Instance.card_click += CardClick;
     }
-    public virtual void TakeDamage(Bullet bullet)
-	{
-		//if(unit == null || bullet == null)return;
-		GamaUtilits.TakeDamageUnit(unit, bullet);
-	}
+    
     protected virtual void PickUnit()
 	{
 		if(!is_ai && !this_is_pick_unit)is_ai = true;

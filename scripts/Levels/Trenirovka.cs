@@ -12,9 +12,7 @@ public partial class Trenirovka : Node
 	private Timer timer;
 	private bool a = true;
 	public Sprite2D boom;
-	public CpuParticles2D blast;
 	public StaticBody2D enemy;
-	private ShaderMaterial sh;
 	private BoxContainer info;
 	private bool flag = false;
 	private Control control;
@@ -76,8 +74,6 @@ public partial class Trenirovka : Node
 		GlobalManager.Instance.win += win;
 		info = GetNode<BoxContainer>("%info");
 		enemy = GetNode<StaticBody2D>("%town_enemy");
-		blast = GetNode<CpuParticles2D>("%blast");
-		sh = blast.Material as ShaderMaterial;
 		go_s = GetNode<Sprite2D>("%go");
 		GlobalManager.Instance._fps += fps;
 		timer = new Timer();

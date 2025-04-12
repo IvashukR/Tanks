@@ -40,3 +40,8 @@ func _on_timer_timeout() -> void:
 		flag_move = false
 		t.stop()
 	pass 
+
+func _exit_tree() -> void:
+	for node: Node in get_tree().root.get_children():
+		if node.is_in_group("trail"):
+			node.queue_free()

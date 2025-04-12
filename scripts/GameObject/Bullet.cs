@@ -1,6 +1,5 @@
 using Godot;
 using System;
-using System.Reflection;
 using TanksUtilits;
 using GameUnit;
 
@@ -109,11 +108,7 @@ public partial class Bullet : CharacterBody2D
     	{
         	return; 
     	}
-		if (body.Name == "TankRed")
-		{
-			GlobalManager.Instance.EmitSignal("del_tank");
-			_QueueFree();
-		}
+		
 		else if (body.IsInGroup("bullet"))
 		{
 			if(!body.IsQueuedForDeletion())body.QueueFree();
@@ -141,30 +136,18 @@ public partial class Bullet : CharacterBody2D
 				_QueueFree();
 			}
 		}
-		else if (body.IsInGroup("transport"))
+		else if (body.IsInGroup("town"))
 		{
-			
-			int proch;
-			var field = body.GetType().GetField("proch", BindingFlags.Public | BindingFlags.Instance);
-			if (field != null && !calculete_damage)
-            {
-				calculete_damage = true;
-				proch = (int)field.GetValue(body);
-				field.SetValue(body, proch - damage);
-				if (body.Name == "town")
-				{
-					GlobalManager.Instance.EmitSignal("del_t");
-				}
-				if(body.IsInGroup("town"))
-				{
-					GlobalManager.Instance.EmitSignal("destroyed_town", body);
-				}
+			if(body is IDamageble actor)
+			{
+				actor.TakeDamage(this);
 				_QueueFree();
 			}
+			
 		}
 		else if(body.IsInGroup("unit"))
 		{
-			if(body.GetNodeOrNull("%logic") is UnitLogic unit)GamaUtilits.TakeDamageUnit(body, this);
+			if(body.GetNodeOrNull("%logic") is UnitLogic)GamaUtilits.TakeDamageUnit(body, this);
 			_QueueFree();
 		}
 	}

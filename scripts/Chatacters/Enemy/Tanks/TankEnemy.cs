@@ -10,7 +10,8 @@ public partial class TankEnemy : CharacterBody2D
     private Vector2 direction;
     public Sprite2D pushka { get; set; }
     private Sprite2D  osnova;
-    [Export] private float speed;
+    private PathFollow2D path_patrul;
+    [Export] private float speed, speed_patrul;
     [Export] private PhysicsBody2D target;
     private bool attack = false;
     public override void _Ready()
@@ -20,20 +21,28 @@ public partial class TankEnemy : CharacterBody2D
         osnova = GetNode<Sprite2D>("%osnova");
         t_patrul = GetNode<Timer>("%t_patrul");
         t_attack = GetNode<Timer>("%t_attack");
-        t_attack.Start();
-        t_patrul.Start();
+        path_patrul = GetParent<PathFollow2D>();
+        //t_attack.Start();
+        //t_patrul.Start();
         SetRandomDirection();
         t_attack.Timeout += Attack;
         t_patrul.Timeout += SetRandomDirection;
     }
     public override void _PhysicsProcess(double delta)
     {
-        var next_pos = agent.GetNextPathPosition();
-        direction = GlobalPosition.DirectionTo(next_pos);
+        if(attack)
+        {
+            var next_pos = agent.GetNextPathPosition();
+            direction = GlobalPosition.DirectionTo(next_pos).Normalized();
+        }
         Velocity = direction * speed * (float)delta;
         var angle_target = direction.Angle();
         Rotation = Mathf.LerpAngle(Rotation, angle_target, (float)delta * 0.4f);
         MoveAndSlide();
+    }
+    public override void _Process(double delta)
+    {
+        path_patrul.Progress += speed_patrul;
     }
     private void Attack()
     {
@@ -47,7 +56,8 @@ public partial class TankEnemy : CharacterBody2D
     private void SetRandomDirection()
     {
         direction = Vector2.Zero;
-        var new_direction = new Vector2(GD.RandRange(15, 230), GD.RandRange(15, 230));
+        var new_direction = new Vector2((float)GD.RandRange(GlobalPosition.X - 30, GlobalPosition.X + 130), 
+        (float)GD.RandRange(GlobalPosition.Y - 100, GlobalPosition.Y + 130));
         var distance = new_direction - GlobalPosition;
         if(distance.Length() < 1)return;
         SetTarget(new_direction);

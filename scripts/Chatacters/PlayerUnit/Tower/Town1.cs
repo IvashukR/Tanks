@@ -5,17 +5,12 @@ using TanksUtilits;
 
 namespace Player.Transport;
 
-public partial class Town1 : Town, ITown
+public partial class Town1 : Town,  ITower
 {
     private bool _is_ai{set;get;}
     public TextureButton on_ai;
     private Area2D bullet_area, unit_detected;
-    [Export] public float time_tween { get; set; } = 0.08f;
-    [Export] public Vector2 bullet_size { get; set; } = new Vector2(0.165f, 0.171f);
 
-    [Export] public int bullet_damage { get; set; } = 50;
-
-    public RayCast2D ray_attack { get; set; }
     private bool flag_area = true;
     private BoxContainer info;
     private bool this_is_pick_unit;
@@ -29,12 +24,12 @@ public partial class Town1 : Town, ITown
             info.Visible = !_is_ai;
         }
     }
+    [Export] public RayCast2D ray_attack { get; set; }
     public override void _Ready()
     {
         info = GetNode<BoxContainer>("%info");
-        bullet_area = GetNode<Area2D>("%bullet_area");
-        ray_attack = GetNode<RayCast2D>("%ray_attack_tower");
-        unit_detected = GetNode<Area2D>("%unit_area");
+        bullet_area = GetNode<Area2D>("bullet_area");
+        unit_detected = GetNode<Area2D>("unit_area");
         on_ai = GetNode<TextureButton>("%on_ai_town");
         GlobalManager.Instance.pick_unit += pick_unit;
         bullet_area.BodyEntered += (body) =>{

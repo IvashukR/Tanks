@@ -13,10 +13,6 @@ public partial class GlobalManager : Node
 	[Signal]
 	public delegate void skip_dEventHandler();
 	[Signal]
-	public  delegate void del_tankEventHandler();
-	[Signal]
-	public  delegate void del_tEventHandler();
-	[Signal]
 	public  delegate void winEventHandler();
 	[Signal]
 	public  delegate void failEventHandler();
@@ -24,8 +20,6 @@ public partial class GlobalManager : Node
 	public  delegate void change_moneyEventHandler(int money);
 	[Signal]
 	public  delegate void pick_unitEventHandler();
-	[Signal]
-	public  delegate void destroyed_townEventHandler(Node2D node);
 	[Signal]
 	public  delegate void take_damageEventHandler(Node2D node, Bullet bullet);
 	[Signal]
