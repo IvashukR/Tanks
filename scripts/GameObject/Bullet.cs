@@ -103,13 +103,13 @@ public partial class Bullet : CharacterBody2D
 	}
 	private  void entered(Node2D body, Vector2 normal)
 	{
+		if(body is IDamageble actor)
+		{
+			actor.TakeDamage(this.damage);
+			_QueueFree();
+		}
 		
-		if (body == null || body.IsQueuedForDeletion() || body == GlobalManager.Instance.temp_pick_unit)
-    	{
-        	return; 
-    	}
-		
-		else if (body.IsInGroup("bullet"))
+		if (body.IsInGroup("bullet"))
 		{
 			if(!body.IsQueuedForDeletion())body.QueueFree();
 			_QueueFree();
@@ -118,13 +118,6 @@ public partial class Bullet : CharacterBody2D
 
 		else if (body.IsInGroup("well"))
 		{
-			var well = body as Well;
-			if (well != null)
-			{
-				int currentProch = well.Proch;
-				int newProch = currentProch - damage;
-				well.Proch = newProch;
-			}
 			
     		dir = dir - 2 * dir.Dot(normal) * normal;
 			if(ricoshet_count - 1 > 0)
@@ -136,20 +129,7 @@ public partial class Bullet : CharacterBody2D
 				_QueueFree();
 			}
 		}
-		else if (body.IsInGroup("town"))
-		{
-			if(body is IDamageble actor)
-			{
-				actor.TakeDamage(this);
-				_QueueFree();
-			}
-			
-		}
-		else if(body.IsInGroup("unit"))
-		{
-			if(body.GetNodeOrNull("%logic") is UnitLogic)GamaUtilits.TakeDamageUnit(body, this);
-			_QueueFree();
-		}
+		
 	}
 	private void _QueueFree()
 	{

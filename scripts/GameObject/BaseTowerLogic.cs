@@ -20,9 +20,9 @@ public partial class BaseTowerLogic : Node2D
 	}
 
 	
-    public virtual void TakeDamage(Bullet bullet)
+    public virtual void TakeDamage(int damage)
 	{
-        proch -= bullet.damage;
+        proch -= damage;
 		GamaUtilits.DestroyTown(proch,blam_particles, tower, sm);
 		if(!main)return;
         string name_signal = string.Empty;

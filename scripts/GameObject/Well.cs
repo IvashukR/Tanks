@@ -3,10 +3,10 @@ using System;
 using System.Threading.Tasks;
 
 namespace GameObjects;
-public partial class Well : StaticBody2D
+public partial class Well : StaticBody2D, IDamageble
 {
     public float low;
-	private int _proch = 75;
+	[Export] private int _proch  {set;get;} = 75;
     private AnimatedSprite2D well_t;
     private bool crash;
 	public int Proch
@@ -45,5 +45,10 @@ public partial class Well : StaticBody2D
         QueueFree();
 		
 	}
+
+    public virtual void TakeDamage(int damage)
+    {
+        Proch -= damage;
+    }
 	
 }

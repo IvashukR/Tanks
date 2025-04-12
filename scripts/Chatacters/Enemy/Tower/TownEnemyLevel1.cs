@@ -94,9 +94,9 @@ public partial class TownEnemyLevel1 : TowerEnemy , ITower
         logic.Shoot();
     }
     
-    public override void TakeDamage(Bullet bullet)
+    public override void TakeDamage(int damage)
 	{
-		logic.TakeDamage(bullet);
+		logic.TakeDamage(damage);
 		EmitSignal("change_hp");
 	}
 

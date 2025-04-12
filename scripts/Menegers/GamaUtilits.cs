@@ -5,7 +5,7 @@ using GameUnit;
 using GameObjects;
 
 namespace TanksUtilits;
-public partial class GamaUtilits
+public static partial class GamaUtilits
 {
     public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
 	{
@@ -87,7 +87,10 @@ public partial class GamaUtilits
                 tween.SetTrans(Tween.TransitionType.Sine);
                 tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - future_pos).Normalized().Angle(), tower.logic.time_tween);
                 await obj.ToSignal(tween, "finished");
-                if(CheckRayCollide(tower.ray_attack, "well"))return;
+                string name_group = string.Empty;
+                if(obj.IsInGroup("unit")) name_group = "unit";
+                else name_group = "enemy"; 
+                if(CheckRayCollide(tower.ray_attack, "well") || CheckRayCollide(tower.ray_attack, name_group))return;
                 tower.Shoot();
             }
         }
@@ -125,7 +128,7 @@ public partial class GamaUtilits
             body.CollisionMask = 0;
         }
     }
-    private static async Task DestroyObjectParticles(Node2D obj, CpuParticles2D blam)
+    public static async Task DestroyObjectParticles(Node2D obj, CpuParticles2D blam)
     {
         blam.Emitting = true;
         UnSetCollision(obj);
@@ -147,25 +150,6 @@ public partial class GamaUtilits
         await obj.ToSignal(obj.GetTree().CreateTimer(blam.Lifetime), "timeout");
         obj.QueueFree();
     }
-    public static async void TakeDamageUnit(Node2D body, Bullet bullet)
-	{
-        if(body.GetNodeOrNull("%logic") is UnitLogic _unit)
-        {
-            _unit.stats.proch -= bullet.damage;
-            _unit.hp_l.Text = $"{_unit.name_unit} Health: {_unit.stats.proch}";
-            if(_unit.stats.proch > 0)
-            {
-                set_shader(_unit.unit_sprite, true, "damage");
-                await body.ToSignal(body.GetTree().CreateTimer(0.2f), "timeout");
-                set_shader(_unit.unit_sprite, false, "damage");
-            }
-            else
-            {
-                await DestroyObjectParticles(body, _unit.bloom);
-                
-            }
-        }
-		
-	}
+    
 
 }

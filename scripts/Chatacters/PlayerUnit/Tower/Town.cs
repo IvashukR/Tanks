@@ -3,7 +3,7 @@ using GameObjects;
 
 namespace Player.Transport;
 
-public partial class Town : CharacterBody2D
+public partial class Town : StaticBody2D
 {
     [Export] public TowerLogicShoot logic  {set;get;}
     private Label patron_l;
@@ -58,9 +58,9 @@ public partial class Town : CharacterBody2D
         upd_patron_l();
     }
     
-    public virtual void TakeDamage(Bullet bullet)
+    public virtual void TakeDamage(int damage)
     {
-        logic.TakeDamage(bullet);
+        logic.TakeDamage(damage);
         upd_h();
     }
     

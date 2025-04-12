@@ -7,7 +7,7 @@ namespace Player.Actor;
 
 
 
-public partial class Voin : CharacterBody2D
+public partial class Voin : CharacterBody2D, IDamageble
 {
     [Export] private UnitLogic unit;
     [Export] private Vector2 scale_bullet = new Vector2(0.1f, 0.1f);
@@ -59,5 +59,9 @@ public partial class Voin : CharacterBody2D
     public override void _ExitTree()
     {
         t_shoot.QueueFree();
+    }
+    public virtual void TakeDamage(int damage)
+    {
+        unit.TakeDamageUnit(damage);
     }
 }

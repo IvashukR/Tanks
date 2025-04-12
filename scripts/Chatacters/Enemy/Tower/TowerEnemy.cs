@@ -12,9 +12,9 @@ public partial class TowerEnemy : StaticBody2D, IDamageble
 	public  delegate void change_hpEventHandler();
 
 
-	public virtual void TakeDamage(Bullet bullet)
+	public virtual void TakeDamage(int damage)
 	{
-		_logic.TakeDamage(bullet);
+		_logic.TakeDamage(damage);
 		EmitSignal("change_hp");
 	}
 }

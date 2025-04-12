@@ -1,14 +1,13 @@
 using Godot;
 using System;
 using TanksUtilits;
-using GameObjects;
 
 namespace GameUnit;
 public partial class UnitLogic : Node2D
 {
     [Export] public string name_unit = "Voin";
 	[Export] public UnitStats stats;
-	[Export] private Node2D unit;
+	private Node2D unit;
     public TextureButton on_ai;
 	protected bool this_is_pick_unit;
     public FSM fsm;
@@ -24,6 +23,7 @@ public partial class UnitLogic : Node2D
 		unit_sprite = GetNode<Node2D>("%unit_sprite");
 		fsm = GetNode<FSM>("%FSM");
 		hp_l.Text = $"{name_unit} Health: {stats.proch}";
+		unit = GetParent<Node2D>();
 		on_ai.Pressed += () =>
 		{
 			if(ReturnCantPick())return;
@@ -83,5 +83,22 @@ public partial class UnitLogic : Node2D
 	private bool CanPick()
 	{
 		return GlobalManager.Instance.temp_pick_unit ==  unit;
+	}
+	public async void TakeDamageUnit(int damage)
+	{
+        stats.proch -= damage;
+        hp_l.Text = $"{name_unit} Health: {stats.proch}";
+        if(stats.proch > 0)
+        {
+            GamaUtilits.set_shader(unit_sprite, true, "damage");
+            await ToSignal(GetTree().CreateTimer(0.2f), "timeout");
+            GamaUtilits.set_shader(unit_sprite, false, "damage");
+        }
+        else
+        {
+            await GamaUtilits.DestroyObjectParticles(unit, bloom);
+                
+        }
+		
 	}
 }

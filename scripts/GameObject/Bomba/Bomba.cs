@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using TanksUtilits;
+
 
 namespace GameObjects;
 public partial class Bomba : Sprite2D
@@ -23,13 +23,9 @@ public partial class Bomba : Sprite2D
     }
     private void AreaCollideEntered(Node2D body)
     {
-        if(body.IsInGroup("unit"))
+        if(body is IDamageble actor)
         {
-            using(var bullet_damage = new Bullet(1000))
-            {
-                GamaUtilits.TakeDamageUnit(body, bullet_damage);
-            }
-            
+            actor.TakeDamage(1000);
         }
     }
 }
