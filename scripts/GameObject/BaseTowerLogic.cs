@@ -10,12 +10,10 @@ public partial class BaseTowerLogic : Node2D
     [Export] public PhysicsBody2D tower;
     [Export] public int proch;
     public int max_proch;
-    public ShaderMaterial sm;
     public CpuParticles2D blam_particles;
 	public override void _Ready()
 	{
         blam_particles = GetParent().GetParent().GetNode<CpuParticles2D>("blam");
-        sm = blam_particles.Material as ShaderMaterial;
         max_proch = proch;
 	}
 
@@ -23,7 +21,7 @@ public partial class BaseTowerLogic : Node2D
     public virtual void TakeDamage(int damage)
 	{
         proch -= damage;
-		GamaUtilits.DestroyTown(proch,blam_particles, tower, sm);
+		GamaUtilits.DestroyTown(proch,blam_particles, tower);
 		if(!main)return;
         string name_signal = string.Empty;
         if(!player)name_signal = "win";

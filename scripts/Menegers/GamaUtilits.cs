@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Threading.Tasks;
-using GameUnit;
 using GameObjects;
 
 namespace TanksUtilits;
@@ -61,7 +60,7 @@ public static partial class GamaUtilits
 
         }
     }
-    public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj, bool _bullet)
+    public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj)
     {
         if(obj is ITower  tower)
         {
@@ -69,7 +68,7 @@ public static partial class GamaUtilits
             {
                 Vector2 future_pos = new Vector2();
                 if(body == GlobalManager.Instance.temp_pick_unit)return;
-                if(body is Bullet bullet && _bullet)
+                if(body is Bullet bullet)
                 {
                     if(bullet.ray_cast_town.IsColliding())
                     {
@@ -96,20 +95,11 @@ public static partial class GamaUtilits
         }
     }
 
-    public static async void DestroyTown(int proch,CpuParticles2D blam_particles, Node2D obj, ShaderMaterial blam_sm)
+    public static async void DestroyTown(int proch,CpuParticles2D blam_particles, Node2D obj)
     {
         if(proch <= 0)
         {
-            if(obj is Bullet body)
-            {
-                body.speed = 0;
-            }
-            for (float i = 0.0f; i <= 1; i += 0.3f)
-            {
-			    await obj.ToSignal(obj.GetTree().CreateTimer(0.03f), "timeout");
-                blam_sm.SetShaderParameter("glow_strength", i);
-            }
-            await DestroyObjectParticles(obj, blam_particles);
+            await DestroyObjectParticles(obj, blam_particles, true);
         }
         else
         {
@@ -128,10 +118,23 @@ public static partial class GamaUtilits
             body.CollisionMask = 0;
         }
     }
-    public static async Task DestroyObjectParticles(Node2D obj, CpuParticles2D blam)
+    public static async Task DestroyObjectParticles(Node2D obj, CpuParticles2D blam, bool boom)
     {
         blam.Emitting = true;
         UnSetCollision(obj);
+        if(obj is IMoveble body)
+        {
+            body.speed = 0.0f;
+        }
+        if(boom)
+        {
+            var blam_sm = blam.Material as ShaderMaterial;
+            for (float i = 0.0f; i <= 1; i += 0.3f)
+            {
+			    await obj.ToSignal(obj.GetTree().CreateTimer(0.03f), "timeout");
+                blam_sm.SetShaderParameter("glow_strength", i);
+            }
+        }
         foreach(var child in obj.GetChildren())
         {
             UnSetCollision(child);

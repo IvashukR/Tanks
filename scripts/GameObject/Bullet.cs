@@ -1,10 +1,9 @@
 using Godot;
 using System;
 using TanksUtilits;
-using GameUnit;
 
 namespace GameObjects;
-public partial class Bullet : CharacterBody2D
+public partial class Bullet : CharacterBody2D, IMoveble
 {
 	public Vector2 mouse_pos;
 	public Vector2 velocity;
@@ -12,7 +11,7 @@ public partial class Bullet : CharacterBody2D
 	public int damage = 50;
 	public int ricoshet_count = 3;
 	public bool coliide = true;
-	[Export] public float speed = 80;
+	[Export] public float speed {set;get;} = 80;
 	public Vector2 dir;
 	private Timer col;
 	public bool fallow_m;
@@ -134,7 +133,7 @@ public partial class Bullet : CharacterBody2D
 	private void _QueueFree()
 	{
 		audio_blast.Play();
-		GamaUtilits.DestroyTown(0,cpu_particles, this, sm_blast);
+		GamaUtilits.DestroyTown(0,cpu_particles, this);
 	}
 	public override void _ExitTree()
 	{

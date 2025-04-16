@@ -96,7 +96,7 @@ public partial class UnitLogic : Node2D
         }
         else
         {
-            await GamaUtilits.DestroyObjectParticles(unit, bloom);
+            await GamaUtilits.DestroyObjectParticles(unit, bloom, false);
                 
         }
 		

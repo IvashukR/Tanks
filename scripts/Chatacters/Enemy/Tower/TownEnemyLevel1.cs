@@ -29,11 +29,11 @@ public partial class TownEnemyLevel1 : TowerEnemy , ITower
         t_unit.Timeout += () => flag_unit = true;
         tower.TreeExited += () => tower = null;
         bullet_detected.BodyEntered += (body) => {
-            GamaUtilits.EnteredBulletInTownZone(body, this, true);
+            GamaUtilits.EnteredBulletInTownZone(body, this);
         };
         unit_detected.BodyEntered += (body) => 
         {
-            GamaUtilits.EnteredBulletInTownZone(body, this, false);
+            GamaUtilits.EnteredBulletInTownZone(body, this);
             last_time_entered_unit = Time.GetTicksMsec() / 1000;
         };
         base._Ready();
@@ -79,7 +79,7 @@ public partial class TownEnemyLevel1 : TowerEnemy , ITower
             if(unit_detected.GetOverlappingBodies().Count > 0)
             {
                 int random_body_index = GD.RandRange(0, unit_detected.GetOverlappingBodies().Count - 1);
-                GamaUtilits.EnteredBulletInTownZone(unit_detected.GetOverlappingBodies()[random_body_index], this, false);
+                GamaUtilits.EnteredBulletInTownZone(unit_detected.GetOverlappingBodies()[random_body_index], this);
                 flag_unit = false;
                 t_unit.Start();
             }

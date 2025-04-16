@@ -33,7 +33,7 @@ public partial class Town1 : Town,  ITower
         on_ai = GetNode<TextureButton>("%on_ai_town");
         GlobalManager.Instance.pick_unit += pick_unit;
         bullet_area.BodyEntered += (body) =>{
-            GamaUtilits.EnteredBulletInTownZone(body, this, true);
+            GamaUtilits.EnteredBulletInTownZone(body, this);
             upd_patron_l();
         };
         on_ai.Pressed += () => 
@@ -45,7 +45,7 @@ public partial class Town1 : Town,  ITower
             flag_area = true;
         };
         unit_detected.BodyEntered += (body) =>{
-            GamaUtilits.EnteredBulletInTownZone(body, this, false);
+            GamaUtilits.EnteredBulletInTownZone(body, this);
             upd_patron_l();
         };
         base._Ready();
