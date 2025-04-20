@@ -14,6 +14,7 @@ public partial class TowerLogicShoot : BaseTowerLogic
     private Marker2D marker;
     [Export] public Vector2 bullet_size { get; set; } = new Vector2(0.165f, 0.171f);
     [Export] public int bullet_damage { get; set; } = 70;
+    [Export] private int mirror_bullet = -1;
     
 	public override void _Ready()
 	{
@@ -31,7 +32,7 @@ public partial class TowerLogicShoot : BaseTowerLogic
             can_shoot = false;
             t.Start();
             patron--;
-            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, tower, false,pushka.Rotation, bullet_size, bullet_damage, -1);
+            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, tower,pushka.Rotation, bullet_size, bullet_damage, mirror_bullet);
         }
     }
     

@@ -7,7 +7,7 @@ namespace GameObjects;
 public partial class BaseTowerLogic : Node2D
 {
     [Export] private bool main, player;
-    [Export] public PhysicsBody2D tower;
+    [Export] public Node2D tower;
     [Export] public int proch;
     public int max_proch;
     public CpuParticles2D blam_particles;

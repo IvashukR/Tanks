@@ -3,7 +3,7 @@ using GameObjects;
 
 namespace Player.Transport;
 
-public partial class Town : StaticBody2D
+public partial class Town : StaticBody2D, IDamageble
 {
     [Export] public TowerLogicShoot logic  {set;get;}
     private Label patron_l;

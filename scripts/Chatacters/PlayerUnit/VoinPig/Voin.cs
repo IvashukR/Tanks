@@ -36,7 +36,7 @@ public partial class Voin : CharacterBody2D, IDamageble
         t_shoot.TreeExited += () => t_shoot = null;
         patron_l.Text = $"{unit.name_unit} Patron: {unit.stats.patron_count}";
     }
-    public void Shoot(bool mouse_fallow)
+    public void Shoot()
 	{
         foreach(Node2D node in ak_control.GetOverlappingBodies())
         {
@@ -44,8 +44,7 @@ public partial class Voin : CharacterBody2D, IDamageble
         }
         if(!can_shoot || unit.stats.patron_count <= 0)return;
         if(!anim.IsPlaying())anim.Play("shoot");
-		if(mouse_fallow)GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this, true, marker.Rotation, scale_bullet, unit.stats.damage , -1, speed_bullet);
-        else GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, this, false, Rotation , scale_bullet ,unit.stats.damage, 1, speed_bullet);
+		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this,Rotation, scale_bullet, unit.stats.damage , 1, speed_bullet);
 		can_shoot = false;
 		unit.stats.patron_count--;
         if(unit.stats.patron_count <= 0)EmitSignal("NullAmmo");

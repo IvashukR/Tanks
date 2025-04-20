@@ -6,7 +6,7 @@ using GameObjects;
 namespace TanksUtilits;
 public static partial class GamaUtilits
 {
-    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i, bool fallow_m, float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
+    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i,float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
 	{
 		var _bullet = (PackedScene)ResourceLoader.Load("res://scene/bullet.tscn");
 		var bullet = _bullet.Instantiate<CharacterBody2D>();
@@ -17,10 +17,8 @@ public static partial class GamaUtilits
         b.speed = speed;
 		b.player_pos = tank_pos;
         b.invertY = invertY;
-		b.fallow_m = fallow_m;
 		b.angle_pushka = angle_pushka;
-		i.GetParent().AddChild(bullet);
-        
+        i.GetTree().Root.AddChild(bullet);
 	}
 	public static void spawn_d (Vector2 pos, Vector2 sc)
 	{
@@ -81,10 +79,11 @@ public static partial class GamaUtilits
                 }
                 else if(body.IsInGroup("unit") && !obj.IsInGroup("unit"))future_pos = body.GlobalPosition;
                 else return;
+                GD.Print("ENTER");
                 var tween = obj.CreateTween();
                 tween.SetEase(Tween.EaseType.InOut);
                 tween.SetTrans(Tween.TransitionType.Sine);
-                tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - future_pos).Normalized().Angle(), tower.logic.time_tween);
+                tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - future_pos).Normalized().Angle() - tower.logic.tower.GlobalRotation, tower.logic.time_tween);
                 await obj.ToSignal(tween, "finished");
                 string name_group = string.Empty;
                 if(obj.IsInGroup("unit")) name_group = "unit";

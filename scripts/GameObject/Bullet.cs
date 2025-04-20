@@ -56,16 +56,8 @@ public partial class Bullet : CharacterBody2D, IMoveble
 
 	private void UpdDir()
 	{
-		if (fallow_m)
-		{
-			dir = (mouse_pos - player_pos).Normalized();
-			Rotation = dir.Angle();
-		}
-		else
-		{
-			dir = new Vector2(Mathf.Cos(angle_pushka), Mathf.Sin(angle_pushka)).Normalized() * invertY;
-			Rotation = dir.Angle();
-		}
+		dir = new Vector2(Mathf.Cos(angle_pushka), Mathf.Sin(angle_pushka)).Normalized() * invertY;
+		Rotation = dir.Angle();
 	}
 	private void AreaCollideEnteredArea(Area2D area)
 	{

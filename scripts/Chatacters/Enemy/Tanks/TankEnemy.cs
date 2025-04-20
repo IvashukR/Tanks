@@ -11,7 +11,7 @@ public partial class TankEnemy : CharacterBody2D, ITower
     private Timer t_patrul, t_attack;
     private Vector2 direction;
     private PathFollow2D path_patrul;
-    [Export] private float speed, speed_patrul;
+    [Export] private float speed;
     [Export] private PhysicsBody2D target;
     [Export] public TowerLogicShoot logic {set;get;}
     private bool attack = true;
@@ -32,12 +32,13 @@ public partial class TankEnemy : CharacterBody2D, ITower
         t_patrul = GetNode<Timer>("%t_patrul");
         t_attack = GetNode<Timer>("%t_attack");
         path_patrul = GetParent<PathFollow2D>();
-        t_attack.Start();
+        //t_attack.Start();
         t_patrul.Start();
         SetRandomDirection();
-        //t_attack.Timeout += Attack;
+        t_attack.Timeout += Attack;
         //t_patrul.Timeout += SetRandomDirection;
         triger_area.BodyEntered += EnteredTrigerArea;
+        logic.pushka.Rotation = (GlobalPosition - GetNode<Marker2D>("marker1").GlobalPosition).Normalized().Angle();
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -48,17 +49,21 @@ public partial class TankEnemy : CharacterBody2D, ITower
         }
         Velocity = direction * speed * (float)delta;
         var angle_target = direction.Angle();
+        if(Velocity.Length() > 0)
         Rotation = Mathf.LerpAngle(Rotation, angle_target, (float)delta * 0.4f);
         MoveAndSlide();
     }
     public override void _Process(double delta)
     {
         if(current_state == State.Patrul)
-        path_patrul.Progress += speed_patrul;
+        {
+            path_patrul.Progress += speed * (float)delta;
+        }
+        
     }
-    private void Attack()
+    private void Attack() 
     {
-        SetTarget(target.GlobalPosition);
+        Shoot();
         
     }
     private void SetTarget(Vector2 target_pos)
@@ -77,6 +82,7 @@ public partial class TankEnemy : CharacterBody2D, ITower
     public virtual void TakeDamage(int damage)
 	{
 		logic.TakeDamage(damage);
+        GD.Print("DAMAGE");
 	}
     
     public virtual void Shoot()

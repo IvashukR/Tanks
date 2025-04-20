@@ -35,7 +35,7 @@ public partial class Ai : State
 				{
 					ray_flag = false;
 					voin.LookAt(collider.GlobalPosition);
-					voin.Shoot(false);
+					voin.Shoot();
 				}
 
 			}

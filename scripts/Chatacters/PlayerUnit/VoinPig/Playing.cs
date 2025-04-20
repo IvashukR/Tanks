@@ -52,7 +52,7 @@ public partial class Playing : State
         {
             if (mouseEvent.ButtonIndex == MouseButton.Left && mouseEvent.Pressed)
             {
-                v.Shoot(true);
+                v.Shoot();
             }
         }
         
