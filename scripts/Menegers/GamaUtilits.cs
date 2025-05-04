@@ -58,13 +58,31 @@ public static partial class GamaUtilits
 
         }
     }
-    public static async void  EnteredBulletInTownZone(Node2D body, Node2D obj)
+    public static async void  EnteredBulletInTownZone(Node2D body, PhysicsBody2D obj, Area2D area = null)
     {
+        if((!body.IsInGroup("enemy") && !body.IsInGroup("unit")  && !body.IsInGroup("bullet")) || body == obj)return;
         if(obj is ITower  tower)
         {
+            string name_group = string.Empty;
+            if(obj.IsInGroup("unit")) name_group = "unit";
+            else name_group = "enemy";
+            if(body.IsInGroup(name_group))return;
+            var body_pos = body.GlobalPosition;
+            var space = obj.GetWorld2D().DirectSpaceState;
+            var query = PhysicsRayQueryParameters2D.Create(tower.logic.pushka.GlobalPosition, body.GlobalPosition);
+            query.Exclude = new Godot.Collections.Array<Rid> { obj.GetRid() };
+            var result = space.IntersectRay(query);
+            if(result.Count == 0)return;
+            Node2D obstacle = (Node2D)result["collider"];
+            if(obstacle.IsInGroup("well") || obstacle.IsInGroup(name_group))
+            {
+                GD.Print(obstacle.Name);
+                //tower.logic.pushka.Rotation = original_pushka;
+                return;
+            }
+            //tower.logic.pushka.Rotation = original_pushka;
             if(tower.logic.patron > 0 && tower.logic.can_shoot)
             {
-                Vector2 future_pos = new Vector2();
                 if(body == GlobalManager.Instance.temp_pick_unit)return;
                 if(body is Bullet bullet)
                 {
@@ -72,24 +90,19 @@ public static partial class GamaUtilits
                     {
                         var collider = (Node2D)bullet.ray_cast_town.GetCollider();
                         if(collider == null)return;
-                        if(collider.IsInGroup("transport"))future_pos = bullet.Position;
-                        else return;
+                        if(!(collider == obj))return;
                     }
                     else return;
                 }
-                else if(body.IsInGroup("unit") && !obj.IsInGroup("unit"))future_pos = body.GlobalPosition;
-                else return;
-                GD.Print("ENTER");
                 var tween = obj.CreateTween();
                 tween.SetEase(Tween.EaseType.InOut);
                 tween.SetTrans(Tween.TransitionType.Sine);
-                tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - future_pos).Normalized().Angle() - tower.logic.tower.GlobalRotation, tower.logic.time_tween);
+                tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - body_pos).Normalized().Angle() - tower.logic.tower.GlobalRotation, tower.logic.time_tween);
                 await obj.ToSignal(tween, "finished");
-                string name_group = string.Empty;
-                if(obj.IsInGroup("unit")) name_group = "unit";
-                else name_group = "enemy"; 
-                if(CheckRayCollide(tower.ray_attack, "well") || CheckRayCollide(tower.ray_attack, name_group))return;
                 tower.Shoot();
+                GD.Print(obstacle.Name);
+                if(area == null)return;
+                
             }
         }
     }

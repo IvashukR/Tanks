@@ -17,6 +17,7 @@ public partial class TankEnemy : CharacterBody2D, ITower
     private bool attack = true;
     private State current_state = State.Patrul;
     private Area2D triger_area;
+    private bool stop_move = false;
 
     private enum State
     {
@@ -38,7 +39,10 @@ public partial class TankEnemy : CharacterBody2D, ITower
         t_attack.Timeout += Attack;
         //t_patrul.Timeout += SetRandomDirection;
         triger_area.BodyEntered += EnteredTrigerArea;
-        logic.pushka.Rotation = (GlobalPosition - GetNode<Marker2D>("marker1").GlobalPosition).Normalized().Angle();
+        triger_area.BodyExited += ExitTrigerArea;
+        var marker1 = GetNodeOrNull<Marker2D>("marker1");
+        if(marker1 != null)
+        logic.pushka.Rotation = (GlobalPosition - marker1.GlobalPosition).Normalized().Angle();
     }
     public override void _PhysicsProcess(double delta)
     {
@@ -47,15 +51,19 @@ public partial class TankEnemy : CharacterBody2D, ITower
             var next_pos = agent.GetNextPathPosition();
             direction = GlobalPosition.DirectionTo(next_pos).Normalized();
         }
-        Velocity = direction * speed * (float)delta;
-        var angle_target = direction.Angle();
-        if(Velocity.Length() > 0)
-        Rotation = Mathf.LerpAngle(Rotation, angle_target, (float)delta * 0.4f);
-        MoveAndSlide();
+        if(!stop_move)
+        {
+            Velocity = direction * speed * (float)delta;
+            var angle_target = direction.Angle();
+            if(Velocity.Length() > 0)
+            Rotation = Mathf.LerpAngle(Rotation, angle_target, (float)delta * 0.4f);
+            MoveAndSlide();
+        }
+        
     }
     public override void _Process(double delta)
     {
-        if(current_state == State.Patrul)
+        if(current_state == State.Patrul && !stop_move)
         {
             path_patrul.Progress += speed * (float)delta;
         }
@@ -84,6 +92,8 @@ public partial class TankEnemy : CharacterBody2D, ITower
 		logic.TakeDamage(damage);
         GD.Print("DAMAGE");
 	}
+
+    private void SetStop(bool value) => stop_move = value;
     
     public virtual void Shoot()
     {
@@ -92,6 +102,12 @@ public partial class TankEnemy : CharacterBody2D, ITower
     private void EnteredTrigerArea(Node2D body)
     {
         GamaUtilits.EnteredBulletInTownZone(body, this);
+        SetStop(true);
+    }
+
+    private void ExitTrigerArea(Node2D body)
+    {
+        SetStop(false);
     }
 
 }
