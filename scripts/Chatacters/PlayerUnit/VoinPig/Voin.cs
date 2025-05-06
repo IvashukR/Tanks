@@ -44,7 +44,7 @@ public partial class Voin : CharacterBody2D, IDamageble
         }
         if(!can_shoot || unit.stats.patron_count <= 0)return;
         if(!anim.IsPlaying())anim.Play("shoot");
-		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this,Rotation, scale_bullet, unit.stats.damage , 1, speed_bullet);
+		GamaUtilits.shoot(marker.GlobalPosition, marker.GlobalPosition, this,Rotation, scale_bullet, unit.stats.damage , 1, false, speed_bullet);
 		can_shoot = false;
 		unit.stats.patron_count--;
         if(unit.stats.patron_count <= 0)EmitSignal("NullAmmo");

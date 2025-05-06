@@ -10,13 +10,11 @@ public partial class Bullet : CharacterBody2D, IMoveble
 	public Vector2 player_pos;
 	public int damage = 50;
 	public int ricoshet_count = 3;
-	public bool coliide = true;
+	public bool coliide = true, pushka_inside;
 	[Export] public float speed {set;get;} = 80;
 	public Vector2 dir;
 	private Timer col;
-	public bool fallow_m;
 	public float angle_pushka;
-	private Timer c;
 	public int invertY;
 	public RayCast2D ray_cast_town;
 	private bool calculete_damage;
@@ -37,22 +35,26 @@ public partial class Bullet : CharacterBody2D, IMoveble
 		mouse_pos = GetGlobalMousePosition();
 		area_collide.AreaEntered += AreaCollideEnteredArea;
 		UpdDir();
-		col = new Timer();
-		AddChild(col);
-		col.OneShot = true;
-		col.WaitTime = 0.3;
+		col = GetNode<Timer>("%t");
 		col.Timeout += () => coliide = true;
-		c = GetNode<Timer>("%t");
-		c.Timeout +=  () => CollisionMask = 1 | 2;
+		if(pushka_inside)
+		{
+			var collision_layer = CollisionLayer;
+			var collision_mask = CollisionMask;
+			CollisionLayer = 0;
+			CollisionMask = 0;
+			var c = new Timer();
+			c.Autostart = true;
+			c.OneShot = true;
+			c.WaitTime = 0.1;
+			AddChild(c);
+			c.Timeout +=  () => {
+				CollisionLayer = collision_layer;
+				CollisionMask = collision_mask;
+			};
+		}
 	}
-	public Bullet(int damage)
-	{
-		this.damage = damage;
-	}
-	public Bullet()
-    {
-        
-    }
+	
 
 	private void UpdDir()
 	{

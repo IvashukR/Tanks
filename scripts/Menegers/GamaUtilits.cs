@@ -6,7 +6,7 @@ using GameObjects;
 namespace TanksUtilits;
 public static partial class GamaUtilits
 {
-    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i,float angle_pushka, Vector2 sc, int damage, int invertY, float speed = 450.5f)
+    public static void shoot (Vector2 tank_pos, Vector2 marker_pos, Node i,float angle_pushka, Vector2 sc, int damage, int invertY, bool pushka_inside, float speed = 450.5f)
 	{
 		var _bullet = (PackedScene)ResourceLoader.Load("res://scene/bullet.tscn");
 		var bullet = _bullet.Instantiate<CharacterBody2D>();
@@ -18,6 +18,7 @@ public static partial class GamaUtilits
 		b.player_pos = tank_pos;
         b.invertY = invertY;
 		b.angle_pushka = angle_pushka;
+        b.pushka_inside = pushka_inside;
         i.GetTree().Root.AddChild(bullet);
 	}
 	public static void spawn_d (Vector2 pos, Vector2 sc)
@@ -76,11 +77,9 @@ public static partial class GamaUtilits
             Node2D obstacle = (Node2D)result["collider"];
             if(obstacle.IsInGroup("well") || obstacle.IsInGroup(name_group))
             {
-                GD.Print(obstacle.Name);
-                //tower.logic.pushka.Rotation = original_pushka;
                 return;
             }
-            //tower.logic.pushka.Rotation = original_pushka;
+            
             if(tower.logic.patron > 0 && tower.logic.can_shoot)
             {
                 if(body == GlobalManager.Instance.temp_pick_unit)return;

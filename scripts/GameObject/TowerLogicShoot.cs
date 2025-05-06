@@ -25,14 +25,14 @@ public partial class TowerLogicShoot : BaseTowerLogic
         base._Ready();
 	}
 
-	public void Shoot()
+	public void Shoot(bool pushka_inside = false)
     {
         if(can_shoot && patron > 0)
         {
             can_shoot = false;
             t.Start();
             patron--;
-            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, tower,pushka.Rotation, bullet_size, bullet_damage, mirror_bullet);
+            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, tower,pushka.Rotation, bullet_size, bullet_damage, mirror_bullet, pushka_inside);
         }
     }
     

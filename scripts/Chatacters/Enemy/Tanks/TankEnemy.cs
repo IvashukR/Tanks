@@ -90,14 +90,13 @@ public partial class TankEnemy : CharacterBody2D, ITower
     public virtual void TakeDamage(int damage)
 	{
 		logic.TakeDamage(damage);
-        GD.Print("DAMAGE");
 	}
 
     private void SetStop(bool value) => stop_move = value;
     
     public virtual void Shoot()
     {
-        logic.Shoot();
+        logic.Shoot(true);
     }
     private void EnteredTrigerArea(Node2D body)
     {
