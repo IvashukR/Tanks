@@ -32,7 +32,7 @@ public partial class TowerLogicShoot : BaseTowerLogic
             can_shoot = false;
             t.Start();
             patron--;
-            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, tower,pushka.Rotation, bullet_size, bullet_damage, mirror_bullet, pushka_inside);
+            GamaUtilits.shoot(pushka.GlobalPosition, marker.GlobalPosition, tower,pushka.GlobalRotation, bullet_size, bullet_damage, mirror_bullet, pushka_inside);
         }
     }
     

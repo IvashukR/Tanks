@@ -39,20 +39,19 @@ public partial class Bullet : CharacterBody2D, IMoveble
 		col.Timeout += () => coliide = true;
 		if(pushka_inside)
 		{
-			var collision_layer = CollisionLayer;
-			var collision_mask = CollisionMask;
-			CollisionLayer = 0;
-			CollisionMask = 0;
-			var c = new Timer();
-			c.Autostart = true;
-			c.OneShot = true;
-			c.WaitTime = 0.1;
-			AddChild(c);
-			c.Timeout +=  () => {
-				CollisionLayer = collision_layer;
-				CollisionMask = collision_mask;
-			};
+			StartOnShooter();
 		}
+	}
+
+	private async void StartOnShooter()
+	{
+		var collision_layer = CollisionLayer;
+		var collision_mask = CollisionMask;
+		GamaUtilits.UnSetCollision(this);
+		await ToSignal(GetTree().CreateTimer(0.07f), "timeout");
+		CollisionLayer = collision_layer;
+		CollisionMask = collision_mask;
+		
 	}
 	
 
@@ -129,8 +128,5 @@ public partial class Bullet : CharacterBody2D, IMoveble
 		audio_blast.Play();
 		GamaUtilits.DestroyTown(0,cpu_particles, this);
 	}
-	public override void _ExitTree()
-	{
-		col.QueueFree();
-	}
+	
 }

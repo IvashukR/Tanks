@@ -99,8 +99,23 @@ public static partial class GamaUtilits
                 tween.TweenProperty(tower.logic.pushka, "rotation", (tower.logic.tower.GlobalPosition - body_pos).Normalized().Angle() - tower.logic.tower.GlobalRotation, tower.logic.time_tween);
                 await obj.ToSignal(tween, "finished");
                 tower.Shoot();
-                GD.Print(obstacle.Name);
                 if(area == null)return;
+                EnteredBulletInTownZone(body, obj, area);
+            }
+            
+            else if(tower.logic.patron >= 1 && !tower.logic.can_shoot)
+            {
+                await obj.ToSignal(tower.logic.t, "timeout");
+                bool body_in_area = false;
+                foreach (var node in area.GetOverlappingBodies())
+                {
+                    if(node  == body)
+                    {
+                        body_in_area = true;
+                    }
+                }
+                if(!body_in_area)return;
+                EnteredBulletInTownZone(body, obj, area);
                 
             }
         }
@@ -121,7 +136,7 @@ public static partial class GamaUtilits
 
         
     }
-    private static void UnSetCollision(Node obj)
+    public static void UnSetCollision(Node obj)
     {
         if(obj is PhysicsBody2D body)
         {

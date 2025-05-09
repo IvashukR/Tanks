@@ -10,8 +10,8 @@ public partial class TownEnemyLevel1 : TowerEnemy , ITower
 {
     private Area2D bullet_detected, unit_detected;
     private float last_time_entered_unit;
-    private bool flag_unit = true, flag_attacked = true;
-    private Timer t_unit, t_attack, t_flag_attack;
+    private bool flag_attacked = true;
+    private Timer t_attack, t_flag_attack;
     private Well hit_well;
     private RandomNumberGenerator rng;
     private Town tower;
@@ -23,18 +23,15 @@ public partial class TownEnemyLevel1 : TowerEnemy , ITower
         tower = GetNode<Town>("%town");
         rng = new RandomNumberGenerator();
         rng.Randomize();
-        t_unit = GetNode<Timer>("t_unit");
         bullet_detected = GetNode<Area2D>("area_town");
         unit_detected = GetNode<Area2D>("area_town_unit");
-        t_unit.Timeout += () => flag_unit = true;
         tower.TreeExited += () => tower = null;
         bullet_detected.BodyEntered += (body) => {
             GamaUtilits.EnteredBulletInTownZone(body, this);
         };
         unit_detected.BodyEntered += (body) => 
         {
-            GamaUtilits.EnteredBulletInTownZone(body, this);
-            last_time_entered_unit = Time.GetTicksMsec() / 1000;
+            GamaUtilits.EnteredBulletInTownZone(body, this, unit_detected);
         };
         base._Ready();
         if(attacked)
@@ -74,16 +71,7 @@ public partial class TownEnemyLevel1 : TowerEnemy , ITower
             t_flag_attack.Start();
             Attack();
         }
-        if(Time.GetTicksMsec() / 1000 - last_time_entered_unit > 0.4 && flag_unit)
-        {
-            if(unit_detected.GetOverlappingBodies().Count > 0)
-            {
-                int random_body_index = GD.RandRange(0, unit_detected.GetOverlappingBodies().Count - 1);
-                GamaUtilits.EnteredBulletInTownZone(unit_detected.GetOverlappingBodies()[random_body_index], this);
-                flag_unit = false;
-                t_unit.Start();
-            }
-        }
+        
         if(GamaUtilits.CheckRayCollide(ray_attack, "unit"))
         {
             Shoot();

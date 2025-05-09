@@ -100,7 +100,7 @@ public partial class TankEnemy : CharacterBody2D, ITower
     }
     private void EnteredTrigerArea(Node2D body)
     {
-        GamaUtilits.EnteredBulletInTownZone(body, this);
+        GamaUtilits.EnteredBulletInTownZone(body, this, triger_area);
         SetStop(true);
     }
 
