@@ -46,18 +46,19 @@ public partial class TankEnemy : CharacterBody2D, ITower
     }
     public override void _PhysicsProcess(double delta)
     {
-        if(current_state != State.Patrul)
+        if(!stop_move && current_state != State.Patrul)
         {
             var next_pos = agent.GetNextPathPosition();
             direction = GlobalPosition.DirectionTo(next_pos).Normalized();
-        }
-        if(!stop_move)
-        {
             Velocity = direction * speed * (float)delta;
             var angle_target = direction.Angle();
-            if(Velocity.Length() > 0)
             Rotation = Mathf.LerpAngle(Rotation, angle_target, (float)delta * 0.4f);
             MoveAndSlide();
+        }
+
+        else if(!stop_move && current_state == State.Patrul)
+        {
+            Velocity = Vector2.Right * speed; // emullator velocity positive length for track
         }
         
     }
@@ -100,12 +101,14 @@ public partial class TankEnemy : CharacterBody2D, ITower
     }
     private void EnteredTrigerArea(Node2D body)
     {
+        if(!body.IsInGroup("unit"))return;
         GamaUtilits.EnteredBulletInTownZone(body, this, triger_area);
         SetStop(true);
     }
 
     private void ExitTrigerArea(Node2D body)
     {
+        if(!body.IsInGroup("unit"))return;
         SetStop(false);
     }
 

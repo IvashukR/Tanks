@@ -19,7 +19,7 @@ public static partial class GamaUtilits
         b.invertY = invertY;
 		b.angle_pushka = angle_pushka;
         b.pushka_inside = pushka_inside;
-        i.GetTree().Root.AddChild(bullet);
+        i.GetTree().CurrentScene.AddChild(bullet);
 	}
 	public static void spawn_d (Vector2 pos, Vector2 sc)
 	{
@@ -40,22 +40,18 @@ public static partial class GamaUtilits
     }
     public static void set_shader(Node parent, bool _render, string name_param)
     {
+        if(parent.GetChildren().Count == 0)
+        {
+            return;
+        }
         foreach(var child in parent.GetChildren())
         {
             if(child is Sprite2D sprite)
             {
                 ShaderMaterial shader = sprite.Material as ShaderMaterial;
-                shader.SetShaderParameter(name_param, _render);
+                if(shader != null)shader.SetShaderParameter(name_param, _render);
             }
-            foreach(var _child in child.GetChildren())
-            {
-                if(_child is Sprite2D _sprite)
-                {
-                    ShaderMaterial shader = _sprite.Material as ShaderMaterial;
-                    if(shader != null)shader.SetShaderParameter(name_param, _render);
-                }
-                
-            }
+            set_shader(child, _render, name_param);
 
         }
     }
@@ -82,7 +78,6 @@ public static partial class GamaUtilits
             
             if(tower.logic.patron > 0 && tower.logic.can_shoot)
             {
-                if(body == GlobalManager.Instance.temp_pick_unit)return;
                 if(body is Bullet bullet)
                 {
                     if(bullet.ray_cast_town.IsColliding())
@@ -105,6 +100,7 @@ public static partial class GamaUtilits
             
             else if(tower.logic.patron >= 1 && !tower.logic.can_shoot)
             {
+                if(area == null)return;
                 await obj.ToSignal(tower.logic.t, "timeout");
                 bool body_in_area = false;
                 foreach (var node in area.GetOverlappingBodies())
@@ -114,7 +110,11 @@ public static partial class GamaUtilits
                         body_in_area = true;
                     }
                 }
-                if(!body_in_area)return;
+                if(!body_in_area)
+                {
+                    return;
+                }
+                
                 EnteredBulletInTownZone(body, obj, area);
                 
             }
